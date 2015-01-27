@@ -1,0 +1,16 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/valgrind
+arch=amd64
+os=darwin
+platform=amd64-darwin
+valt_load_address=0x138000000
+
+Name: Valgrind
+Description: A dynamic binary instrumentation framework
+Version: 3.10.1
+Requires:
+Libs: -L${libdir}/valgrind -lcoregrind-amd64-darwin -lvex-amd64-darwin -lgcc
+Cflags: -I${includedir}
+

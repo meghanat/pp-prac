@@ -1,0 +1,2 @@
+m_syswrap/libcoregrind_x86_darwin_a-syscall-mips64-linux.o: \
+ m_syswrap/syscall-mips64-linux.S

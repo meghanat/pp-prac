@@ -1,0 +1,112 @@
+m_debuginfo/libcoregrind_x86_darwin_a-readdwarf3.o: \
+ m_debuginfo/readdwarf3.c pub_core_basics.h ../include/pub_tool_basics.h \
+ ../VEX/pub/libvex_basictypes.h \
+ /usr/local/Cellar/gcc/4.9.2_1/lib/gcc/4.9/gcc/x86_64-apple-darwin13.4.0/4.9.2/include/stdarg.h \
+ ../VEX/pub/libvex.h ../VEX/pub/libvex_basictypes.h \
+ ../VEX/pub/libvex_ir.h ../VEX/pub/libvex_guest_x86.h \
+ pub_core_debuginfo.h ../include/pub_tool_debuginfo.h \
+ ../include/pub_tool_basics.h pub_core_libcbase.h \
+ ../include/pub_tool_libcbase.h pub_core_libcassert.h \
+ ../include/pub_tool_libcassert.h pub_core_basics.h pub_core_libcprint.h \
+ ../include/pub_tool_libcprint.h pub_core_libcsetjmp.h \
+ ../include/pub_tool_libcsetjmp.h /usr/include/setjmp.h \
+ /usr/include/sys/cdefs.h /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h pub_core_hashtable.h \
+ ../include/pub_tool_hashtable.h pub_core_options.h \
+ ../include/pub_tool_options.h pub_core_tooliface.h \
+ ../include/pub_tool_tooliface.h ../include/pub_tool_errormgr.h \
+ ../include/pub_tool_execontext.h pub_core_xarray.h \
+ ../include/pub_tool_xarray.h pub_core_wordfm.h \
+ ../include/pub_tool_wordfm.h m_debuginfo/priv_misc.h \
+ m_debuginfo/priv_image.h m_debuginfo/priv_tytypes.h \
+ m_debuginfo/priv_d3basics.h m_debuginfo/priv_storage.h \
+ pub_core_deduppoolalloc.h ../include/pub_tool_deduppoolalloc.h \
+ m_debuginfo/priv_readdwarf3.h
+
+pub_core_basics.h:
+
+../include/pub_tool_basics.h:
+
+../VEX/pub/libvex_basictypes.h:
+
+/usr/local/Cellar/gcc/4.9.2_1/lib/gcc/4.9/gcc/x86_64-apple-darwin13.4.0/4.9.2/include/stdarg.h:
+
+../VEX/pub/libvex.h:
+
+../VEX/pub/libvex_basictypes.h:
+
+../VEX/pub/libvex_ir.h:
+
+../VEX/pub/libvex_guest_x86.h:
+
+pub_core_debuginfo.h:
+
+../include/pub_tool_debuginfo.h:
+
+../include/pub_tool_basics.h:
+
+pub_core_libcbase.h:
+
+../include/pub_tool_libcbase.h:
+
+pub_core_libcassert.h:
+
+../include/pub_tool_libcassert.h:
+
+pub_core_basics.h:
+
+pub_core_libcprint.h:
+
+../include/pub_tool_libcprint.h:
+
+pub_core_libcsetjmp.h:
+
+../include/pub_tool_libcsetjmp.h:
+
+/usr/include/setjmp.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/sys/_symbol_aliasing.h:
+
+/usr/include/sys/_posix_availability.h:
+
+pub_core_hashtable.h:
+
+../include/pub_tool_hashtable.h:
+
+pub_core_options.h:
+
+../include/pub_tool_options.h:
+
+pub_core_tooliface.h:
+
+../include/pub_tool_tooliface.h:
+
+../include/pub_tool_errormgr.h:
+
+../include/pub_tool_execontext.h:
+
+pub_core_xarray.h:
+
+../include/pub_tool_xarray.h:
+
+pub_core_wordfm.h:
+
+../include/pub_tool_wordfm.h:
+
+m_debuginfo/priv_misc.h:
+
+m_debuginfo/priv_image.h:
+
+m_debuginfo/priv_tytypes.h:
+
+m_debuginfo/priv_d3basics.h:
+
+m_debuginfo/priv_storage.h:
+
+pub_core_deduppoolalloc.h:
+
+../include/pub_tool_deduppoolalloc.h:
+
+m_debuginfo/priv_readdwarf3.h:

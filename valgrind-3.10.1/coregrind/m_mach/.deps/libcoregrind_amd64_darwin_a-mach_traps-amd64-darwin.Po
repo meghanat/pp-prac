@@ -1,0 +1,7 @@
+m_mach/libcoregrind_amd64_darwin_a-mach_traps-amd64-darwin.o: \
+ m_mach/mach_traps-amd64-darwin.S ../include/vki/vki-scnums-darwin.h \
+ ../config.h
+
+../include/vki/vki-scnums-darwin.h:
+
+../config.h:

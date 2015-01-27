@@ -1,0 +1,2 @@
+m_syswrap/libcoregrind_x86_darwin_a-syswrap-mips32-linux.o: \
+ m_syswrap/syswrap-mips32-linux.c

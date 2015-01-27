@@ -1,0 +1,2 @@
+m_syswrap/libcoregrind_amd64_darwin_a-syscall-ppc64be-linux.o: \
+ m_syswrap/syscall-ppc64be-linux.S

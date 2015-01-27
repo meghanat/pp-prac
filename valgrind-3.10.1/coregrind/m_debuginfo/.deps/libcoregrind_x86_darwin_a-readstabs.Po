@@ -1,0 +1,126 @@
+m_debuginfo/libcoregrind_x86_darwin_a-readstabs.o: \
+ m_debuginfo/readstabs.c pub_core_basics.h ../include/pub_tool_basics.h \
+ ../VEX/pub/libvex_basictypes.h \
+ /usr/local/Cellar/gcc/4.9.2_1/lib/gcc/4.9/gcc/x86_64-apple-darwin13.4.0/4.9.2/include/stdarg.h \
+ ../VEX/pub/libvex.h ../VEX/pub/libvex_basictypes.h \
+ ../VEX/pub/libvex_ir.h ../VEX/pub/libvex_guest_x86.h \
+ pub_core_debuginfo.h ../include/pub_tool_debuginfo.h \
+ ../include/pub_tool_basics.h pub_core_libcbase.h \
+ ../include/pub_tool_libcbase.h pub_core_libcassert.h \
+ ../include/pub_tool_libcassert.h pub_core_basics.h pub_core_libcprint.h \
+ ../include/pub_tool_libcprint.h pub_core_xarray.h \
+ ../include/pub_tool_xarray.h m_debuginfo/priv_misc.h \
+ m_debuginfo/priv_image.h m_debuginfo/priv_tytypes.h \
+ m_debuginfo/priv_d3basics.h m_debuginfo/priv_storage.h \
+ pub_core_deduppoolalloc.h ../include/pub_tool_deduppoolalloc.h \
+ m_debuginfo/priv_readstabs.h /usr/include/mach-o/nlist.h \
+ /usr/local/Cellar/gcc/4.9.2_1/lib/gcc/4.9/gcc/x86_64-apple-darwin13.4.0/4.9.2/include/stdint.h \
+ /usr/local/Cellar/gcc/4.9.2_1/lib/gcc/4.9/gcc/x86_64-apple-darwin13.4.0/4.9.2/include-fixed/stdint.h \
+ /usr/include/sys/_types/_int8_t.h /usr/include/sys/_types/_int16_t.h \
+ /usr/include/sys/_types/_int32_t.h /usr/include/sys/_types/_int64_t.h \
+ /usr/include/_types/_uint8_t.h /usr/include/_types/_uint16_t.h \
+ /usr/include/_types/_uint32_t.h /usr/include/_types/_uint64_t.h \
+ /usr/include/sys/_types.h /usr/include/sys/cdefs.h \
+ /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/sys/_types/_intptr_t.h \
+ /usr/include/sys/_types/_uintptr_t.h /usr/include/_types/_intmax_t.h \
+ /usr/include/_types/_uintmax_t.h
+
+pub_core_basics.h:
+
+../include/pub_tool_basics.h:
+
+../VEX/pub/libvex_basictypes.h:
+
+/usr/local/Cellar/gcc/4.9.2_1/lib/gcc/4.9/gcc/x86_64-apple-darwin13.4.0/4.9.2/include/stdarg.h:
+
+../VEX/pub/libvex.h:
+
+../VEX/pub/libvex_basictypes.h:
+
+../VEX/pub/libvex_ir.h:
+
+../VEX/pub/libvex_guest_x86.h:
+
+pub_core_debuginfo.h:
+
+../include/pub_tool_debuginfo.h:
+
+../include/pub_tool_basics.h:
+
+pub_core_libcbase.h:
+
+../include/pub_tool_libcbase.h:
+
+pub_core_libcassert.h:
+
+../include/pub_tool_libcassert.h:
+
+pub_core_basics.h:
+
+pub_core_libcprint.h:
+
+../include/pub_tool_libcprint.h:
+
+pub_core_xarray.h:
+
+../include/pub_tool_xarray.h:
+
+m_debuginfo/priv_misc.h:
+
+m_debuginfo/priv_image.h:
+
+m_debuginfo/priv_tytypes.h:
+
+m_debuginfo/priv_d3basics.h:
+
+m_debuginfo/priv_storage.h:
+
+pub_core_deduppoolalloc.h:
+
+../include/pub_tool_deduppoolalloc.h:
+
+m_debuginfo/priv_readstabs.h:
+
+/usr/include/mach-o/nlist.h:
+
+/usr/local/Cellar/gcc/4.9.2_1/lib/gcc/4.9/gcc/x86_64-apple-darwin13.4.0/4.9.2/include/stdint.h:
+
+/usr/local/Cellar/gcc/4.9.2_1/lib/gcc/4.9/gcc/x86_64-apple-darwin13.4.0/4.9.2/include-fixed/stdint.h:
+
+/usr/include/sys/_types/_int8_t.h:
+
+/usr/include/sys/_types/_int16_t.h:
+
+/usr/include/sys/_types/_int32_t.h:
+
+/usr/include/sys/_types/_int64_t.h:
+
+/usr/include/_types/_uint8_t.h:
+
+/usr/include/_types/_uint16_t.h:
+
+/usr/include/_types/_uint32_t.h:
+
+/usr/include/_types/_uint64_t.h:
+
+/usr/include/sys/_types.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/sys/_symbol_aliasing.h:
+
+/usr/include/sys/_posix_availability.h:
+
+/usr/include/machine/_types.h:
+
+/usr/include/i386/_types.h:
+
+/usr/include/sys/_types/_intptr_t.h:
+
+/usr/include/sys/_types/_uintptr_t.h:
+
+/usr/include/_types/_intmax_t.h:
+
+/usr/include/_types/_uintmax_t.h:

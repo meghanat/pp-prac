@@ -1,0 +1,178 @@
+vgpreload_core_amd64_darwin_so-vg_preloaded.o: vg_preloaded.c \
+ pub_core_basics.h ../include/pub_tool_basics.h \
+ ../VEX/pub/libvex_basictypes.h \
+ /usr/local/Cellar/gcc/4.9.2_1/lib/gcc/4.9/gcc/x86_64-apple-darwin13.4.0/4.9.2/include/stdarg.h \
+ ../VEX/pub/libvex.h ../VEX/pub/libvex_basictypes.h \
+ ../VEX/pub/libvex_ir.h ../VEX/pub/libvex_guest_amd64.h pub_core_clreq.h \
+ ../include/pub_tool_clreq.h ../include/valgrind.h pub_core_debuginfo.h \
+ ../include/pub_tool_debuginfo.h ../include/pub_tool_basics.h \
+ pub_core_redir.h ../include/pub_tool_redir.h ../config.h \
+ /usr/include/string.h /usr/include/_types.h /usr/include/sys/_types.h \
+ /usr/include/sys/cdefs.h /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/Availability.h \
+ /usr/include/AvailabilityInternal.h /usr/include/sys/_types/_size_t.h \
+ /usr/include/sys/_types/_null.h /usr/include/sys/_types/_rsize_t.h \
+ /usr/include/sys/_types/_errno_t.h /usr/include/sys/_types/_ssize_t.h \
+ /usr/include/strings.h /usr/include/secure/_string.h \
+ /usr/include/secure/_common.h /usr/include/crt_externs.h \
+ /usr/include/fcntl.h /usr/include/sys/fcntl.h \
+ /usr/include/sys/_types/_mode_t.h /usr/include/sys/_types/_off_t.h \
+ /usr/include/sys/_types/_pid_t.h /usr/include/sys/_types/_o_sync.h \
+ /usr/include/sys/_types/_o_dsync.h /usr/include/sys/_types/_seek_set.h \
+ /usr/include/sys/_types/_s_ifmt.h /usr/include/sys/_types/_timespec.h \
+ /usr/include/sys/_types/_filesec_t.h /usr/include/unistd.h \
+ /usr/include/sys/unistd.h /usr/include/sys/_types/_posix_vdisable.h \
+ /usr/include/sys/_types/_gid_t.h /usr/include/sys/_types/_intptr_t.h \
+ /usr/include/sys/_types/_uid_t.h /usr/include/sys/_types/_useconds_t.h \
+ /usr/include/sys/select.h /usr/include/sys/appleapiopts.h \
+ /usr/include/sys/_types/_fd_def.h /usr/include/sys/_types/_timeval.h \
+ /usr/include/sys/_types/_time_t.h /usr/include/sys/_types/_suseconds_t.h \
+ /usr/include/sys/_types/_sigset_t.h \
+ /usr/include/sys/_types/_fd_setsize.h /usr/include/sys/_types/_fd_set.h \
+ /usr/include/sys/_types/_fd_clr.h /usr/include/sys/_types/_fd_isset.h \
+ /usr/include/sys/_types/_fd_zero.h /usr/include/sys/_types/_fd_copy.h \
+ /usr/include/sys/_select.h /usr/include/sys/_types/_dev_t.h \
+ /usr/include/sys/_types/_uuid_t.h /usr/include/gethostuuid.h
+
+pub_core_basics.h:
+
+../include/pub_tool_basics.h:
+
+../VEX/pub/libvex_basictypes.h:
+
+/usr/local/Cellar/gcc/4.9.2_1/lib/gcc/4.9/gcc/x86_64-apple-darwin13.4.0/4.9.2/include/stdarg.h:
+
+../VEX/pub/libvex.h:
+
+../VEX/pub/libvex_basictypes.h:
+
+../VEX/pub/libvex_ir.h:
+
+../VEX/pub/libvex_guest_amd64.h:
+
+pub_core_clreq.h:
+
+../include/pub_tool_clreq.h:
+
+../include/valgrind.h:
+
+pub_core_debuginfo.h:
+
+../include/pub_tool_debuginfo.h:
+
+../include/pub_tool_basics.h:
+
+pub_core_redir.h:
+
+../include/pub_tool_redir.h:
+
+../config.h:
+
+/usr/include/string.h:
+
+/usr/include/_types.h:
+
+/usr/include/sys/_types.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/sys/_symbol_aliasing.h:
+
+/usr/include/sys/_posix_availability.h:
+
+/usr/include/machine/_types.h:
+
+/usr/include/i386/_types.h:
+
+/usr/include/Availability.h:
+
+/usr/include/AvailabilityInternal.h:
+
+/usr/include/sys/_types/_size_t.h:
+
+/usr/include/sys/_types/_null.h:
+
+/usr/include/sys/_types/_rsize_t.h:
+
+/usr/include/sys/_types/_errno_t.h:
+
+/usr/include/sys/_types/_ssize_t.h:
+
+/usr/include/strings.h:
+
+/usr/include/secure/_string.h:
+
+/usr/include/secure/_common.h:
+
+/usr/include/crt_externs.h:
+
+/usr/include/fcntl.h:
+
+/usr/include/sys/fcntl.h:
+
+/usr/include/sys/_types/_mode_t.h:
+
+/usr/include/sys/_types/_off_t.h:
+
+/usr/include/sys/_types/_pid_t.h:
+
+/usr/include/sys/_types/_o_sync.h:
+
+/usr/include/sys/_types/_o_dsync.h:
+
+/usr/include/sys/_types/_seek_set.h:
+
+/usr/include/sys/_types/_s_ifmt.h:
+
+/usr/include/sys/_types/_timespec.h:
+
+/usr/include/sys/_types/_filesec_t.h:
+
+/usr/include/unistd.h:
+
+/usr/include/sys/unistd.h:
+
+/usr/include/sys/_types/_posix_vdisable.h:
+
+/usr/include/sys/_types/_gid_t.h:
+
+/usr/include/sys/_types/_intptr_t.h:
+
+/usr/include/sys/_types/_uid_t.h:
+
+/usr/include/sys/_types/_useconds_t.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/sys/appleapiopts.h:
+
+/usr/include/sys/_types/_fd_def.h:
+
+/usr/include/sys/_types/_timeval.h:
+
+/usr/include/sys/_types/_time_t.h:
+
+/usr/include/sys/_types/_suseconds_t.h:
+
+/usr/include/sys/_types/_sigset_t.h:
+
+/usr/include/sys/_types/_fd_setsize.h:
+
+/usr/include/sys/_types/_fd_set.h:
+
+/usr/include/sys/_types/_fd_clr.h:
+
+/usr/include/sys/_types/_fd_isset.h:
+
+/usr/include/sys/_types/_fd_zero.h:
+
+/usr/include/sys/_types/_fd_copy.h:
+
+/usr/include/sys/_select.h:
+
+/usr/include/sys/_types/_dev_t.h:
+
+/usr/include/sys/_types/_uuid_t.h:
+
+/usr/include/gethostuuid.h:
