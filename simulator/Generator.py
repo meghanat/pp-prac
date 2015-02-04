@@ -4,6 +4,7 @@ import thread
 
 
 class VirtualAddressGenerator:
+    pid = 0
     def __init__(self, address_stream, event, prob_dist=[0.6, 0.3, 0.1], process_size=1 << 32):
         self.process_size = process_size
         self.kernel_space = 1 << 30
@@ -21,13 +22,14 @@ class VirtualAddressGenerator:
         pass
 
     def generate_virtual_address(self):
+        VirtualAddressGenerator.pid += 1
         while (True):
             gen_value = numpy.random.choice(self.values, None, self.prob_dist)
             if(gen_value == 1):
                 # print "Increment\n"
                 self.current_address += 4
                 # print self.current_address
-                self.address_stream.append(self.current_address)
+                self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
                 self.event.set()
 
             elif (gen_value == 2):
@@ -37,11 +39,11 @@ class VirtualAddressGenerator:
                 for i in range(num_iterations):
                     for j in range(self.current_address, self.current_address + offset, 4):
                         # print j, "\n"
-                        self.address_stream.append(j)
+                        self.address_stream.append((VirtualAddressGenerator.pid, j))
                         self.event.set()
 
                 self.current_address += offset + 4
-                self.address_stream.append(self.current_address)
+                self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
                 self.event.set()
 
             elif (gen_value == 3):
@@ -50,8 +52,8 @@ class VirtualAddressGenerator:
                 offset = random.randrange(4, 4000, 4)
                 for j in range(jump_to, jump_to + offset, 4):
                     # print j, "\n"
-                    self.address_stream.append(j)
+                    self.address_stream.append((VirtualAddressGenerator.pid, j))
                     self.event.set()
                 self.current_address += 4
-                self.address_stream.append(self.current_address)
+                self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
                 self.event.set()

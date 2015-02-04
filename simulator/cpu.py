@@ -25,10 +25,10 @@ class CPU:
 
             # print self.addr_access_stream
             # print self.event_access_stream.is_set()
-            virt_addr = self.addr_access_stream.pop(0)
+            pid, virt_addr = self.addr_access_stream.pop(0)
             virt_page = virt_addr >> self.PAGE_SHIFT
             # print virt_page, "\n"
-            self.page_num_stream.append([virt_page, 0])
+            self.page_num_stream.append([(pid, virt_page), 0])
             self.event_page_stream.set()
 
 
