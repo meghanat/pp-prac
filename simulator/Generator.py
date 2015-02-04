@@ -1,6 +1,7 @@
 import random
 import numpy.random
 import thread
+import threading
 
 
 class VirtualAddressGenerator:
@@ -14,7 +15,9 @@ class VirtualAddressGenerator:
         self.address_stream = address_stream
         self.event = event
         try:
-            thread.start_new_thread(self.generate_virtual_address, ())
+            thread = threading.Thread(target=self.generate_virtual_address, args=())
+            thread.start()
+            #  TODO : Need to join these threads somewhere :}
         except Exception as e:
             print e
 

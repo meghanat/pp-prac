@@ -13,10 +13,20 @@ class LRU(object):
         self.memory = [{"time" : 0, "pid": -1, "virtual_page_no": -1} for i in range(number_frames)]
         self.page_num_stream = page_num_stream
         self.event = event_page_stream
+        self.simulating = True
+
+    def get_current_memory_mappings(self):
+        virtual_addresses = []
+        for frame in self.memory:      
+            virtual_addresses.append(frame["virtual_page_no"])
+        return virtual_addresses
+
+    def stop_lru(self):
+        self.simulating = False
 
         
-    def algorithm(self):
-        while True:
+    def __call__(self):
+        while self.simulating:
             if(len(self.page_num_stream) == 0):  # Wait for an access to be made
                 self.event.clear()
             self.event.wait()
@@ -67,15 +77,21 @@ class LRU(object):
                         [frame_to_replace["virtual_page_no"]]["present_bit"] = 0
 
                         # For the current process' page table
+                        if virtual_page_no not in page_table:
+                            page_table[virtual_page_no] = {}
+
                         page_table[virtual_page_no]["frame_no"] = frame_no_to_replace
                         page_table[virtual_page_no]["present_bit"] = 1
 
                         # Update the frame entry's PID and time stamp
                         self.memory[frame_no_to_replace]["pid"] = pid
                         self.memory[frame_no_to_replace]["time"] = time.clock()
+                        self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
 
                 self.page_num_stream[0][2].add(thread_id)  # This thread has read the address
-
+            
             if(len(self.page_num_stream[0][2]) == self.number_pr_threads):  # If all threads have read the value
                 #print "Popped"
                 self.page_num_stream.pop(0)
+            
+# TODO: Call a function from within a thread? This function is too long
