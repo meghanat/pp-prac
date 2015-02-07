@@ -76,7 +76,7 @@ class LRU(object):
                 self.event.clear() 
             self.event.wait()
 
-            #print self.page_num_stream[0]
+            print self.page_num_stream[0]
             pid, virtual_page_no, thread_set = self.page_num_stream[0]
             thread_id = thread.get_ident()
 
