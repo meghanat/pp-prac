@@ -17,7 +17,7 @@ class Simulator(tk.Tk):
         self.spinbox_names = ["vas", "memory", "page_size", "num_processes", "window"]
         self.label_texts = ["VAS(GB)", "Physical Memory(GB)", "Page Size(KB)"
                            , "Number of procesess", "Simulation Window"]
-        ranges = [(1,4), (1,4), (256, 512), (1, 1000), (1, 1000)]
+        ranges = [(1,4), (1,4), (4, 8), (1, 1000), (1, 1000)]
 
         self.leftFrame = tk.Frame(self)
         self.leftFrame.grid(column=0, row=0, sticky="NS")
