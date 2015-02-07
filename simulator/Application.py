@@ -51,3 +51,7 @@ if __name__ == "__main__":
     sim.title("Simulation of Page Replacement")
     sim.initialize()
     sim.mainloop()
+# TODO: controller.start_simulation needs to be run on a seperate thread to avoid blocking the UI
+# TODO: add a stop_simulation
+# TODO: add widgets for showing page fault counts
+# TODO: add a dynamically changing graph for page access? :D : http://www.physics.utoronto.ca/~phy326/python/Live_Plot_Simple.py
