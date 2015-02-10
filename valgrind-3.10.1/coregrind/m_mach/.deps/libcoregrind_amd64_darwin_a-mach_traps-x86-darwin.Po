@@ -1,2 +1,0 @@
-m_mach/libcoregrind_amd64_darwin_a-mach_traps-x86-darwin.o: \
- m_mach/mach_traps-x86-darwin.S

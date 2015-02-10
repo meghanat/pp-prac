@@ -1,2 +1,0 @@
-m_initimg/libcoregrind_amd64_darwin_a-initimg-linux.o: \
- m_initimg/initimg-linux.c
