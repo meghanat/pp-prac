@@ -2,6 +2,7 @@ import cpu
 import threading
 import thread
 from LRUAlgorithm import LRU
+from LFUAlgorithm import LFU
 
 def start_simulation(simulation_values):
     page_num_stream = []  # Each List Entry
@@ -27,9 +28,16 @@ def start_simulation(simulation_values):
         thread.start()
 
         lru = LRU(number_virtual_pages, number_frames, number_pr_threads, page_num_stream, event_page_stream)
-        thread = threading.Thread(target=lru, args=())
-        threads.append(thread)
-        thread.start()
+        thread_lru = threading.Thread(target=lru, args=())
+        threads.append(thread_lru)
+        thread_lru.start()
+
+        lfu = LFU(number_virtual_pages, number_frames, number_pr_threads, page_num_stream, event_page_stream)
+        thread_lfu = threading.Thread(target=lfu, args=())
+        threads.append(thread_lfu)
+        thread_lfu.start()
+
+
     except Exception as e:
         print "Failed to start thread:", e
 
