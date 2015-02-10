@@ -29,8 +29,13 @@ class VirtualAddressGenerator:
         self.event.set()
 
     def generate_loop_addresses(self):
-        num_iterations = random.randrange(10, 100000)
+        num_iterations = random.randrange(10, 10000)
+
         offset = random.randrange(4, 4000, 4)  # one to thousand instructions per iteration
+        
+        if self.current_address+offset > self.process_size:
+            offset=self.process_size-self.current_address
+            
         for i in range(num_iterations):
             for j in range(self.current_address, self.current_address + offset, 4):
                 # print j, "\n"
@@ -42,7 +47,8 @@ class VirtualAddressGenerator:
         self.event.set()
 
     def generate_jump_addresses(self):
-        jump_to = random.randrange(self.kernel_space, self.process_size, 4)
+
+        jump_to = random.randrange(self.kernel_space, self.process_size-self.current_address+self.kernel_space-4000, 4)
         offset = random.randrange(4, 4000, 4)
         for j in range(jump_to, jump_to + offset, 4):
             # print j, "\n"
@@ -55,7 +61,8 @@ class VirtualAddressGenerator:
     def generate_virtual_address(self):
         VirtualAddressGenerator.pid += 1
         while (True):
-            gen_value = numpy.random.choice(self.values, None, self.prob_dist)
+            #gen_value = numpy.random.choice(self.values, None, self.prob_dist)
+            gen_value=3
             if(gen_value == 1):
                 self.increment_address()
                 
