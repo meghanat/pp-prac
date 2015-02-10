@@ -1,8 +1,9 @@
 import thread
 
+
 class LFU(object):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream):
+                       page_num_stream, event_page_stream,read_lock):
         self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
@@ -13,6 +14,7 @@ class LFU(object):
         self.page_num_stream = page_num_stream
         self.event = event_page_stream
         self.simulating = True
+        self.read_lock=read_lock
 
     def get_current_memory_mappings(self):
         virtual_addresses = []
@@ -76,13 +78,8 @@ class LFU(object):
                 self.event.clear() 
             self.event.wait()
 
-            #print self.page_num_stream[0]
+           
             pid, virtual_page_no, thread_set = self.page_num_stream[0]
-            print "access : " , virtual_page_no
-            print "Memory : " ,
-            for i in self.memory:
-                print i 
-            
             thread_id = thread.get_ident()
 
             if thread_id not in thread_set:  # Only if the thread hasn't already
@@ -96,7 +93,7 @@ class LFU(object):
                     pte = None
 
                 if pte and pte["present_bit"]:
-                    print "here"
+                    #print "here"
                     #  Update frequency of page
                     self.memory[pte["frame_no"]]["frequency"] += 1
                 
@@ -110,8 +107,10 @@ class LFU(object):
                         self.replace_frame(virtual_page_no,pid)
                         
                 self.page_num_stream[0][2].add(thread_id)  # This thread has read the address
-            
+
+            self.read_lock.acquire()
             if(len(self.page_num_stream[0][2]) == self.number_pr_threads):  # If all threads have read the value
                 #print "Popped"
                 self.page_num_stream.pop(0)
+            self.read_lock.release()
             

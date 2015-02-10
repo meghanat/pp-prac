@@ -1,9 +1,10 @@
 import thread
 import time
 
+
 class LRU(object):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream):
+                       page_num_stream, event_page_stream,read_lock):
         self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
@@ -14,6 +15,7 @@ class LRU(object):
         self.page_num_stream = page_num_stream
         self.event = event_page_stream
         self.simulating = True
+        self.read_lock=read_lock
 
     def get_current_memory_mappings(self):
         virtual_addresses = []
@@ -76,7 +78,7 @@ class LRU(object):
                 self.event.clear() 
             self.event.wait()
 
-            print self.page_num_stream[0]
+            #print self.page_num_stream[0]
             pid, virtual_page_no, thread_set = self.page_num_stream[0]
             thread_id = thread.get_ident()
 
@@ -105,8 +107,10 @@ class LRU(object):
                         
                 self.page_num_stream[0][2].add(thread_id)  # This thread has read the address
             
+            self.read_lock.acquire()
             if(len(self.page_num_stream[0][2]) == self.number_pr_threads):  # If all threads have read the value
                 #print "Popped"
                 self.page_num_stream.pop(0)
+            self.read_lock.release()
             
 # TODO: Call a function from within a thread? This function is too long
