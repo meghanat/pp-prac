@@ -22,41 +22,48 @@ class VirtualAddressGenerator:
             print e
 
     def increment_address(self):
-        pass
+        # print "Increment\n"
+        self.current_address += 4
+        # print self.current_address
+        self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
+        self.event.set()
+
+    def generate_loop_addresses(self):
+        num_iterations = random.randrange(10, 100000)
+        offset = random.randrange(4, 4000, 4)  # one to thousand instructions per iteration
+        for i in range(num_iterations):
+            for j in range(self.current_address, self.current_address + offset, 4):
+                # print j, "\n"
+                self.address_stream.append((VirtualAddressGenerator.pid, j))
+                self.event.set()
+
+        self.current_address += offset + 4
+        self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
+        self.event.set()
+
+    def generate_jump_addresses(self):
+        jump_to = random.randrange(self.kernel_space, self.process_size, 4)
+        offset = random.randrange(4, 4000, 4)
+        for j in range(jump_to, jump_to + offset, 4):
+            # print j, "\n"
+            self.address_stream.append((VirtualAddressGenerator.pid, j))
+            self.event.set()
+        self.current_address += 4
+        self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
+        self.event.set()
 
     def generate_virtual_address(self):
         VirtualAddressGenerator.pid += 1
         while (True):
             gen_value = numpy.random.choice(self.values, None, self.prob_dist)
             if(gen_value == 1):
-                # print "Increment\n"
-                self.current_address += 4
-                # print self.current_address
-                self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
-                self.event.set()
-
+                self.increment_address()
+                
             elif (gen_value == 2):
                 # print "Loop\n"
-                num_iterations = random.randrange(10, 100000)
-                offset = random.randrange(4, 4000, 4)  # one to thousand instructions per iteration
-                for i in range(num_iterations):
-                    for j in range(self.current_address, self.current_address + offset, 4):
-                        # print j, "\n"
-                        self.address_stream.append((VirtualAddressGenerator.pid, j))
-                        self.event.set()
-
-                self.current_address += offset + 4
-                self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
-                self.event.set()
+                self.generate_loop_addresses()
 
             elif (gen_value == 3):
                 # print "Jump\n"
-                jump_to = random.randrange(self.kernel_space, self.process_size, 4)
-                offset = random.randrange(4, 4000, 4)
-                for j in range(jump_to, jump_to + offset, 4):
-                    # print j, "\n"
-                    self.address_stream.append((VirtualAddressGenerator.pid, j))
-                    self.event.set()
-                self.current_address += 4
-                self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
-                self.event.set()
+                self.generate_jump_addresses()
+                
