@@ -1,6 +1,7 @@
 import Tkinter as tk
 import controller
-
+import tkFont
+import ttk
 
 class Simulator(tk.Tk):
     def __init__(self, parent):
@@ -11,23 +12,31 @@ class Simulator(tk.Tk):
         self.padx = 10
         self.pady = 5
         self.label_options = {"padx": self.padx, "pady": self.pady
-                              , "relief": tk.SUNKEN, "width": 20}
-        self.spinbox_options = {"width": 20}
+                              ,"width": 15,"bg":"gainsboro"}
+        self.spinbox_options = {"width": 10}
         self.spinBoxes = {}
         self.spinbox_names = ["vas", "memory", "page_size", "num_processes", "window"]
         self.label_texts = ["VAS(GB)", "Physical Memory(GB)", "Page Size(KB)"
                            , "Number of procesess", "Simulation Window"]
         ranges = [(1,4), (1,4), (4, 8), (1, 1000), (1, 1000)]
 
-        self.leftFrame = tk.Frame(self)
-        self.leftFrame.grid(column=0, row=0, sticky="NS")
+        #self.settings_label=th.Label(self,{})
+        self.leftFrame = tk.Frame(self,bg="gainsboro", relief=tk.GROOVE,bd=5)
+        self.leftFrame.grid(column=0, row=0, sticky="NS",padx=10,pady=10)
         self.rightFrame = tk.Frame(self, width=500, height=500, bg="white")
         self.rightFrame.grid(column=1, row=0)
 
-        self.label_param = tk.Label(self.leftFrame,self.label_options, text="Parameter", bg="gray")
-        self.label_param.grid(column=0, row=0)
-        self.label_value = tk.Label(self.leftFrame, self.label_options, text="Value", bg="gray")
-        self.label_value.grid(column=1, row=0)
+
+
+        self.label_param = tk.Label(self.leftFrame,padx=self.padx,pady=self.pady,width=15,font=("Helvetica", 16), text="Parameter", bg="gainsboro")
+        self.label_param.grid(column=0, row=0, pady=20)
+        self.label_value = tk.Label(self.leftFrame,padx=self.padx,pady=self.pady,width=15,font=("Helvetica", 16), text="Value", bg="gainsboro")
+        self.label_value.grid(column=1, row=0,pady=20)
+
+        f = tkFont.Font(self.label_param, self.label_param.cget("font"))
+        f.configure(underline = True)
+        self.label_param.configure(font=f)
+        self.label_value.configure(font=f)
 
         for i,text in enumerate(self.label_texts):
             label = tk.Label(self.leftFrame,self.label_options, text=text)
@@ -36,9 +45,12 @@ class Simulator(tk.Tk):
                         , self.spinbox_options, from_=ranges[i][0], to=ranges[i][1])
             self.spinBoxes[self.spinbox_names[i]].grid(column=1, row=i+1)
 
+        self.leftFrame.columnconfigure(1,pad=10)
+        self.leftFrame.columnconfigure(0,pad=10)
         self.simulate_button = tk.Button(self.leftFrame, text="Simulate", command=self.start_simulation)
         self.simulate_button.grid(column=0, row=6, columnspan=2, padx=10, pady=10 )
         self.resizable(False, False)
+
 
     def start_simulation(self):
         simulation_values = {}
