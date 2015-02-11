@@ -7,6 +7,7 @@ class Simulator(tk.Tk):
     def __init__(self, parent):
         tk.Tk.__init__(self, parent)
         self.parent = parent
+        self.controller = None
 
     def initialize(self):
         self.padx = 10
@@ -56,7 +57,8 @@ class Simulator(tk.Tk):
         simulation_values = {}
         for parameter in self.spinbox_names:
             simulation_values[parameter] = int(self.spinBoxes[parameter].get())
-        controller.start_simulation(simulation_values)
+        self.controller = controller.Controller(simulation_values)
+        self.controller.start_simulation()
 
 if __name__ == "__main__":
     sim = Simulator(None)

@@ -5,59 +5,61 @@ from LRUAlgorithm import LRU
 from LFUAlgorithm import LFU
 from OptimalAlgorithm import Optimal
 
-def start_simulation(simulation_values):
-    page_num_stream = []  # Each List Entry
-                          # [pid, virtual_page_number, set of threads that have
-                          #  read from this entry]
-    event_page_stream = threading.Event()  # Used to wait for an address to be 
-                                           # available on page_num_stream
 
-    lock = threading.Lock()                                     
-    number_processes = simulation_values["num_processes"] 
-    main_memory_size = simulation_values["memory"] * (2 ** 30)  # GB
-    page_size = simulation_values["page_size"] * (2 ** 10)  # KB
-    number_frames = main_memory_size / page_size
-    simulation_window_size = simulation_values["window"]
-    process_size = simulation_values["vas"] * (2 ** 30)  # GB 
-    number_virtual_pages = process_size / page_size
+class Controller(object):
+    
+    def __init__(self, simulation_values):        
+        self.page_num_stream = []  # Each List Entry
+                              # [pid, virtual_page_number, set of threads that have
+                              #  read from this entry]
+        self.event_page_stream = threading.Event()  # Used to wait for an address to be 
+                                               # available on page_num_stream
+        self.lock = threading.Lock()                                     
+        self.number_processes = simulation_values["num_processes"] 
+        self.main_memory_size = simulation_values["memory"] * (2 ** 30)  # GB
+        self.page_size = simulation_values["page_size"] * (2 ** 10)  # KB
+        self.number_frames = self.main_memory_size / self.page_size
+        self.simulation_window_size = simulation_values["window"]
+        self.process_size = simulation_values["vas"] * (2 ** 30)  # GB 
+        self.number_virtual_pages = self.process_size / self.page_size
 
-    number_pr_threads = 3  # No of page replacement algorithms
-    threads = []  # Array of PR started. Used to wait on them
+        self.number_pr_threads = 3  # No of page replacement algorithms
+        self.threads = []  # Array of PR started. Used to wait on them
 
-    #print "THREAD: ", thread.get_ident()
-    try:
-        thread = threading.Thread(target=lambda : cpu.start_CPU(number_processes, 
-                                    page_num_stream, event_page_stream, lock), args=())
-        threads.append(thread)
-        thread.start()
+    def start_simulation(self):
+        try:
+            thread = threading.Thread(target=lambda : cpu.start_CPU(self.number_processes, 
+                                        self.page_num_stream, self.event_page_stream, self.lock), args=())
+            self.threads.append(thread)
+            thread.start()
 
-        while(len(page_num_stream) < simulation_window_size):
-            pass
+            while(len(self.page_num_stream) < self.simulation_window_size):
+                pass
 
-        print "sim_win filled"
-        print len(page_num_stream)
-        
-        optimal = Optimal(number_virtual_pages, number_frames, number_pr_threads, page_num_stream, 
-            event_page_stream, lock, simulation_window_size)
-        thread_optimal = threading.Thread(target=optimal, args=())
-        threads.append(thread_optimal)
-        thread_optimal.start()
-
+            print "sim_win filled"
+            print len(self.page_num_stream)
             
-        lru = LRU(number_virtual_pages, number_frames, number_pr_threads, page_num_stream, event_page_stream, lock)
-        thread_lru = threading.Thread(target=lru, args=())
-        threads.append(thread_lru)
-        thread_lru.start()
-    
-        lfu = LFU(number_virtual_pages, number_frames, number_pr_threads, page_num_stream, event_page_stream, lock)
-        thread_lfu = threading.Thread(target=lfu, args=())
-        threads.append(thread_lfu)
-        thread_lfu.start()
-    
+            optimal = Optimal(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, 
+                self.event_page_stream, self.lock, self.simulation_window_size)
+            thread_optimal = threading.Thread(target=optimal, args=())
+            self.threads.append(thread_optimal)
+            thread_optimal.start()
 
-    except Exception as e:
-        print "Failed to start thread:", e
+                
+            lru = LRU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock)
+            thread_lru = threading.Thread(target=lru, args=())
+            self.threads.append(thread_lru)
+            thread_lru.start()
+        
+            lfu = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock)
+            thread_lfu = threading.Thread(target=lfu, args=())
+            self.threads.append(thread_lfu)
+            thread_lfu.start()
+        
+
+        except Exception as e:
+            print "Failed to start thread:", e
 
 
-    for thread in threads:
-        thread.join()
+        for thread in self.threads:
+            thread.join()
