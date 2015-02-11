@@ -16,6 +16,7 @@ class LRU(object):
         self.event = event_page_stream
         self.simulating = True
         self.read_lock = read_lock
+        self.page_fault_count = 0
 
     def get_current_memory_mappings(self):
         virtual_addresses = []
@@ -37,8 +38,9 @@ class LRU(object):
 
         #  Update the frame entry also
         self.memory[frame_no]["pid"] = pid
-        self.memory[frame_no]["time"] = time.clock()
+        self.memory[frame_no]["time"] = time.time()#time.clock()
         self.memory[frame_no]["virtual_page_no"] = virtual_page_no
+        self.page_fault_count += 1
 
 
     #swap out page from memory
@@ -62,8 +64,9 @@ class LRU(object):
 
         # Update the frame entry's PID and time stamp
         self.memory[frame_no_to_replace]["pid"] = pid
-        self.memory[frame_no_to_replace]["time"] = time.clock()
+        self.memory[frame_no_to_replace]["time"] = time.time()#time.clock()
         self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
+        self.page_fault_count += 1
 
     #return page table for process    
     def get_page_table(self,pid):
@@ -96,7 +99,7 @@ class LRU(object):
 
                 if pte and pte["present_bit"]:
                     #  Update main memory time stamp
-                    self.memory[pte["frame_no"]]["time"] = time.clock()
+                    self.memory[pte["frame_no"]]["time"] = time.time()#time.clock()
                 
                 else:   #page not in memory
                     for frame_no, frame_entry in enumerate(self.memory):
@@ -114,5 +117,9 @@ class LRU(object):
                 #print "Popped"
                 self.page_num_stream.pop(0)
             self.read_lock.release()
+
+            print "Memory: ", self.memory
+            print "Virtual Addresses:", self.get_current_memory_mappings()
+            print "Page Count", self.page_fault_count
             
 # TODO: Call a function from within a thread? This function is too long
