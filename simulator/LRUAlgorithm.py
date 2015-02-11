@@ -4,7 +4,7 @@ import time
 
 class LRU(object):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream,read_lock):
+                       page_num_stream, event_page_stream, read_lock):
         self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
@@ -15,7 +15,7 @@ class LRU(object):
         self.page_num_stream = page_num_stream
         self.event = event_page_stream
         self.simulating = True
-        self.read_lock=read_lock
+        self.read_lock = read_lock
 
     def get_current_memory_mappings(self):
         virtual_addresses = []
@@ -78,8 +78,10 @@ class LRU(object):
                 self.event.clear() 
             self.event.wait()
 
-            #print self.page_num_stream[0]
+            self.read_lock.acquire()
             pid, virtual_page_no, thread_set = self.page_num_stream[0]
+            self.read_lock.release()
+            
             thread_id = thread.get_ident()
 
             if thread_id not in thread_set:  # Only if the thread hasn't already

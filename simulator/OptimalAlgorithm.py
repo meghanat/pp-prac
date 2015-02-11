@@ -5,7 +5,7 @@ import thread
 class Optimal(object):
 
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream,read_lock,simulation_window_size):
+                       page_num_stream, event_page_stream, read_lock, simulation_window_size):
         self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
@@ -16,8 +16,8 @@ class Optimal(object):
         self.page_num_stream = page_num_stream
         self.event = event_page_stream
         self.simulating = True
-        self.simulation_window_size=simulation_window_size
-        self.read_lock=read_lock
+        self.simulation_window_size = simulation_window_size
+        self.read_lock = read_lock
 
 
     def get_current_memory_mappings(self):
@@ -99,42 +99,38 @@ class Optimal(object):
                 self.event.clear() 
 
             self.event.wait()
-            try:
-                pid, virtual_page_no, thread_set = self.page_num_stream[0]
-                #print "Access: ",virtual_page_no,"\n"
-                thread_id = thread.get_ident()
+            
+            self.read_lock.acquire()
+            pid, virtual_page_no, thread_set = self.page_num_stream[0]
+            self.read_lock.release()
+            
+            thread_id = thread.get_ident()
 
-                if thread_id not in thread_set:  # Only if the thread hasn't already
-                                                 # read this address
-                    #get page table for process
-                    page_table=self.get_page_table(pid)
+            if thread_id not in thread_set:  # Only if the thread hasn't already
+                                             # read this address
+                #get page table for process
+                page_table=self.get_page_table(pid)
 
-                    if virtual_page_no in page_table:
-                        pte = page_table[virtual_page_no]
-                    else:
-                        pte = None
-                    if pte and pte["present_bit"]:
-                        pass
-                    else:   #page not in memory
-                        for frame_no, frame_entry in enumerate(self.memory):
-                            if frame_entry["pid"] == -1:  # Empty Frame
-                                self.fill_frame(virtual_page_no,pid,frame_no)
-                                break
-                        else:  # If all of the previous iterations went through,
-                               # ie. if no frames are free
-                            self.replace_frame(virtual_page_no,pid)
-                            
-                    self.page_num_stream[0][2].add(thread_id)  # This thread has read the address
-                
-                self.read_lock.acquire()
-                if(len(self.page_num_stream[0][2]) == self.number_pr_threads):  # If all threads have read the value
-                    #print "Popped"
-                    self.page_num_stream.pop(0)
-                self.read_lock.release()
-
-            except IndexError:
-                print len(self.page_num_stream)
-                print self.event.is_set()
-
-
-    # TODO: Call a function from within a thread? This function is too long
+                if virtual_page_no in page_table:
+                    pte = page_table[virtual_page_no]
+                else:
+                    pte = None
+                if pte and pte["present_bit"]:
+                    pass
+                else:   #page not in memory
+                    for frame_no, frame_entry in enumerate(self.memory):
+                        if frame_entry["pid"] == -1:  # Empty Frame
+                            self.fill_frame(virtual_page_no,pid,frame_no)
+                            break
+                    else:  # If all of the previous iterations went through,
+                           # ie. if no frames are free
+                        self.replace_frame(virtual_page_no,pid)
+                        
+                self.page_num_stream[0][2].add(thread_id)  # This thread has read the address
+            
+            self.read_lock.acquire()
+            if(len(self.page_num_stream[0][2]) == self.number_pr_threads):  # If all threads have read the value
+                #print "Popped"
+                self.page_num_stream.pop(0)
+            self.read_lock.release()
+            

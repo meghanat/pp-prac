@@ -3,7 +3,7 @@ import thread
 
 class LFU(object):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream,read_lock):
+                       page_num_stream, event_page_stream, read_lock):
         self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
@@ -78,8 +78,10 @@ class LFU(object):
                 self.event.clear() 
             self.event.wait()
 
-           
+            self.read_lock.acquire()  
             pid, virtual_page_no, thread_set = self.page_num_stream[0]
+            self.read_lock.release()
+            
             thread_id = thread.get_ident()
 
             if thread_id not in thread_set:  # Only if the thread hasn't already
