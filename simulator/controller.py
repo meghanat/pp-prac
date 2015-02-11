@@ -39,20 +39,20 @@ class Controller(object):
             print "sim_win filled"
             print len(self.page_num_stream)
             
-            optimal = Optimal(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, 
+            self.optimal = Optimal(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, 
                 self.event_page_stream, self.lock, self.simulation_window_size)
-            thread_optimal = threading.Thread(target=optimal, args=())
+            thread_optimal = threading.Thread(target=self.optimal, args=())
             self.threads.append(thread_optimal)
             thread_optimal.start()
 
                 
-            lru = LRU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock)
-            thread_lru = threading.Thread(target=lru, args=())
+            self.lru = LRU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock)
+            thread_lru = threading.Thread(target=self.lru, args=())
             self.threads.append(thread_lru)
             thread_lru.start()
         
-            lfu = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock)
-            thread_lfu = threading.Thread(target=lfu, args=())
+            self.lfu = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock)
+            thread_lfu = threading.Thread(target=self.lfu, args=())
             self.threads.append(thread_lfu)
             thread_lfu.start()
         

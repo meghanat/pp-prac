@@ -60,6 +60,10 @@ class Simulator(tk.Tk):
         self.controller = controller.Controller(simulation_values)
         self.controller.start_simulation()
 
+    ## Plan : To add a method which periodically updates some label(To be added) with the value of self.controller.lru.get_page_fault_count()
+    ## Add labels for each of the algorithms, with the thread updating all the values from the corresponding objects periodically
+
+
 if __name__ == "__main__":
     sim = Simulator(None)
     sim.title("Simulation of Page Replacement")
