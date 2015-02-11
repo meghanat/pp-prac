@@ -27,6 +27,9 @@ class LRU(object):
     def stop_lru(self):
         self.simulating = False
 
+    def get_page_fault_count(self):
+        return self.page_fault_count
+
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
         page_table=self.page_tables[pid]
@@ -118,8 +121,5 @@ class LRU(object):
                 self.page_num_stream.pop(0)
             self.read_lock.release()
 
-            print "Memory: ", self.memory
-            print "Virtual Addresses:", self.get_current_memory_mappings()
-            print "Page Count", self.page_fault_count
             
 # TODO: Call a function from within a thread? This function is too long
