@@ -48,7 +48,7 @@ class VirtualAddressGenerator:
 
     def generate_jump_addresses(self):
 
-        jump_to = random.randrange(self.kernel_space, self.process_size-self.current_address+self.kernel_space-4000, 4)
+        jump_to = random.randrange(self.kernel_space, self.process_size-4000, 4)
         offset = random.randrange(4, 4000, 4)
         for j in range(jump_to, jump_to + offset, 4):
             # print j, "\n"
