@@ -15,12 +15,16 @@ class LFU(object):
         self.event = event_page_stream
         self.simulating = True
         self.read_lock=read_lock
+        self.page_fault_count = 0
 
     def get_current_memory_mappings(self):
         virtual_addresses = []
         for frame in self.memory:      
             virtual_addresses.append(frame["virtual_page_no"])
         return virtual_addresses
+
+    def get_page_fault_count(self):
+        return self.page_fault_count
 
     def stop_lfu(self):
         self.simulating = False
@@ -38,6 +42,7 @@ class LFU(object):
         self.memory[frame_no]["pid"] = pid
         self.memory[frame_no]["frequency"] = 0
         self.memory[frame_no]["virtual_page_no"] = virtual_page_no
+        self.page_fault_count += 1
 
 
     #swap out page from memory
@@ -63,6 +68,7 @@ class LFU(object):
         self.memory[frame_no_to_replace]["pid"] = pid
         self.memory[frame_no_to_replace]["frequency"] = 0
         self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
+        self.page_fault_count += 1
 
     #return page table for process    
     def get_page_table(self,pid):

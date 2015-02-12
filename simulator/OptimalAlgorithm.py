@@ -18,6 +18,7 @@ class Optimal(object):
         self.simulating = True
         self.simulation_window_size = simulation_window_size
         self.read_lock = read_lock
+        self.page_fault_count = 0
 
 
     def get_current_memory_mappings(self):
@@ -25,6 +26,9 @@ class Optimal(object):
         for frame in self.memory:      
             virtual_addresses.append(frame["virtual_page_no"])
         return virtual_addresses
+
+    def get_page_fault_count(self):
+        return self.page_fault_count
 
     def stop_optimal(self):
         self.simulating = False
@@ -41,6 +45,7 @@ class Optimal(object):
         #  Update the frame entry also
         self.memory[frame_no]["pid"] = pid
         self.memory[frame_no]["virtual_page_no"] = virtual_page_no
+        self.page_fault_count += 1
 
 
     #swap out page from memory
@@ -65,7 +70,7 @@ class Optimal(object):
                 frame_no_to_replace=frame_no
                 break
                 
-
+        self.page_fault_count += 1
         #print frame_to_replace
 
 

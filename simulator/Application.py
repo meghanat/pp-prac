@@ -1,7 +1,9 @@
 import Tkinter as tk
 import controller
+import time
 import tkFont
 import ttk
+import threading
 
 class Simulator(tk.Tk):
     def __init__(self, parent):
@@ -19,7 +21,13 @@ class Simulator(tk.Tk):
         self.spinbox_names = ["vas", "memory", "page_size", "num_processes", "window"]
         self.label_texts = ["VAS(GB)", "Physical Memory(GB)", "Page Size(KB)"
                            , "Number of procesess", "Simulation Window"]
-        ranges = [(1,4), (1,4), (4, 8), (1, 1000), (1, 1000)]
+        self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO"]
+        self.algo_values = {"LRU" : {}, "LFU": {}, "FIFO": {}, "OPTIMAL": {}}
+        for text in self.algo_texts:
+            self.algo_values[text]["label"] = None
+            self.algo_values[text]["string_var"] = tk.StringVar()
+
+        ranges = [(1,4), (0.1,4), (4, 8), (1, 1000), (1, 1000)]
 
         #self.settings_label=th.Label(self,{})
         self.leftFrame = tk.Frame(self,bg="gainsboro", relief=tk.GROOVE,bd=5)
@@ -46,6 +54,13 @@ class Simulator(tk.Tk):
                         , self.spinbox_options, from_=ranges[i][0], to=ranges[i][1])
             self.spinBoxes[self.spinbox_names[i]].grid(column=1, row=i+1)
 
+        for i,text in enumerate(self.algo_texts):
+            label = tk.Label(self.rightFrame, self.label_options, text=text)
+            label.grid(column=0, row=i+1)
+            self.algo_values[text]["label"] = tk.Label(self.rightFrame, self.label_options,
+             bg="white", textvariable=self.algo_values[text]["string_var"])
+            self.algo_values[text]["label"].grid(column=1, row=i+1)
+
         self.leftFrame.columnconfigure(1,pad=10)
         self.leftFrame.columnconfigure(0,pad=10)
         self.simulate_button = tk.Button(self.leftFrame, text="Simulate", command=self.start_simulation)
@@ -58,10 +73,42 @@ class Simulator(tk.Tk):
         for parameter in self.spinbox_names:
             simulation_values[parameter] = int(self.spinBoxes[parameter].get())
         self.controller = controller.Controller(simulation_values)
-        self.controller.start_simulation()
+        #self.controller.start_simulation()
+        self.controller_thread = threading.Thread(target=self.controller.start_simulation)
+        self.controller_thread.start()
+        self.update_thread = threading.Thread(target=self.update_labels)
+        self.update_thread.start()
+
 
     ## Plan : To add a method which periodically updates some label(To be added) with the value of self.controller.lru.get_page_fault_count()
     ## Add labels for each of the algorithms, with the thread updating all the values from the corresponding objects periodically
+    # def do_every(self, period, function):
+    #     def tick():
+    #         t = time.time()
+    #         count = 0
+    #         while True:
+    #             count += 1
+    #             yield max(t + count * period - time.time(), 0)
+    #     ticker = tick()
+    #     while True:
+    #         time.sleep(g.next())
+    #         function()
+
+    # def start_periodic_update(self):
+    #     self.update_thread = threading.Thread(target=lambda x: do_every(1, update_labels))
+    #     self.update_thread.start()
+
+    def update_labels(self):
+        while True:
+            print "LRU", self.controller.lru.get_page_fault_count()
+            print "LFU", self.controller.lfu.get_page_fault_count()
+            print "OPTIMAL", self.controller.optimal.get_page_fault_count()
+            self.algo_values["LRU"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
+            self.algo_values["LFU"]["string_var"].set(str(self.controller.lfu.get_page_fault_count()))
+            self.algo_values["OPTIMAL"]["string_var"].set(str(self.controller.optimal.get_page_fault_count()))
+            #self.algo_values["FIFO"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
+            time.sleep(1)
+
 
 
 if __name__ == "__main__":
