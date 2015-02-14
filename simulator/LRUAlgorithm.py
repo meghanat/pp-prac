@@ -4,7 +4,7 @@ import time
 
 class LRU(object):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set):
+                       page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size=10):
         self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
@@ -18,6 +18,13 @@ class LRU(object):
         self.read_lock = read_lock
         self.page_fault_count = 0
         self.thread_set = thread_set
+        self.simulation_window_size=simulation_window_size
+        self.pages_accessed=0
+        
+
+    def reset_memory(self,current_memory):
+        self.memory=[{"time" : 0, "pid": i["pid"], "virtual_page_no": i["virtual_page_no"]} for i in current_memory]
+
 
     def get_current_memory_mappings(self):
         virtual_addresses = []
@@ -81,8 +88,12 @@ class LRU(object):
         page_table = self.page_tables[pid]
         return page_table
         
-    def __call__(self):
+    def __call__(self,switcher):
+        self.switcher=switcher
         while self.simulating:
+
+            while(self.pages_accessed==10):
+                pass
             
             thread_id = thread.get_ident()
 
@@ -95,6 +106,7 @@ class LRU(object):
                 #print " lru after event.wait",self.event.is_set()
                 pid, virtual_page_no, thread_set = self.page_num_stream[0]
                 self.read_lock.release()
+                self.pages_accessed+=1
                 #get page table for process
                 page_table=self.get_page_table(pid)
 
@@ -123,8 +135,12 @@ class LRU(object):
                 #print "Popped"
                 self.page_num_stream.pop(0)
                 self.thread_set.clear()
-                if(len(self.page_num_stream) == 0):  # Wait for an access to be made
+                if(len(self.page_num_stream) < self.simulation_window_size):  # Wait for an access to be made
                     self.event.clear() 
+
+                if(self.pages_accessed==10):
+                    self.switcher.switch()
+                
             self.read_lock.release()
             #print thread_id, " LRU out 1"
 
