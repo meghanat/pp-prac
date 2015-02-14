@@ -61,8 +61,7 @@ class VirtualAddressGenerator:
     def generate_virtual_address(self):
         VirtualAddressGenerator.pid += 1
         while (True):
-            #gen_value = numpy.random.choice(self.values, None, self.prob_dist)
-            gen_value=3
+            gen_value = numpy.random.choice(self.values, None, self.prob_dist)
             if(gen_value == 1):
                 self.increment_address()
                 

@@ -23,12 +23,14 @@ class Controller(object):
         self.process_size = simulation_values["vas"] * (2 ** 30)  # GB 
         self.number_virtual_pages = self.process_size / self.page_size
 
-        self.number_pr_threads = 3  # No of page replacement algorithms
+        self.number_pr_threads = 2  # No of page replacement algorithms
         self.threads = []  # Array of PR started. Used to wait on them
-        self.lru = LRU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock)
+        self.thread_set = set()
+        self.lru = LRU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set)
         self.optimal = Optimal(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, 
-                self.event_page_stream, self.lock, self.simulation_window_size)
-        self.lfu = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock)
+              self.event_page_stream, self.lock, self.simulation_window_size)
+        self.lfu = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set)
+
 
     def start_simulation(self):
         try:
@@ -44,9 +46,9 @@ class Controller(object):
             print len(self.page_num_stream)
             
             
-            thread_optimal = threading.Thread(target=self.optimal, args=())
+            """thread_optimal = threading.Thread(target=self.optimal, args=())
             self.threads.append(thread_optimal)
-            thread_optimal.start()
+            thread_optimal.start()"""
             
             thread_lru = threading.Thread(target=self.lru, args=())
             self.threads.append(thread_lru)

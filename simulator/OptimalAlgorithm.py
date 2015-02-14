@@ -130,8 +130,11 @@ class Optimal(object):
                     else:  # If all of the previous iterations went through,
                            # ie. if no frames are free
                         self.replace_frame(virtual_page_no,pid)
-                        
+                    
+        		self.read_lock.acquire() 
+                print self.read_lock.locked       
                 self.page_num_stream[0][2].add(thread_id)  # This thread has read the address
+                self.read_lock.release()
             
             self.read_lock.acquire()
             if(len(self.page_num_stream[0][2]) == self.number_pr_threads):  # If all threads have read the value

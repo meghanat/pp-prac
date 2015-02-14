@@ -27,7 +27,7 @@ class Simulator(tk.Tk):
             self.algo_values[text]["label"] = None
             self.algo_values[text]["string_var"] = tk.StringVar()
 
-        ranges = [(1,4), (0.1,4), (4, 8), (1, 1000), (1, 1000)]
+        ranges = [(1,4), (1,4), (4, 8), (1, 1000), (1, 1000)]
 
         #self.settings_label=th.Label(self,{})
         self.leftFrame = tk.Frame(self,bg="gainsboro", relief=tk.GROOVE,bd=5)
@@ -100,9 +100,9 @@ class Simulator(tk.Tk):
 
     def update_labels(self):
         while True:
-            print "LRU", self.controller.lru.get_page_fault_count()
-            print "LFU", self.controller.lfu.get_page_fault_count()
-            print "OPTIMAL", self.controller.optimal.get_page_fault_count()
+            #print "LRU", self.controller.lru.get_page_fault_count()
+            #print "LFU", self.controller.lfu.get_page_fault_count()
+            #print "OPTIMAL", self.controller.optimal.get_page_fault_count()
             self.algo_values["LRU"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
             self.algo_values["LFU"]["string_var"].set(str(self.controller.lfu.get_page_fault_count()))
             self.algo_values["OPTIMAL"]["string_var"].set(str(self.controller.optimal.get_page_fault_count()))
