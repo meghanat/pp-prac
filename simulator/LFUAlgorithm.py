@@ -32,6 +32,7 @@ class LFU(object):
 
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
+        print "LFU replace"
         page_table=self.page_tables[pid]
         #  Update the page table of this process
         if virtual_page_no not in page_table:
@@ -48,7 +49,7 @@ class LFU(object):
 
     #swap out page from memory
     def replace_frame(self,virtual_page_no,pid):
-        #print "here"
+        print "LFU replace"
         frame_to_replace = min(self.memory, key=lambda x: x["frequency"])
         frame_no_to_replace = self.memory.index(frame_to_replace)
 
@@ -80,11 +81,6 @@ class LFU(object):
         
     def __call__(self):
         while self.simulating:
-
-
-
-
-            
             thread_id = thread.get_ident()
 
             if thread_id not in self.thread_set:  # Only if the thread hasn't already
@@ -92,7 +88,9 @@ class LFU(object):
                 #get page table for process
 
                 self.read_lock.acquire()  
+                #print " lru before event.wait",self.event.is_set()
                 self.event.wait()
+                #print " lru after event.wait",self.event.is_set()
                 pid, virtual_page_no, thread_set = self.page_num_stream[0]
                 self.read_lock.release()
 
@@ -116,22 +114,19 @@ class LFU(object):
                     else:  # If all of the previous iterations went through,
                            # ie. if no frames are free
                         self.replace_frame(virtual_page_no,pid)
-                   
-                self.read_lock.acquire()
-                print "LFU in"
+                #print "LFU in"
                 self.thread_set.add(thread_id)  # This thread has read the address
-                self.read_lock.release()
-                print "LFU out"
+                #print "LFU out"
 
             self.read_lock.acquire()
-            print "LFU in 1"            
+            #print "LFU in 1"            
             if(len(self.page_num_stream) != 0 and len(self.thread_set) == self.number_pr_threads):  # If all threads have read the value
                 #print "Popped"
                 self.page_num_stream.pop(0)
-                self.thread_set = set()
+                self.thread_set.clear()
                 if(len(self.page_num_stream) == 0):  # Wait for an access to be made
                     self.event.clear() 
             self.read_lock.release()
-            print "LFU out 1"
+            #print "LFU out 1"
 
             

@@ -25,11 +25,8 @@ class CPU:
 
             pid, virt_addr = self.addr_access_stream.pop(0)
             virt_page = virt_addr >> self.PAGE_SHIFT
-        
-            self.lock.acquire()
             self.page_num_stream.append([pid, virt_page, set()])
             self.event_page_stream.set()
-            self.lock.release()
 
 def start_CPU(num_processes, page_num_stream, event_page_stream, lock):
     mCPU = CPU(num_processes, page_num_stream, event_page_stream, lock)
