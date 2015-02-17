@@ -92,7 +92,7 @@ class LRU(object):
         self.switcher=switcher
         while self.simulating:
 
-            while(self.pages_accessed==10):
+            while(self.pages_accessed==100000):
                 pass
             
             thread_id = thread.get_ident()
@@ -104,7 +104,7 @@ class LRU(object):
                 #print " lru before event.wait",self.event.is_set()
                 self.event.wait()
                 #print " lru after event.wait",self.event.is_set()
-                pid, virtual_page_no, thread_set = self.page_num_stream[0]
+                pid, virtual_page_no = self.page_num_stream[0]
                 self.read_lock.release()
                 self.pages_accessed+=1
                 #get page table for process
@@ -138,7 +138,7 @@ class LRU(object):
                 if(len(self.page_num_stream) < self.simulation_window_size):  # Wait for an access to be made
                     self.event.clear() 
 
-                if(self.pages_accessed==10):
+                if(self.pages_accessed==100000):
                     self.switcher.switch()
                 
             self.read_lock.release()

@@ -27,7 +27,7 @@ class Simulator(tk.Tk):
             self.algo_values[text]["label"] = None
             self.algo_values[text]["string_var"] = tk.StringVar()
 
-        ranges = [(1,4), (1,4), (4, 8), (1, 1000), (1, 1000)]
+        ranges = [(2,4), (1,4), (4, 8), (1, 1000), (1, 1000)]
 
         self.leftFrame = tk.Frame(self,bg="gainsboro", relief=tk.GROOVE,bd=5)
         self.leftFrame.grid(column=0, row=0, sticky="NS",padx=10,pady=10)
@@ -45,23 +45,23 @@ class Simulator(tk.Tk):
         self.label_value.configure(font=f)
 
         for i,text in enumerate(self.label_texts):
-            label = tk.Label(self.leftFrame,self.label_options, text=text)
+            label = tk.Label(self.leftFrame, self.label_options, text=text)
             label.grid(column=0, row=i+1)
-            self.spinBoxes[self.spinbox_names[i]] = tk.Spinbox(self.leftFrame
-                        , self.spinbox_options, from_=ranges[i][0], to=ranges[i][1])
+            self.spinBoxes[self.spinbox_names[i]] = tk.Spinbox(self.leftFrame,
+                          self.spinbox_options, from_=ranges[i][0], to=ranges[i][1])
             self.spinBoxes[self.spinbox_names[i]].grid(column=1, row=i+1)
 
         for i,text in enumerate(self.algo_texts):
             label = tk.Label(self.rightFrame, self.label_options, text=text)
-            label.grid(column=0, row=i+1)
+            label.grid(column=0, row=i)
             self.algo_values[text]["label"] = tk.Label(self.rightFrame, self.label_options,
-             bg="white", textvariable=self.algo_values[text]["string_var"])
-            self.algo_values[text]["label"].grid(column=1, row=i+1)
+                                              bg="white", textvariable=self.algo_values[text]["string_var"])
+            self.algo_values[text]["label"].grid(column=1, row=i)
 
-        self.leftFrame.columnconfigure(1,pad=10)
-        self.leftFrame.columnconfigure(0,pad=10)
+        self.leftFrame.columnconfigure(1, pad=10)
+        self.leftFrame.columnconfigure(0, pad=10)
         self.simulate_button = tk.Button(self.leftFrame, text="Simulate", command=self.start_simulation)
-        self.simulate_button.grid(column=0, row=6, columnspan=2, padx=10, pady=10 )
+        self.simulate_button.grid(column=0, row=6, columnspan=2, padx=10, pady=10)
         self.resizable(False, False)
 
 
@@ -81,10 +81,12 @@ class Simulator(tk.Tk):
             #print "LFU", self.controller.lfu.get_page_fault_count()
             #print "OPTIMAL", self.controller.optimal.get_page_fault_count()
             self.algo_values["LRU"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
-            self.algo_values["LFU"]["string_var"].set(str(self.controller.lfu.get_page_fault_count()))
-            self.algo_values["OPTIMAL"]["string_var"].set(str(self.controller.optimal.get_page_fault_count()))
+            #print self.controller.lru.get_page_fault_count()
+            #self.algo_values["LFU"]["string_var"].set(str(self.controller.lfu.get_page_fault_count()))
+            #self.algo_values["OPTIMAL"]["string_var"].set(str(self.controller.optimal.get_page_fault_count()))
             #self.algo_values["FIFO"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
-            time.sleep(1)
+            #time.sleep(1)
+            self.update_idletasks()
 
 if __name__ == "__main__":
     sim = Simulator(None)

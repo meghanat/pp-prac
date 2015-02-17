@@ -11,38 +11,36 @@ class Controller(object):
     
     def __init__(self, simulation_values):        
         self.page_num_stream = []  # Each List Entry
-                              # [pid, virtual_page_number, set of threads that have
-                              #  read from this entry]
+                                   # [pid, virtual_page_number]
         self.event_page_stream = threading.Event()  # Used to wait for an address to be 
-                                               # available on page_num_stream
-        self.lock = threading.Lock()                                     
+                                                    # available on page_num_stream
+        self.lock = threading.Lock()                                 
         self.number_processes = simulation_values["num_processes"] 
         self.main_memory_size = simulation_values["memory"] * (2 ** 30)  # GB
         self.page_size = simulation_values["page_size"] * (2 ** 10)  # KB
         #self.number_frames = self.main_memory_size / self.page_size
-        self.number_frames=50
+        self.number_frames = 50
         self.simulation_window_size = simulation_values["window"]
         self.process_size = simulation_values["vas"] * (2 ** 30)  # GB 
         self.number_virtual_pages = self.process_size / self.page_size
 
-        self.number_pr_threads = 2  # No of page replacement algorithms
+        self.number_pr_threads = 1  # No of page replacement algorithms
         self.threads = []  # Array of PR started. Used to wait on them
-        self.thread_set = set()
+        self.thread_set = set()  # Global set; Used to indicate reading of an elem by all algos.
         self.lru = LRU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set)
-        self.optimal = Optimal(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, 
-              self.event_page_stream, self.lock, self.simulation_window_size)
-        self.lfu = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set)
+        #self.optimal = Optimal(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, 
+        #      self.event_page_stream, self.lock, self.simulation_window_size)
+        #self.lfu = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set)
 
-        print type(self.lfu)
-        self.current_algorithm=self.lru
-        self.other_algorithms=[self.lfu,self.lru]
+        self.current_algorithm = self.lru
+        self.other_algorithms = [self.lru]#[self.lfu,self.lru]
 
-        self.switcher=Switcher(self.current_algorithm,self.other_algorithms)
+        self.switcher = Switcher(self.current_algorithm, self.other_algorithms)
 
     def start_simulation(self):
         try:
             thread = threading.Thread(target=lambda : cpu.start_CPU(self.number_processes, 
-                                        self.page_num_stream, self.event_page_stream, self.lock,self.simulation_window_size), args=())
+                                        self.page_num_stream, self.event_page_stream, self.lock, self.simulation_window_size), args=())
             self.threads.append(thread)
             thread.start()
 
@@ -61,9 +59,9 @@ class Controller(object):
             self.threads.append(thread_lru)
             thread_lru.start()
             
-            thread_lfu = threading.Thread(target=self.lfu, args=(self.switcher,))
+            """thread_lfu = threading.Thread(target=self.lfu, args=(self.switcher,))
             self.threads.append(thread_lfu)
-            thread_lfu.start()
+            thread_lfu.start()"""
         
 
         except Exception as e:
