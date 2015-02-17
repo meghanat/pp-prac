@@ -34,9 +34,9 @@ class Simulator(tk.Tk):
         self.rightFrame = tk.Frame(self, width=500, height=500, bg="white")
         self.rightFrame.grid(column=1, row=0)
 
-        self.label_param = tk.Label(self.leftFrame,padx=self.padx,pady=self.pady,width=15,font=("Helvetica", 16), text="Parameter", bg="gainsboro")
+        self.label_param = tk.Label(self.leftFrame, self.label_options, font=("Helvetica", 16), text="Parameter")
         self.label_param.grid(column=0, row=0, pady=20)
-        self.label_value = tk.Label(self.leftFrame,padx=self.padx,pady=self.pady,width=15,font=("Helvetica", 16), text="Value", bg="gainsboro")
+        self.label_value = tk.Label(self.leftFrame, self.label_options, font=("Helvetica", 16), text="Value")
         self.label_value.grid(column=1, row=0,pady=20)
 
         f = tkFont.Font(self.label_param, self.label_param.cget("font"))
