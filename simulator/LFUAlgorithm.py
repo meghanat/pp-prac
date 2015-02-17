@@ -3,7 +3,7 @@ import thread
 
 class LFU(object):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size=10):
+                       page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size=10, switching_window=10000):
         self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
@@ -17,8 +17,10 @@ class LFU(object):
         self.read_lock=read_lock
         self.page_fault_count = 0
         self.thread_set = thread_set
-        self.simulation_window_size=simulation_window_size
-        self.pages_accessed=0
+        self.simulation_window_size = simulation_window_size
+        self.pages_accessed = 0
+        self.switching_window = switching_window
+        self.name = "LFU"
 
 
     def reset_memory(self,current_memory):
@@ -88,7 +90,7 @@ class LFU(object):
     def __call__(self,switcher):
         self.switcher=switcher
         while True:
-            while(self.pages_accessed==10):
+            while(self.pages_accessed == self.switching_window):
                 pass
             thread_id = thread.get_ident()
 
@@ -100,7 +102,7 @@ class LFU(object):
                 #print " lru before event.wait",self.event.is_set()
                 self.event.wait()
                 #print " lru after event.wait",self.event.is_set()
-                pid, virtual_page_no, thread_set = self.page_num_stream[0]
+                pid, virtual_page_no = self.page_num_stream[0]
                 self.read_lock.release()
                 self.pages_accessed+=1
 
@@ -138,7 +140,7 @@ class LFU(object):
                 if(len(self.page_num_stream) < self.simulation_window_size):  # Wait for an access to be made
                     self.event.clear() 
 
-                if(self.pages_accessed==10):
+                if(self.pages_accessed == self.switching_window):
                     self.switcher.switch()
                 
             self.read_lock.release()

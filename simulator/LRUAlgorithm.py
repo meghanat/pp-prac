@@ -4,7 +4,7 @@ import time
 
 class LRU(object):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size=10, switching_window=100000):
+                       page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size=10, switching_window=10000):
         self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
@@ -21,6 +21,7 @@ class LRU(object):
         self.simulation_window_size=simulation_window_size
         self.pages_accessed=0
         self.switching_window = switching_window
+        self.name = "LRU"
         
 
     def reset_memory(self,current_memory):

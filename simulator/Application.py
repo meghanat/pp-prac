@@ -81,11 +81,16 @@ class Simulator(tk.Tk):
             #print "LFU", self.controller.lfu.get_page_fault_count()
             #print "OPTIMAL", self.controller.optimal.get_page_fault_count()
             self.algo_values["LRU"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
-            #print self.controller.lru.get_page_fault_count()
-            #self.algo_values["LFU"]["string_var"].set(str(self.controller.lfu.get_page_fault_count()))
+            self.algo_values["LFU"]["string_var"].set(str(self.controller.lfu.get_page_fault_count()))
+            for algo in self.algo_values:
+                self.algo_values[algo]["label"].config(bg="white")
+            self.algo_values[self.controller.switcher.current_algorithm.name]["label"].config(bg="green")
+            
+
+
             #self.algo_values["OPTIMAL"]["string_var"].set(str(self.controller.optimal.get_page_fault_count()))
             #self.algo_values["FIFO"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
-            #time.sleep(1)
+            time.sleep(1)
             self.update_idletasks()
 
 if __name__ == "__main__":
