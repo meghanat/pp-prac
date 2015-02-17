@@ -29,13 +29,10 @@ class Simulator(tk.Tk):
 
         ranges = [(1,4), (1,4), (4, 8), (1, 1000), (1, 1000)]
 
-        #self.settings_label=th.Label(self,{})
         self.leftFrame = tk.Frame(self,bg="gainsboro", relief=tk.GROOVE,bd=5)
         self.leftFrame.grid(column=0, row=0, sticky="NS",padx=10,pady=10)
         self.rightFrame = tk.Frame(self, width=500, height=500, bg="white")
         self.rightFrame.grid(column=1, row=0)
-
-
 
         self.label_param = tk.Label(self.leftFrame,padx=self.padx,pady=self.pady,width=15,font=("Helvetica", 16), text="Parameter", bg="gainsboro")
         self.label_param.grid(column=0, row=0, pady=20)
@@ -73,30 +70,10 @@ class Simulator(tk.Tk):
         for parameter in self.spinbox_names:
             simulation_values[parameter] = int(self.spinBoxes[parameter].get())
         self.controller = controller.Controller(simulation_values)
-        #self.controller.start_simulation()
         self.controller_thread = threading.Thread(target=self.controller.start_simulation)
         self.controller_thread.start()
         self.update_thread = threading.Thread(target=self.update_labels)
         self.update_thread.start()
-
-
-    ## Plan : To add a method which periodically updates some label(To be added) with the value of self.controller.lru.get_page_fault_count()
-    ## Add labels for each of the algorithms, with the thread updating all the values from the corresponding objects periodically
-    # def do_every(self, period, function):
-    #     def tick():
-    #         t = time.time()
-    #         count = 0
-    #         while True:
-    #             count += 1
-    #             yield max(t + count * period - time.time(), 0)
-    #     ticker = tick()
-    #     while True:
-    #         time.sleep(g.next())
-    #         function()
-
-    # def start_periodic_update(self):
-    #     self.update_thread = threading.Thread(target=lambda x: do_every(1, update_labels))
-    #     self.update_thread.start()
 
     def update_labels(self):
         while True:
@@ -109,14 +86,9 @@ class Simulator(tk.Tk):
             #self.algo_values["FIFO"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
             time.sleep(1)
 
-
-
 if __name__ == "__main__":
     sim = Simulator(None)
     sim.title("Simulation of Page Replacement")
     sim.initialize()
     sim.mainloop()
-# TODO: controller.start_simulation needs to be run on a seperate thread to avoid blocking the UI
-# TODO: add a stop_simulation
-# TODO: add widgets for showing page fault counts
-# TODO: add a dynamically changing graph for page access? :D : http://www.physics.utoronto.ca/~phy326/python/Live_Plot_Simple.py
+
