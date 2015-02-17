@@ -29,15 +29,25 @@ class Simulator(tk.Tk):
 
         ranges = [(2,4), (1,4), (4, 8), (1, 1000), (1, 1000)]
 
-        self.leftFrame = tk.Frame(self,bg="gainsboro", relief=tk.GROOVE,bd=5)
-        self.leftFrame.grid(column=0, row=0, sticky="NS",padx=10,pady=10)
-        self.rightFrame = tk.Frame(self, width=500, height=500, bg="white")
-        self.rightFrame.grid(column=1, row=0)
+        self.leftFrame = tk.Frame(self, bg="gainsboro", relief=tk.GROOVE, bd=5)
+        self.leftFrame.grid(column=0, row=0, sticky="NS",padx=10, pady=10)
+        self.rightFrame = tk.Frame(self)
+        self.rightFrame.grid(column=1, sticky="NS", row=0, padx=10, pady=10)
+        self.rightTopFrame = tk.Frame(self.rightFrame, width=500, height=500)
+        self.rightTopFrame.grid(row=0, column=0, sticky="NS")
+        self.rightBottomFrame = tk.Frame(self.rightFrame, width=500, height=500)
+        self.rightBottomFrame.grid(row=1, column=0, sticky="NS")
+
 
         self.label_param = tk.Label(self.leftFrame, self.label_options, font=("Helvetica", 16), text="Parameter")
         self.label_param.grid(column=0, row=0, pady=20)
         self.label_value = tk.Label(self.leftFrame, self.label_options, font=("Helvetica", 16), text="Value")
         self.label_value.grid(column=1, row=0,pady=20)
+
+        self.leftFrame.columnconfigure(1, pad=10)
+        self.leftFrame.columnconfigure(0, pad=10)
+        self.simulate_button = tk.Button(self.leftFrame, text="Simulate", command=self.start_simulation)
+        self.simulate_button.grid(column=0, row=6, columnspan=2, padx=10, pady=10)
 
         f = tkFont.Font(self.label_param, self.label_param.cget("font"))
         f.configure(underline = True)
@@ -52,17 +62,22 @@ class Simulator(tk.Tk):
             self.spinBoxes[self.spinbox_names[i]].grid(column=1, row=i+1)
 
         for i,text in enumerate(self.algo_texts):
-            label = tk.Label(self.rightFrame, self.label_options, text=text)
+            label = tk.Label(self.rightTopFrame, self.label_options, text=text)
             label.grid(column=0, row=i)
-            self.algo_values[text]["label"] = tk.Label(self.rightFrame, self.label_options,
+            self.algo_values[text]["label"] = tk.Label(self.rightTopFrame, self.label_options,
                                               bg="white", textvariable=self.algo_values[text]["string_var"])
             self.algo_values[text]["label"].grid(column=1, row=i)
 
-        self.leftFrame.columnconfigure(1, pad=10)
-        self.leftFrame.columnconfigure(0, pad=10)
-        self.simulate_button = tk.Button(self.leftFrame, text="Simulate", command=self.start_simulation)
-        self.simulate_button.grid(column=0, row=6, columnspan=2, padx=10, pady=10)
+        self.tabs = ttk.Notebook(self.rightBottomFrame)
+        for algo in self.algo_texts:
+            frame = ttk.Frame(self.tabs)
+            label = tk.Label(frame, text=algo)
+            label.grid(row=0, column=0)
+            self.tabs.add(frame, text=algo)
+        self.tabs.grid(row=1, column=0)
+        
         self.resizable(False, False)
+
 
 
     def start_simulation(self):
