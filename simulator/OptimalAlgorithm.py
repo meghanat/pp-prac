@@ -39,7 +39,7 @@ class Optimal(object):
 
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
-        
+        print "Fill",frame_no, " with ", virtual_page_no
         page_table=self.page_tables[pid]
         #  Update the page table of this process
         if virtual_page_no not in page_table:
@@ -55,7 +55,6 @@ class Optimal(object):
 
      #swap out page from memory
     def replace_frame(self,virtual_page_no,pid):
-        #print "here"
         
         #frame_to_replace = min(self.memory, key=lambda x: x["time"])
     
@@ -76,6 +75,7 @@ class Optimal(object):
                 break
                 
         self.page_fault_count += 1
+        print "replace ", frame_to_replace, " with ", virtual_page_no
         #print frame_to_replace
 
 
@@ -111,6 +111,7 @@ class Optimal(object):
             while(self.pages_accessed==1000):
                 pass
 
+            print "__call__"
             thread_id = thread.get_ident()
 
             if thread_id not in self.thread_set:  # Only if the thread hasn't already
