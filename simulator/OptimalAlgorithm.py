@@ -64,20 +64,20 @@ class Optimal(object):
         for frame_no,frame in enumerate(self.memory):
             try:
                 i=self.page_num_stream.index([pid,frame["virtual_page_no"]],0,self.simulation_window_size)
-                print frame_no," index: ",i
+                #print frame_no," index: ",i
                 if i> next_access:
                     next_access=i
                     frame_to_replace=frame
                     frame_no_to_replace=frame_no
 
             except ValueError: # not in the simulation_window
-                print frame_no
+                #print frame_no
                 frame_to_replace=frame
                 frame_no_to_replace=frame_no
                 break
                 
         self.page_fault_count += 1
-        print "replace ", frame_to_replace, " with ", virtual_page_no
+        #print "replace ", frame_to_replace, " with ", virtual_page_no
         #print frame_to_replace
 
 
@@ -113,7 +113,7 @@ class Optimal(object):
             while(self.pages_accessed==1000):
                 pass
 
-            print "__call__"
+            #print "__call__"
             thread_id = thread.get_ident()
 
             if thread_id not in self.thread_set:  # Only if the thread hasn't already
