@@ -4,7 +4,7 @@ import time
 
 class FIFO(object):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock):
+                       page_num_stream, event_page_stream, read_lock, thread_set, simulation_window_size = 10, switching_window = 10000):
         self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
@@ -17,8 +17,16 @@ class FIFO(object):
         self.simulating = True
         self.read_lock = read_lock
         self.page_fault_count = 0
+	self.thread_set = thread_set
+	self.simulation_window_size = simulation_window_size
+	self.pages_accessed = 0
+	self.switching_window = self.switching_window
+	self.name = "FIFO"
 	self.i = -1
-	
+
+    def reset_memory(self,current_memory):
+        self.memory=[{"time" : 0, "pid": i["pid"], "virtual_page_no": i["virtual_page_no"]} for i in current_memory]
+
     def get_current_memory_mappings(self):
         virtual_addresses = []
         for frame in self.memory:      
@@ -33,6 +41,7 @@ class FIFO(object):
 
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
+	print "FIFO replace"
         page_table=self.page_tables[pid]
         #  Update the page table of this process
         if virtual_page_no not in page_table:
@@ -50,6 +59,7 @@ class FIFO(object):
     #swap out page from memory
     def replace_frame(self,virtual_page_no,pid):
         #print "here"
+	print "FIFO replace"
 	self.i = (self.i + 1) % len(self.memory)
         frame_to_replace = self.memory[self.i]
         frame_no_to_replace = self.i
@@ -69,7 +79,7 @@ class FIFO(object):
 
         # Update the frame entry's PID and time stamp
         self.memory[frame_no_to_replace]["pid"] = pid
-        self.memory[frame_no_to_replace]["time"] = time.time()#time.clock()
+        #self.memory[frame_no_to_replace]["time"] = time.time()#time.clock()
         self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
         self.page_fault_count += 1
 
@@ -80,20 +90,22 @@ class FIFO(object):
         page_table = self.page_tables[pid]
         return page_table
         
-    def __call__(self):
+    def __call__(self, switcher):
+	self.switcher = switcher
         while self.simulating:
-            if(len(self.page_num_stream) == 0):  # Wait for an access to be made
-                self.event.clear() 
-            self.event.wait()
-
-            self.read_lock.acquire()
-            pid, virtual_page_no, thread_set = self.page_num_stream[0]
-            self.read_lock.release()
-            
-            thread_id = thread.get_ident()
+	    
+	    while self.pages_accessed == self.switching_window:
+		pass
+	    
+	    thread_id = thread.get_ident()
 
             if thread_id not in thread_set:  # Only if the thread hasn't already
                                              # read this address
+		self.read_lock.acquire()
+		self.event.wait()
+		pid, virtual_page_no = self.page_num_stream[0]
+		self.pages_accessed+=1
+
                 #get page table for process
                 page_table=self.get_page_table(pid)
 
@@ -115,13 +127,19 @@ class FIFO(object):
                            # ie. if no frames are free
                         self.replace_frame(virtual_page_no,pid)
                         
-                self.page_num_stream[0][2].add(thread_id)  # This thread has read the address
+                self.thread_set.add(thread_id)  # This thread has read the address
             
             self.read_lock.acquire()
-            if(len(self.page_num_stream[0][2]) == self.number_pr_threads):  # If all threads have read the value
+            if(len(self.page_num_stream) != 0 and len(self.thread_set) == self.number_pr_threads):  # If all threads have read the value
                 #print "Popped"
                 self.page_num_stream.pop(0)
-            self.read_lock.release()
+		self.thread_set.clear()
+		if(len(self.page_num_stream) < self.simulation_window_size):  # Wait for an access to be made
+			self.event.clear()
+		if(self.pages_accessed == self.switching_window):
+                    self.switcher.switch()
+
+	    self.read_lock.release()
 
             
 # TODO: Call a function from within a thread? This function is too long
