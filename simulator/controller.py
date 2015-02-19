@@ -1,6 +1,7 @@
 import cpu
 import threading
 import thread
+from FIFOAlgorithm import FIFO
 from LRUAlgorithm import LRU
 from LFUAlgorithm import LFU
 from OptimalAlgorithm import Optimal
@@ -24,16 +25,18 @@ class Controller(object):
         self.process_size = simulation_values["vas"] * (2 ** 30)  # GB 
         self.number_virtual_pages = self.process_size / self.page_size
 
-        self.number_pr_threads = 3  # No of page replacement algorithms
+        self.number_pr_threads = 4  # No of page replacement algorithms
         self.threads = []  # Array of PR started. Used to wait on them
         self.thread_set = set()  # Global set; Used to indicate reading of an elem by all algos.
         self.lru = LRU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size)
         self.optimal = Optimal(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, 
              self.event_page_stream, self.lock,self.thread_set, self.simulation_window_size)
-        self.lfu = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size)
+        self.lfu = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock,self.thread_set,self.simulation_window_size)
+
+	self.fifo = FIFO(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size)
 
         self.current_algorithm = self.lfu
-        self.other_algorithms = [self.lfu,self.lru]
+        self.other_algorithms = [self.lfu,self.lru,self.fifo]
 
         self.switcher = Switcher(self.current_algorithm, self.other_algorithms,self.optimal)
 
@@ -63,6 +66,11 @@ class Controller(object):
             self.threads.append(thread_lfu)
             thread_lfu.start()
             
+  	    thread_fifo = threading.Thread(target=self.fifo, args=(self.switcher,))
+            self.threads.append(thread_fifo)
+            thread_fifo.start()
+
+
 
         except Exception as e:
             print "Failed to start thread:", e
