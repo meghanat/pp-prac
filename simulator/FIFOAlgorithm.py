@@ -20,7 +20,7 @@ class FIFO(object):
 	self.thread_set = thread_set
 	self.simulation_window_size = simulation_window_size
 	self.pages_accessed = 0
-	self.switching_window = self.switching_window
+	self.switching_window = switching_window
 	self.name = "FIFO"
 	self.i = -1
 
@@ -99,7 +99,7 @@ class FIFO(object):
 	    
 	    thread_id = thread.get_ident()
 
-            if thread_id not in thread_set:  # Only if the thread hasn't already
+            if thread_id not in self.thread_set:  # Only if the thread hasn't already
                                              # read this address
 		self.read_lock.acquire()
 		self.event.wait()
