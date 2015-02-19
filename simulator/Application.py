@@ -98,7 +98,8 @@ class Simulator(tk.Tk):
             self.algo_values["LRU"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
             self.algo_values["LFU"]["string_var"].set(str(self.controller.lfu.get_page_fault_count()))
             self.algo_values["OPTIMAL"]["string_var"].set(str(self.controller.optimal.get_page_fault_count()))
-            for algo in self.algo_values:
+            self.algo_values["FIFO"]["string_var"].set(str(self.controller.fifo.get_page_fault_count()))
+	    for algo in self.algo_values:
                 self.algo_values[algo]["label"].config(bg="white")
             self.algo_values[self.controller.switcher.current_algorithm.name]["label"].config(bg="green")
             
