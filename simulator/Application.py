@@ -33,10 +33,10 @@ class Simulator(tk.Tk):
         self.leftFrame.grid(column=0, row=0, sticky="NS",padx=10, pady=10)
         self.rightFrame = tk.Frame(self)
         self.rightFrame.grid(column=1, sticky="NS", row=0, padx=10, pady=10)
-        self.rightTopFrame = tk.Frame(self.rightFrame, width=500, height=500)
-        self.rightTopFrame.grid(row=0, column=0, sticky="NS")
-        self.rightBottomFrame = tk.Frame(self.rightFrame, width=500, height=500)
-        self.rightBottomFrame.grid(row=1, column=0, sticky="NS")
+        self.rightTopFrame = tk.Frame(self.rightFrame, width=500, height=500, padx=10, pady=10)
+        self.rightTopFrame.grid(row=0, column=0)
+        self.rightBottomFrame = tk.Frame(self.rightFrame, width=500, height=500, padx=10, pady=10)
+        self.rightBottomFrame.grid(row=1, column=0)
 
 
         self.label_param = tk.Label(self.leftFrame, self.label_options, font=("Helvetica", 16), text="Parameter")
@@ -71,8 +71,10 @@ class Simulator(tk.Tk):
         self.tabs = ttk.Notebook(self.rightBottomFrame)
         for algo in self.algo_texts:
             frame = ttk.Frame(self.tabs)
-            label = tk.Label(frame, text=algo)
-            label.grid(row=0, column=0)
+            textArea = tk.Text(frame, width=50, height=30)
+            self.algo_values[algo]["log"] = textArea
+            textArea.insert(tk.END, algo)
+            textArea.grid(row=0, column=0)
             self.tabs.add(frame, text=algo)
         self.tabs.grid(row=1, column=0)
         
