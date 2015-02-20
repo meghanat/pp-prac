@@ -21,15 +21,16 @@ class VirtualAddressGenerator:
         except Exception as e:
             print e
 
-    def increment_address(self):
-        # print "Increment\n"
+    def increment_address(self, pid):
+        print "Increment ", pid, "\n"
         self.current_address += 4
         # print self.current_address
-        self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
+        self.address_stream.append((pid, self.current_address))
         if(len(self.address_stream) >= self.simulation_window_size):
             self.event.set()
 
-    def generate_loop_addresses(self):
+    def generate_loop_addresses(self, pid):
+        print "Loop ", pid, "\n"
         num_iterations = random.randrange(10, 100)
         offset = random.randrange(4, 4000, 4)  # one to thousand instructions per iteration
         
@@ -38,46 +39,50 @@ class VirtualAddressGenerator:
             
         for i in range(num_iterations):
             for j in range(self.current_address, self.current_address + offset, 4):
-                # print j, "\n"
-                self.address_stream.append((VirtualAddressGenerator.pid, j))
+                print "Address: ", j, "; Process: ", pid, "\n"
+                self.address_stream.append((pid, j))
                 if(len(self.address_stream) >= self.simulation_window_size):
                     self.event.set()
 
         self.current_address += offset + 4
-        self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
+        print "Address: ", self.current_address, "; Process: ", pid, "\n"
+        self.address_stream.append((pid, self.current_address))
         if(len(self.address_stream) >= self.simulation_window_size):
             self.event.set()
 
 
-    def generate_jump_addresses(self):
+    def generate_jump_addresses(self, pid):
+        print "Jump: ", pid, "\n"
         jump_to = random.randrange(self.kernel_space, self.process_size-4000, 4)
         #print " jump_to :",jump_to,"\n"
         offset = random.randrange(4, 4000, 4)
         
         for j in range(jump_to, jump_to + offset, 4):
-            # print j, "\n"
-            self.address_stream.append((VirtualAddressGenerator.pid, j))
+            print "Address: ", j, "; Process: ", pid, "\n"
+            self.address_stream.append((pid, j))
             if(len(self.address_stream) >= self.simulation_window_size):
                 self.event.set()
 
         self.current_address += 4
-        self.address_stream.append((VirtualAddressGenerator.pid, self.current_address))
+        print "Address: ", self.current_address, "; Process: ", pid, "\n"
+        self.address_stream.append((pid, self.current_address))
         if(len(self.address_stream) >= self.simulation_window_size):
             self.event.set()
 
     def generate_virtual_address(self):
         VirtualAddressGenerator.pid += 1
+        pid = VirtualAddressGenerator.pid
         while (True):
 
             gen_value = numpy.random.choice(self.values, None, self.prob_dist)
         
             if(gen_value == 1):
-                self.increment_address()
+                self.increment_address(pid)
                 
             elif (gen_value == 2):
-                self.generate_loop_addresses()
+                self.generate_loop_addresses(pid)
 
             elif (gen_value == 3):
                 # print "Jump\n"
-                self.generate_jump_addresses()
+                self.generate_jump_addresses(pid)
                 
