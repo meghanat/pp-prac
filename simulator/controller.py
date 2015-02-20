@@ -48,6 +48,7 @@ class Controller(object):
             thread.start()
 
             while(len(self.page_num_stream) < self.simulation_window_size):
+                print len(self.page_num_stream)
                 pass
 
             print "sim_win filled"

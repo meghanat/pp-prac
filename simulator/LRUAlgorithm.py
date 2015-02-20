@@ -42,7 +42,7 @@ class LRU(object):
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
         print "LRU: Fill frame ", frame_no, " with ", virtual_page_no, "\n"
-        
+
         page_table=self.page_tables[pid]
         #  Update the page table of this process
         if virtual_page_no not in page_table:
@@ -111,6 +111,9 @@ class LRU(object):
                 pid, virtual_page_no = self.page_num_stream[0]
                 self.read_lock.release()
                 self.pages_accessed+=1
+
+                print "LRU: read next\n"
+
                 #get page table for process
                 page_table=self.get_page_table(pid)
 

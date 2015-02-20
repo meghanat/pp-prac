@@ -125,6 +125,8 @@ class Optimal(object):
                 self.read_lock.release()
                 self.pages_accessed+=1
 
+                print "Optimal: read next\n"
+
                 page_table=self.get_page_table(pid)
 
                 if virtual_page_no in page_table:
