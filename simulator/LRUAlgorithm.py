@@ -4,7 +4,7 @@ import time
 
 class LRU(object):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size=10, switching_window=10000):
+                       page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size=10):
         self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
@@ -20,7 +20,6 @@ class LRU(object):
         self.thread_set = thread_set
         self.simulation_window_size=simulation_window_size
         self.pages_accessed=0
-        self.switching_window = switching_window
         self.name = "LRU"
         
 
@@ -42,7 +41,8 @@ class LRU(object):
 
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
-        print "LRU replace"
+        print "LRU: Fill frame ", frame_no, " with ", virtual_page_no, "\n"
+        
         page_table=self.page_tables[pid]
         #  Update the page table of this process
         if virtual_page_no not in page_table:
@@ -59,8 +59,6 @@ class LRU(object):
 
     #swap out page from memory
     def replace_frame(self,virtual_page_no,pid):
-        #print "here"
-        print "LRU replace"
         frame_to_replace = min(self.memory, key=lambda x: x["time"])
         frame_no_to_replace = self.memory.index(frame_to_replace)
 
@@ -77,11 +75,15 @@ class LRU(object):
         page_table[virtual_page_no]["frame_no"] = frame_no_to_replace
         page_table[virtual_page_no]["present_bit"] = 1
 
+        print "LRU: Replace page ", self.memory[frame_no_to_replace]["virtual_page_no"],\
+             " in frame ", frame_no_to_replace, " with page ", virtual_page_no, " of process ", pid, "\n"
+
         # Update the frame entry's PID and time stamp
         self.memory[frame_no_to_replace]["pid"] = pid
         self.memory[frame_no_to_replace]["time"] = time.time()#time.clock()
         self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
         self.page_fault_count += 1
+        
 
     #return page table for process    
     def get_page_table(self,pid):
@@ -94,7 +96,7 @@ class LRU(object):
         self.switcher=switcher
         while self.simulating:
 
-            while(self.pages_accessed == self.switching_window):
+            while(self.pages_accessed == self.simulation_window_size):
                 pass
             
             thread_id = thread.get_ident()
@@ -140,7 +142,7 @@ class LRU(object):
                 if(len(self.page_num_stream) < self.simulation_window_size):  # Wait for an access to be made
                     self.event.clear() 
 
-                if(self.pages_accessed == self.switching_window):
+                if(self.pages_accessed == self.simulation_window_size):
                     self.switcher.switch()
                 
             self.read_lock.release()
