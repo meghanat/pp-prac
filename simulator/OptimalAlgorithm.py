@@ -39,7 +39,7 @@ class Optimal(object):
 
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
-        print "Fill",frame_no, " with ", virtual_page_no
+        print "Optimal: Fill frame ", frame_no, " with ", virtual_page_no, "\n"
         page_table=self.page_tables[pid]
         #  Update the page table of this process
         if virtual_page_no not in page_table:
@@ -55,9 +55,6 @@ class Optimal(object):
 
      #swap out page from memory
     def replace_frame(self,virtual_page_no,pid):
-        
-        #frame_to_replace = min(self.memory, key=lambda x: x["time"])
-    
         next_access=-1
         frame_to_replace={}
 
@@ -71,15 +68,11 @@ class Optimal(object):
                     frame_no_to_replace=frame_no
 
             except ValueError: # not in the simulation_window
-                #print frame_no
                 frame_to_replace=frame
                 frame_no_to_replace=frame_no
                 break
                 
         self.page_fault_count += 1
-        #print "replace ", frame_to_replace, " with ", virtual_page_no
-        #print frame_to_replace
-
 
         # For the frame which is being replaced, make it's process'
         # page table's page table entry's present bit 1
@@ -98,6 +91,9 @@ class Optimal(object):
         self.memory[frame_no_to_replace]["pid"] = pid
         self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
 
+        print "Optimal: Replace page ", self.memory[frame_no_to_replace]["virtual_page_no"],\
+              " in frame ", frame_no_to_replace, " with page ", virtual_page_no, " of process ", pid, "\n"
+
 
     #return page table for process    
     def get_page_table(self,pid):
@@ -110,7 +106,7 @@ class Optimal(object):
         self.switcher=switcher
         
         while True:
-            while(self.pages_accessed==1000):
+            while(self.pages_accessed==self.simulation_window_size):
                 pass
 
             #print "__call__"
@@ -164,7 +160,7 @@ class Optimal(object):
                     self.event.clear() 
                 #since all pr threads must sleep to ensure consistent view of the memory, the switch function is called in optimal,
                 #but optimal is never a candidate for switching, only local page fault count and the number of pages accesses are reset
-                if(self.pages_accessed==10):
+                if(self.pages_accessed == self.simulation_window_size):
                     self.switcher.switch()
                 
             self.read_lock.release()
