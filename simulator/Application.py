@@ -21,8 +21,8 @@ class Simulator(tk.Tk):
         self.spinbox_names = ["vas", "memory", "page_size", "num_processes", "window"]
         self.label_texts = ["VAS(GB)", "Physical Memory(GB)", "Page Size(KB)"
                            , "Number of procesess", "Simulation Window"]
-        self.algo_texts = ["LRU", "LFU", "OPTIMAL"]#, "FIFO"]
-        self.algo_values = {"LRU" : {}, "LFU": {}, "OPTIMAL": {}} #, "FIFO": {}, "OPTIMAL": {}}
+        self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO"]
+        self.algo_values = {"LRU" : {}, "LFU": {}, "OPTIMAL": {}, "FIFO": {}}
         for text in self.algo_texts:
             self.algo_values[text]["label"] = None
             self.algo_values[text]["string_var"] = tk.StringVar()
@@ -83,7 +83,7 @@ class Simulator(tk.Tk):
         self.algo_values["LRU"]["algo"] = self.controller.lru
         self.algo_values["LFU"]["algo"] = self.controller.lfu
         self.algo_values["OPTIMAL"]["algo"] = self.controller.optimal
-        #self.algo_values["FIFO"]["algo"] = self.controller.fifo
+        self.algo_values["FIFO"]["algo"] = self.controller.fifo
 
 
     def start_simulation(self):
