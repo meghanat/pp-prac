@@ -73,7 +73,6 @@ class Simulator(tk.Tk):
             frame = ttk.Frame(self.tabs)
             textArea = tk.Text(frame, width=50, height=30)
             self.algo_values[algo]["log"] = textArea
-            textArea.insert(tk.END, algo)
             textArea.grid(row=0, column=0)
             self.tabs.add(frame, text=algo)
         self.tabs.grid(row=1, column=0)

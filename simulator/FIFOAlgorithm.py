@@ -22,6 +22,7 @@ class FIFO(object):
         self.pages_accessed = 0
         self.name = "FIFO"
         self.i = -1
+        self.logs = []
 
     def reset_memory(self,current_memory):
         self.memory=[{"pid": i["pid"], "virtual_page_no": i["virtual_page_no"]} for i in current_memory]
@@ -33,7 +34,10 @@ class FIFO(object):
         return virtual_addresses
 
     def get_next_log(self):
-        return "hello"
+        if len(self.logs) > 0:
+            return self.logs.pop(0)
+        else:
+            return ""
 
     def stop_fifo(self):
         self.simulating = False
@@ -43,7 +47,7 @@ class FIFO(object):
 
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
-        print "FIFO replace"
+        self.logs.append("Fill frame " + str(frame_no) + " with " + str(virtual_page_no) + "\n")
         page_table=self.page_tables[pid]
         #  Update the page table of this process
         if virtual_page_no not in page_table:
@@ -59,8 +63,6 @@ class FIFO(object):
 
     #swap out page from memory
     def replace_frame(self,virtual_page_no,pid):
-        #print "here"
-        print "FIFO replace"    
         self.i = (self.i + 1) % len(self.memory)
         frame_to_replace = self.memory[self.i]
         frame_no_to_replace = self.i
@@ -74,6 +76,9 @@ class FIFO(object):
         page_table=self.page_tables[pid]
         if virtual_page_no not in page_table:
             page_table[virtual_page_no] = {}
+
+        self.logs.append("Replace page " + str(self.memory[frame_no_to_replace]["virtual_page_no"]) +
+             " in frame " + str(frame_no_to_replace) + " with page " +  str(virtual_page_no) + " of process " + str(pid) +"\n")
 
         page_table[virtual_page_no]["frame_no"] = frame_no_to_replace
         page_table[virtual_page_no]["present_bit"] = 1
@@ -103,9 +108,7 @@ class FIFO(object):
                 #get page table for process
 
                 self.read_lock.acquire()  
-                #print " lru before event.wait",self.event.is_set()
                 self.event.wait()
-                #print " lru after event.wait",self.event.is_set()
                 pid, virtual_page_no = self.page_num_stream[0]
                 self.read_lock.release()
                 self.pages_accessed+=1
@@ -119,9 +122,6 @@ class FIFO(object):
                     pte = None
 
                 if pte and pte["present_bit"]:
-                    #print "here"
-                    #  Update frequency of page
-                    #self.memory[pte["frame_no"]]["frequency"] += 1
                     pass
                 
                 else:   #page not in memory
@@ -132,14 +132,12 @@ class FIFO(object):
                     else:  # If all of the previous iterations went through,
                            # ie. if no frames are free
                         self.replace_frame(virtual_page_no,pid)
-                #print "LFU in"
                 self.thread_set.add(thread_id)  # This thread has read the address
-                #print "LFU out"
+                
 
             self.read_lock.acquire()
-            #print "LFU in 1"            
+            
             if(len(self.page_num_stream) != 0 and len(self.thread_set) == self.number_pr_threads):  # If all threads have read the value
-                #print "Popped"
                 self.page_num_stream.pop(0)
                 self.thread_set.clear()
                 
@@ -150,6 +148,5 @@ class FIFO(object):
                     self.switcher.switch()
                 
             self.read_lock.release()
-            #print "LFU out 1"
             
-# TODO: Call a function from within a thread? This function is too long
+        
