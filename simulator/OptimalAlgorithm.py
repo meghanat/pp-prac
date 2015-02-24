@@ -14,11 +14,11 @@ class Optimal(object):
         self.page_num_stream = page_num_stream
         self.event = event_page_stream
         self.simulating = True
-        self.read_lock=read_lock
+        self.read_lock = read_lock
         self.page_fault_count = 0
         self.thread_set = thread_set
-        self.simulation_window_size=simulation_window_size
-        self.pages_accessed=0
+        self.simulation_window_size = simulation_window_size
+        self.pages_accessed = 0
         self.logs = []
 
 
@@ -44,9 +44,8 @@ class Optimal(object):
         self.simulating = False
 
     #fill empty frame
-    def fill_frame(self,virtual_page_no,pid,frame_no):
-        print "fill_frame"
-        self.logs.append("Optimal: Fill frame " +  str(frame_no) + " with " + str(virtual_page_no) + "\n")
+    def fill_frame(self,virtual_page_no, pid, frame_no):
+        self.logs.append("Fill frame " +  str(frame_no) + " with " + str(virtual_page_no) + "\n")
         page_table=self.page_tables[pid]
         #  Update the page table of this process
         if virtual_page_no not in page_table:
@@ -62,7 +61,6 @@ class Optimal(object):
 
      #swap out page from memory
     def replace_frame(self,virtual_page_no,pid):
-        print "replace_frame"
         next_access=-1
         frame_to_replace={}
 
@@ -83,7 +81,7 @@ class Optimal(object):
         self.page_fault_count += 1
 
         # For the frame which is being replaced, make it's process'
-        # page table's page table entry's present bit 1
+        # page table's page table entry's present bit 0
         self.page_tables[frame_to_replace["pid"]]\
         [frame_to_replace["virtual_page_no"]]["present_bit"] = 0
 
@@ -95,12 +93,13 @@ class Optimal(object):
         page_table[virtual_page_no]["frame_no"] = frame_no_to_replace
         page_table[virtual_page_no]["present_bit"] = 1
 
+        self.logs.append("Optimal: Replace page " + str(self.memory[frame_no_to_replace]["virtual_page_no"]) +
+              " in frame " + str(frame_no_to_replace) + " with page " + str(virtual_page_no) + " of process " + str(pid) + "\n")
         # Update the frame entry's PID and time stamp
         self.memory[frame_no_to_replace]["pid"] = pid
         self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
 
-        self.logs.append("Optimal: Replace page " + str(self.memory[frame_no_to_replace]["virtual_page_no"]) +
-              " in frame " + str(frame_no_to_replace) + " with page " + str(virtual_page_no) + " of process " + str(pid) + "\n")
+
 
 
     #return page table for process    
@@ -111,13 +110,12 @@ class Optimal(object):
         return page_table
         
     def __call__(self,switcher):
-        self.switcher=switcher
+        self.switcher = switcher
         
         while True:
             while(self.pages_accessed==self.simulation_window_size):
                 pass
 
-            #print "__call__"
             thread_id = thread.get_ident()
 
             if thread_id not in self.thread_set:  # Only if the thread hasn't already
@@ -125,10 +123,7 @@ class Optimal(object):
                 #get page table for process
                 
                 self.read_lock.acquire()  
-                #print " lru before event.wait",self.event.is_set()
                 self.event.wait()
-                #print " lru after event.wait",self.event.is_set()
-                #print self.page_num_stream
                 pid, virtual_page_no= self.page_num_stream[0]
                 self.read_lock.release()
                 self.pages_accessed+=1
@@ -138,25 +133,20 @@ class Optimal(object):
                 page_table=self.get_page_table(pid)
 
                 if virtual_page_no in page_table:
-                    #self.logs.append("In page table\n")
                     pte = page_table[virtual_page_no]
                 else:
                     pte = None
 
                 if pte and pte["present_bit"]:
-                    #self.logs.append("In memory\n")
                     pass
                 
                 else:   #page not in memory
                     for frame_no, frame_entry in enumerate(self.memory):
                         if frame_entry["pid"] == -1:  # Empty Frame
-                            #self.logs.append(str(frame_no) + "\n")
-                            #self.logs.append(str(self.memory) + "\n")
-                            #self.fill_frame(virtual_page_no,pid,frame_no)
+                            self.fill_frame(virtual_page_no, pid, frame_no)
                             break
                     else:  # If all of the previous iterations went through,
                            # ie. if no frames are free
-                        #self.logs.append("Replace\n")
                         self.replace_frame(virtual_page_no,pid)
                 
                 self.thread_set.add(thread_id)  # This thread has read the address

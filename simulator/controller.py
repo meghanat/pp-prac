@@ -11,10 +11,9 @@ from Switcher import Switcher
 class Controller(object):
     
     def __init__(self, simulation_values):        
-        self.page_num_stream = []  # Each List Entry
-                                   # [pid, virtual_page_number]
+        self.page_num_stream = []  # Each List Entry: [pid, virtual_page_number]
         self.event_page_stream = threading.Event()  # Used to wait for an address to be 
-                                                    # available on page_num_stream
+                                                    # available in page_num_stream
         self.lock = threading.Lock()                                 
         self.number_processes = simulation_values["num_processes"] 
         self.main_memory_size = simulation_values["memory"] * (2 ** 30)  # GB
@@ -28,6 +27,7 @@ class Controller(object):
         self.number_pr_threads = 4  # No of page replacement algorithms
         self.threads = []  # Array of PR started. Used to wait on them
         self.thread_set = set()  # Global set; Used to indicate reading of an elem by all algos.
+
         self.lru = LRU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size)
         self.optimal = Optimal(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, 
              self.event_page_stream, self.lock,self.thread_set, self.simulation_window_size)
@@ -36,7 +36,7 @@ class Controller(object):
         self.current_algorithm = self.lfu
         self.other_algorithms = [self.lfu,self.lru,self.fifo]
 
-        self.switcher = Switcher(self.current_algorithm, self.other_algorithms,self.optimal)
+        self.switcher = Switcher(self.current_algorithm, self.other_algorithms, self.optimal)
 
     def start_simulation(self):
         try:
