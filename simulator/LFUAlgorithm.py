@@ -20,10 +20,12 @@ class LFU(object):
         self.simulation_window_size = simulation_window_size
         self.pages_accessed = 0
         self.name = "LFU"
+        self.logs = []
 
 
     def reset_memory(self,current_memory):
         self.memory=[{"frequency" : 0, "pid": i["pid"], "virtual_page_no": i["virtual_page_no"]} for i in current_memory]
+
 
     def get_current_memory_mappings(self):
         virtual_addresses = []
@@ -31,6 +33,13 @@ class LFU(object):
             virtual_addresses.append(frame["virtual_page_no"])
         return virtual_addresses
 
+    def get_next_log(self):
+        if len(self.logs) > 0:
+            return self.logs.pop(0)
+        else:
+            return ""
+
+        
     def get_page_fault_count(self):
         return self.page_fault_count
 
@@ -39,7 +48,7 @@ class LFU(object):
 
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
-        print "LFU: Fill frame ", frame_no, " with ", virtual_page_no, "\n"
+        self.logs.append("Fill frame " + str(frame_no) + " with " + str(virtual_page_no) + "\n")
         page_table=self.page_tables[pid]
         #  Update the page table of this process
         if virtual_page_no not in page_table:
@@ -56,7 +65,6 @@ class LFU(object):
 
     #swap out page from memory
     def replace_frame(self,virtual_page_no,pid):
-        print "LFU replace"
         frame_to_replace = min(self.memory, key=lambda x: x["frequency"])
         frame_no_to_replace = self.memory.index(frame_to_replace)
 
@@ -73,8 +81,8 @@ class LFU(object):
         page_table[virtual_page_no]["frame_no"] = frame_no_to_replace
         page_table[virtual_page_no]["present_bit"] = 1
 
-        print "LFU: Replace page ", self.memory[frame_no_to_replace]["virtual_page_no"],\
-              " in frame ", frame_no_to_replace, " with page ", virtual_page_no, " of process ", pid, "\n"
+        self.logs.append("LFU: Replace page " + str(self.memory[frame_no_to_replace]["virtual_page_no"]) +
+              " in frame " + str(frame_no_to_replace) + " with page " + str(virtual_page_no) + " of process " + str(pid) + "\n")
 
         # Update the frame entry's PID and frequency
         self.memory[frame_no_to_replace]["pid"] = pid
@@ -108,7 +116,7 @@ class LFU(object):
                 self.read_lock.release()
                 self.pages_accessed+=1
 
-                print "LRU: Read next\n"
+                #self.logs.append("Read next: " +str(virtual_page_no) + "\n")
                 page_table=self.get_page_table(pid)
 
                 if virtual_page_no in page_table:

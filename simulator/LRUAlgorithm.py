@@ -21,6 +21,7 @@ class LRU(object):
         self.simulation_window_size=simulation_window_size
         self.pages_accessed=0
         self.name = "LRU"
+        self.logs = []
         
 
     def reset_memory(self,current_memory):
@@ -33,6 +34,12 @@ class LRU(object):
             virtual_addresses.append(frame["virtual_page_no"])
         return virtual_addresses
 
+    def get_next_log(self):
+        if len(self.logs) > 0:
+            return self.logs.pop(0)
+        else:
+            return ""
+
     def stop_lru(self):
         self.simulating = False
 
@@ -41,7 +48,7 @@ class LRU(object):
 
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
-        print "LRU: Fill frame ", frame_no, " with ", virtual_page_no, "\n"
+        self.logs.append("LRU: Fill frame " + str(frame_no) + " with " + str(virtual_page_no) + "\n")
 
         page_table=self.page_tables[pid]
         #  Update the page table of this process
@@ -75,8 +82,8 @@ class LRU(object):
         page_table[virtual_page_no]["frame_no"] = frame_no_to_replace
         page_table[virtual_page_no]["present_bit"] = 1
 
-        print "LRU: Replace page ", self.memory[frame_no_to_replace]["virtual_page_no"],\
-             " in frame ", frame_no_to_replace, " with page ", virtual_page_no, " of process ", pid, "\n"
+        self.logs.append("Replace page " + str(self.memory[frame_no_to_replace]["virtual_page_no"]) +
+             " in frame " + str(frame_no_to_replace) + " with page " +  str(virtual_page_no) + " of process " + str(pid) +"\n")
 
         # Update the frame entry's PID and time stamp
         self.memory[frame_no_to_replace]["pid"] = pid
@@ -112,7 +119,7 @@ class LRU(object):
                 self.read_lock.release()
                 self.pages_accessed+=1
 
-                print "LRU: read next\n"
+                #self.logs.append("Read next " + str(virtual_page_no) + "\n")
 
                 #get page table for process
                 page_table=self.get_page_table(pid)

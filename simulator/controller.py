@@ -31,10 +31,8 @@ class Controller(object):
         self.lru = LRU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size)
         self.optimal = Optimal(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, 
              self.event_page_stream, self.lock,self.thread_set, self.simulation_window_size)
-        self.lfu = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock,self.thread_set,self.simulation_window_size)
-
-	self.fifo = FIFO(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size)
-
+        self.lfu = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size)
+        self.fifo = LFU(self.number_virtual_pages, self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size)
         self.current_algorithm = self.lfu
         self.other_algorithms = [self.lfu,self.lru,self.fifo]
 

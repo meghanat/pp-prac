@@ -33,6 +33,9 @@ class FIFO(object):
             virtual_addresses.append(frame["virtual_page_no"])
         return virtual_addresses
 
+    def get_next_log(self):
+        return "hello"
+
     def stop_fifo(self):
         self.simulating = False
 

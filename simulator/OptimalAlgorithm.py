@@ -19,7 +19,7 @@ class Optimal(object):
         self.thread_set = thread_set
         self.simulation_window_size=simulation_window_size
         self.pages_accessed=0
-
+        self.logs = []
 
 
     def reset_memory(self,current_memory):
@@ -34,12 +34,19 @@ class Optimal(object):
     def get_page_fault_count(self):
         return self.page_fault_count
 
+    def get_next_log(self):
+        if len(self.logs) > 0:
+            return self.logs.pop(0)
+        else:
+            return ""
+
     def stop_optimal(self):
         self.simulating = False
 
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
-        print "Optimal: Fill frame ", frame_no, " with ", virtual_page_no, "\n"
+        print "fill_frame"
+        self.logs.append("Optimal: Fill frame " +  str(frame_no) + " with " + str(virtual_page_no) + "\n")
         page_table=self.page_tables[pid]
         #  Update the page table of this process
         if virtual_page_no not in page_table:
@@ -55,6 +62,7 @@ class Optimal(object):
 
      #swap out page from memory
     def replace_frame(self,virtual_page_no,pid):
+        print "replace_frame"
         next_access=-1
         frame_to_replace={}
 
@@ -91,8 +99,8 @@ class Optimal(object):
         self.memory[frame_no_to_replace]["pid"] = pid
         self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
 
-        print "Optimal: Replace page ", self.memory[frame_no_to_replace]["virtual_page_no"],\
-              " in frame ", frame_no_to_replace, " with page ", virtual_page_no, " of process ", pid, "\n"
+        self.logs.append("Optimal: Replace page " + str(self.memory[frame_no_to_replace]["virtual_page_no"]) +
+              " in frame " + str(frame_no_to_replace) + " with page " + str(virtual_page_no) + " of process " + str(pid) + "\n")
 
 
     #return page table for process    
@@ -125,25 +133,30 @@ class Optimal(object):
                 self.read_lock.release()
                 self.pages_accessed+=1
 
-                print "Optimal: read next\n"
+                #self.logs.append("Read next " + str(virtual_page_no) + "\n")
 
                 page_table=self.get_page_table(pid)
 
                 if virtual_page_no in page_table:
+                    #self.logs.append("In page table\n")
                     pte = page_table[virtual_page_no]
                 else:
                     pte = None
 
                 if pte and pte["present_bit"]:
+                    #self.logs.append("In memory\n")
                     pass
                 
                 else:   #page not in memory
                     for frame_no, frame_entry in enumerate(self.memory):
                         if frame_entry["pid"] == -1:  # Empty Frame
-                            self.fill_frame(virtual_page_no,pid,frame_no)
+                            #self.logs.append(str(frame_no) + "\n")
+                            #self.logs.append(str(self.memory) + "\n")
+                            #self.fill_frame(virtual_page_no,pid,frame_no)
                             break
                     else:  # If all of the previous iterations went through,
                            # ie. if no frames are free
+                        #self.logs.append("Replace\n")
                         self.replace_frame(virtual_page_no,pid)
                 
                 self.thread_set.add(thread_id)  # This thread has read the address

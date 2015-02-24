@@ -15,14 +15,14 @@ class Simulator(tk.Tk):
         self.padx = 10
         self.pady = 5
         self.label_options = {"padx": self.padx, "pady": self.pady
-                              ,"width": 15,"bg":"gainsboro"}
+                              ,"width": 15, "bg":"gainsboro"}
         self.spinbox_options = {"width": 10}
         self.spinBoxes = {}
         self.spinbox_names = ["vas", "memory", "page_size", "num_processes", "window"]
         self.label_texts = ["VAS(GB)", "Physical Memory(GB)", "Page Size(KB)"
                            , "Number of procesess", "Simulation Window"]
-        self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO"]
-        self.algo_values = {"LRU" : {}, "LFU": {}, "FIFO": {}, "OPTIMAL": {}}
+        self.algo_texts = ["LRU", "LFU", "OPTIMAL"]#, "FIFO"]
+        self.algo_values = {"LRU" : {}, "LFU": {}, "OPTIMAL": {}} #, "FIFO": {}, "OPTIMAL": {}}
         for text in self.algo_texts:
             self.algo_values[text]["label"] = None
             self.algo_values[text]["string_var"] = tk.StringVar()
@@ -77,9 +77,13 @@ class Simulator(tk.Tk):
             textArea.grid(row=0, column=0)
             self.tabs.add(frame, text=algo)
         self.tabs.grid(row=1, column=0)
-        
         self.resizable(False, False)
 
+    def update_algo_values(self):
+        self.algo_values["LRU"]["algo"] = self.controller.lru
+        self.algo_values["LFU"]["algo"] = self.controller.lfu
+        self.algo_values["OPTIMAL"]["algo"] = self.controller.optimal
+        #self.algo_values["FIFO"]["algo"] = self.controller.fifo
 
 
     def start_simulation(self):
@@ -87,10 +91,13 @@ class Simulator(tk.Tk):
         for parameter in self.spinbox_names:
             simulation_values[parameter] = int(self.spinBoxes[parameter].get())
         self.controller = controller.Controller(simulation_values)
+        self.update_algo_values()
         self.controller_thread = threading.Thread(target=self.controller.start_simulation)
         self.controller_thread.start()
         self.update_thread = threading.Thread(target=self.update_labels)
         self.update_thread.start()
+        self.update_log_thread = threading.Thread(target=self.update_logs)
+        self.update_log_thread.start()
 
     def update_labels(self):
         while True:
@@ -104,12 +111,14 @@ class Simulator(tk.Tk):
 	    for algo in self.algo_values:
                 self.algo_values[algo]["label"].config(bg="white")
             self.algo_values[self.controller.switcher.current_algorithm.name]["label"].config(bg="green")
-            
-
-
-            #self.algo_values["OPTIMAL"]["string_var"].set(str(self.controller.optimal.get_page_fault_count()))
-            #self.algo_values["FIFO"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
             time.sleep(1)
+            self.update_idletasks()
+
+    def update_logs(self):
+        while True:
+            for algo in self.algo_texts:
+                self.algo_values[algo]["log"].insert(tk.END, str(self.algo_values[algo]["algo"].get_next_log()))
+            #time.sleep(1)
             self.update_idletasks()
 
 if __name__ == "__main__":
