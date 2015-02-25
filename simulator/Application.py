@@ -71,9 +71,12 @@ class Simulator(tk.Tk):
         self.tabs = ttk.Notebook(self.rightBottomFrame)
         for algo in self.algo_texts:
             frame = ttk.Frame(self.tabs)
-            textArea = tk.Text(frame, width=50, height=30)
+            scrollbar = tk.Scrollbar(frame)
+            scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+            textArea = tk.Text(frame, width=50, height=30, yscrollcommand=scrollbar.set)
+            textArea.pack(side=tk.LEFT, fill=tk.BOTH)
+            scrollbar.config(command=textArea.yview)
             self.algo_values[algo]["log"] = textArea
-            textArea.grid(row=0, column=0)
             self.tabs.add(frame, text=algo)
         self.tabs.grid(row=1, column=0)
         self.resizable(False, False)
