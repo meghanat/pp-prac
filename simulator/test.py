@@ -1,5 +1,7 @@
 import OptimalAlgorithm as opt
 import LRUAlgorithm as lru
+import FIFOAlgorithm as fifo
+import LFUAlgorithm as lfu
 import threading
 
 # Test the page fault count logic
@@ -44,6 +46,51 @@ def test_optimal_page_fault_count():
     print opt_ob.get_page_fault_count()
     assert expected_faults == opt_ob.get_page_fault_count()
 
+def test_fifo_page_fault_count():
+    number_frames = 3
+    number_pr_threads = 1
+    event_page_stream = threading.Event()
+    event_page_stream.set()
+    read_lock = threading.Lock()
+    expected_faults = 7
+    thread_set = set()
+
+    page_num_stream = [[1, 2], [1, 3], [1, 2], [1, 1], [1, 5], [1, 2], [1, 4], [1, 5], [1, 3]]
+    fifo_ob = fifo.FIFO(100, number_frames, number_pr_threads, 
+                       page_num_stream, event_page_stream, read_lock, thread_set)
+
+    thread_fifo = threading.Thread(target=fifo_ob, args=(None,))
+    thread_fifo.start()
+    while len(page_num_stream) > 0:
+        event_page_stream.set()
+        pass
+    thread_fifo._Thread__stop()
+    print fifo_ob.get_page_fault_count()
+    assert expected_faults == fifo_ob.get_page_fault_count()
+
+def test_lfu_page_fault_count():
+    number_frames = 3
+    number_pr_threads = 1
+    event_page_stream = threading.Event()
+    event_page_stream.set()
+    read_lock = threading.Lock()
+    expected_faults = 7
+    thread_set = set()
+
+    page_num_stream = [[1, 2], [1, 3], [1, 2], [1, 1], [1, 5], [1, 2], [1, 4], [1, 5], [1, 3]]
+    lfuob = lfu.LFU(100, number_frames, number_pr_threads, 
+                       page_num_stream, event_page_stream, read_lock, thread_set)
+    thread_lfu = threading.Thread(target=lfuob, args=(None,))
+    thread_lfu.start()
+    while len(page_num_stream) > 0:
+        event_page_stream.set()
+        pass
+    thread_lfu._Thread__stop()
+    print lfuob.get_page_fault_count()
+    assert expected_faults == lfuob.get_page_fault_count()
+
 test_lru_page_fault_count()
 test_optimal_page_fault_count()
+test_fifo_page_fault_count()
+test_lfu_page_fault_count()
 
