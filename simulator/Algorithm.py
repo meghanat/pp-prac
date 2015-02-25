@@ -44,3 +44,6 @@ class Algorithm:
         page_table = self.page_tables[pid]
         return page_table
 
+    def stop_algorithm(self):
+        self.simulating = False
+
