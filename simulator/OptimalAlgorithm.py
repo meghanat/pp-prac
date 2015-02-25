@@ -1,44 +1,22 @@
 import thread
 import time
+import Algorithm
 
-class Optimal(object):
+class Optimal(Algorithm.Algorithm):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
                        page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size=10):
-        self.number_virtual_pages = number_virtual_pages
-        self.number_pr_threads = number_pr_threads
-        self.page_tables = { }  # Structure: PID => Page Table
-                                # { virtual_page_no : 
-                                #        { frame_no: #, present_bit: 1/0 } }
-                                # index of page table is the virtual page number
+        
+       
+        Algorithm.Algorithm.__init__(self, number_virtual_pages, number_frames, number_pr_threads, 
+                       page_num_stream, event_page_stream, read_lock, thread_set,"Optimal",simulation_window_size)
+
         self.memory = [{"pid": -1, "virtual_page_no": -1} for i in range(number_frames)]
-        self.page_num_stream = page_num_stream
-        self.event = event_page_stream
-        self.simulating = True
-        self.read_lock = read_lock
-        self.page_fault_count = 0
-        self.thread_set = thread_set
-        self.simulation_window_size = simulation_window_size
-        self.pages_accessed = 0
-        self.logs = []
+        self.name = "Optimal"
 
 
     def reset_memory(self,current_memory):
         self.memory=[{"pid": i["pid"], "virtual_page_no": i["virtual_page_no"]} for i in current_memory]
 
-    def get_current_memory_mappings(self):
-        virtual_addresses = []
-        for frame in self.memory:      
-            virtual_addresses.append(frame["virtual_page_no"])
-        return virtual_addresses
-
-    def get_page_fault_count(self):
-        return self.page_fault_count
-
-    def get_next_log(self):
-        if len(self.logs) > 0:
-            return self.logs.pop(0)
-        else:
-            return ""
 
     def stop_optimal(self):
         self.simulating = False
@@ -110,6 +88,7 @@ class Optimal(object):
         return page_table
         
     def __call__(self,switcher):
+        print self.name
         self.switcher = switcher
         
         while True:

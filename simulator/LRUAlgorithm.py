@@ -7,10 +7,10 @@ class LRU(Algorithm.Algorithm):
                        page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size=10):
         
         Algorithm.Algorithm.__init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size=10)
+                       page_num_stream, event_page_stream, read_lock, thread_set,"LRU",simulation_window_size)
 
         self.memory = [{"time" : 0, "pid": -1, "virtual_page_no": -1} for i in range(number_frames)]
-        self.name = "LRU"
+        
         
 
     def reset_memory(self,current_memory):
@@ -64,4 +64,69 @@ class LRU(Algorithm.Algorithm):
         self.memory[frame_no_to_replace]["time"] = time.time()#time.clock()
         self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
         self.page_fault_count += 1
+
+    def __call__(self,switcher):
+
+        
+        self.switcher=switcher
+        while self.simulating:
+
+            while(self.pages_accessed == self.simulation_window_size):
+                pass
+            
+            thread_id = thread.get_ident()
+
+            if thread_id not in self.thread_set:  # Only if the thread hasn't already
+                                             # read this address
+
+                self.read_lock.acquire()
+                self.event.wait()
+                
+                pid, virtual_page_no = self.page_num_stream[0]
+
+                self.read_lock.release()
+                self.pages_accessed+=1
+
+                
+
+                #get page table for process
+                page_table=self.get_page_table(pid)
+
+                if virtual_page_no in page_table:
+                    pte = page_table[virtual_page_no]
+                else:
+                    pte = None
+
+                if pte and pte["present_bit"]:
+                    #  Update main memory time stamp
+                    self.memory[pte["frame_no"]]["time"] = time.time()#time.clock()
+                
+                else:   #page not in memory
+                    for frame_no, frame_entry in enumerate(self.memory):
+                        if frame_entry["pid"] == -1:  # Empty Frame
+                            self.fill_frame(virtual_page_no,pid,frame_no)
+                            break
+                    else:  # If all of the previous iterations went through,
+                           # ie. if no frames are free
+                        self.replace_frame(virtual_page_no,pid)
+
+                self.thread_set.add(thread_id)  # This thread has read the address
+            self.read_lock.acquire()
+            #print thread_id, " LRU in 1"
+            if(len(self.page_num_stream) != 0 and len(self.thread_set) == self.number_pr_threads):  # If all threads have read the value
+                #print "Popped"
+                self.page_num_stream.pop(0)
+                self.thread_set.clear()
+                if(len(self.page_num_stream) < self.simulation_window_size):  # Wait for an access to be made
+                    self.event.clear() 
+
+                if(self.pages_accessed == self.simulation_window_size):
+                    self.switcher.switch()
+                
+            self.read_lock.release()
+            #print thread_id, " LRU out 1"
+
+            
+# TODO: Call a function from within a thread? This function is too long
+
         
