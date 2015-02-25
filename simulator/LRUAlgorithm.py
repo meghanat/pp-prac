@@ -62,9 +62,10 @@ class LRU(Algorithm.Algorithm):
         self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
         self.page_fault_count += 1
 
-    def __call__(self,switcher):
+    def update_frame_in_memory(self, pte):
+        self.memory[pte["frame_no"]]["time"] = time.time()
 
-        
+    def __call__(self,switcher):
         self.switcher=switcher
         while self.simulating:
 
@@ -96,7 +97,7 @@ class LRU(Algorithm.Algorithm):
 
                 if pte and pte["present_bit"]:
                     #  Update main memory time stamp
-                    self.memory[pte["frame_no"]]["time"] = time.time()#time.clock()
+                    self.update_frame_in_memory(pte)
                 
                 else:   #page not in memory
                     for frame_no, frame_entry in enumerate(self.memory):

@@ -76,14 +76,15 @@ class Optimal(Algorithm.Algorithm):
         self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
 
 
-
-
     #return page table for process    
     def get_page_table(self,pid):
         if pid not in self.page_tables:
             self.page_tables[pid] = {}
         page_table = self.page_tables[pid]
         return page_table
+
+    def update_frame_in_memory(self, pte):
+        pass
         
     def __call__(self,switcher):
         print self.name
@@ -115,7 +116,7 @@ class Optimal(Algorithm.Algorithm):
                     pte = None
 
                 if pte and pte["present_bit"]:
-                    pass
+                    self.update_frame_in_memory(pte)
                 
                 else:   #page not in memory
                     for frame_no, frame_entry in enumerate(self.memory):

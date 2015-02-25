@@ -62,6 +62,8 @@ class LFU(Algorithm.Algorithm):
         self.memory[frame_no_to_replace]["virtual_page_no"] = virtual_page_no
         self.page_fault_count += 1
 
+    def update_frame_in_memory(self, pte):
+        self.memory[pte["frame_no"]]["frequency"] += 1
         
     def __call__(self,switcher):
         self.switcher=switcher
@@ -90,9 +92,8 @@ class LFU(Algorithm.Algorithm):
                     pte = None
 
                 if pte and pte["present_bit"]:
-                    #print "here"
                     #  Update frequency of page
-                    self.memory[pte["frame_no"]]["frequency"] += 1
+                    self.update_frame_in_memory(pte)
                 
                 else:   #page not in memory
                     for frame_no, frame_entry in enumerate(self.memory):
