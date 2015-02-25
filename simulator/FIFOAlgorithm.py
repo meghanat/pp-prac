@@ -19,9 +19,6 @@ class FIFO(Algorithm.Algorithm):
         self.memory=[{"pid": i["pid"], "virtual_page_no": i["virtual_page_no"]} for i in current_memory]
 
 
-    def stop_fifo(self):
-        self.simulating = False
-
     
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
@@ -86,7 +83,6 @@ class FIFO(Algorithm.Algorithm):
                 self.read_lock.release()
                 self.pages_accessed+=1
 
-                #self.logs.append("Read next: " +str(virtual_page_no) + "\n")
                 page_table=self.get_page_table(pid)
 
                 if virtual_page_no in page_table:
