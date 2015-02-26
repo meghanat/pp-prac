@@ -34,9 +34,9 @@ class Simulator(tk.Tk):
         ranges = [(2, 4), (1, 4), (4, 8), (1, 1000), (1, 1000)]
 
         self.leftFrame = tk.Frame(self, bg="gainsboro", relief=tk.GROOVE, bd=5)
-        self.leftFrame.grid(column=0, row=0, sticky="NS", padx=10, pady=10)
+        self.leftFrame.grid(column=0, row=0, sticky="EWNS", padx=10, pady=10)
         self.rightFrame = tk.Frame(self)
-        self.rightFrame.grid(column=1, sticky="NS", row=0, padx=10, pady=10)
+        self.rightFrame.grid(column=1, sticky="", row=0, padx=10, pady=10)
         self.rightTopFrame = tk.Frame(self.rightFrame, self.frame_options)
         self.rightTopFrame.grid(row=0, column=0)
         self.rightBottomFrame = tk.Frame(self.rightFrame, self.frame_options)
@@ -86,7 +86,10 @@ class Simulator(tk.Tk):
             self.algo_values[algo]["log"] = textArea
             self.tabs.add(frame, text=algo)
         self.tabs.grid(row=1, column=0)
-        self.resizable(False, False)
+        self.grid_columnconfigure(0,weight=1)
+	self.grid_columnconfigure(1,weight=1)
+	self.grid_rowconfigure(0,weight=1)
+	#self.resizable(False, False)
 
     def update_algo_values(self):
         self.algo_values["LRU"]["algo"] = self.controller.lru
