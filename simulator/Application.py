@@ -90,6 +90,16 @@ class Simulator(tk.Tk):
         self.grid_columnconfigure(0,weight=1)
 	self.grid_columnconfigure(1,weight=1)
 	self.grid_rowconfigure(0,weight=1)
+	self.leftFrame.columnconfigure(0,weight=1)
+	self.leftFrame.columnconfigure(1,weight=1)
+	self.leftFrame.rowconfigure(0,weight=1)
+	self.leftFrame.rowconfigure(1,weight=1)
+	self.leftFrame.rowconfigure(2,weight=1)
+	self.leftFrame.rowconfigure(3,weight=1)
+	self.leftFrame.rowconfigure(4,weight=1)
+	self.leftFrame.rowconfigure(5,weight=1)
+	
+
 	#self.resizable(False, False)
 
     def update_algo_values(self):
