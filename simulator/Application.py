@@ -81,6 +81,7 @@ class Simulator(tk.Tk):
             scrollbar = tk.Scrollbar(frame)
             scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
             textArea = tk.Text(frame, width=50, height=30, yscrollcommand=scrollbar.set)
+            textArea.configure(state=tk.DISABLED)
             textArea.pack(side=tk.LEFT, fill=tk.BOTH)
             scrollbar.config(command=textArea.yview)
             self.algo_values[algo]["log"] = textArea
@@ -125,7 +126,9 @@ class Simulator(tk.Tk):
     def update_logs(self):
         while True:
             for algo in self.algo_texts:
+                self.algo_values[algo]["log"].configure(state=tk.NORMAL)
                 self.algo_values[algo]["log"].insert(tk.END, str(self.algo_values[algo]["algo"].get_next_log()))
+                self.algo_values[algo]["log"].configure(state=tk.DISABLED)
             # time.sleep(1)
             self.update_idletasks()
 
