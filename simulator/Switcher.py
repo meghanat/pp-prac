@@ -7,14 +7,11 @@ class Switcher(object):
 
 	def switch(self):
 		print "Switch"
-		time.sleep(1)
 		best = min(self.other_algorithms, key=lambda x: x.get_page_fault_count())
 		#print best.name
-		"""for i in self.other_algorithms:
-			print i.get_page_fault_count()
+		for i in self.other_algorithms:
+			print i.name, i.get_page_fault_count()
 		print self.optimal.get_page_fault_count()
-		"""
-		print time.sleep(4)
 
 		for i in self.other_algorithms:
 			i.reset_memory(self.current_algorithm.memory)

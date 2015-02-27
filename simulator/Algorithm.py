@@ -34,7 +34,6 @@ class Algorithm:
             return ""
 
     def get_page_fault_count(self):
-        print "In Algorithm :",self.name
         return self.page_fault_count
 
      #return page table for process    

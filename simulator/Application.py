@@ -80,27 +80,30 @@ class Simulator(tk.Tk):
             frame = ttk.Frame(self.tabs)
             scrollbar = tk.Scrollbar(frame)
             scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-            textArea = tk.Text(frame, width=50, height=30, yscrollcommand=scrollbar.set)
+            textArea = tk.Text(frame, yscrollcommand=scrollbar.set)
             textArea.configure(state=tk.DISABLED)
             textArea.pack(side=tk.LEFT, fill=tk.BOTH)
             scrollbar.config(command=textArea.yview)
             self.algo_values[algo]["log"] = textArea
             self.tabs.add(frame, text=algo)
-        self.tabs.grid(row=1, column=0)
-        self.grid_columnconfigure(0,weight=1)
-	self.grid_columnconfigure(1,weight=1)
-	self.grid_rowconfigure(0,weight=1)
-	self.leftFrame.columnconfigure(0,weight=1)
-	self.leftFrame.columnconfigure(1,weight=1)
-	self.leftFrame.rowconfigure(0,weight=1)
-	self.leftFrame.rowconfigure(1,weight=1)
-	self.leftFrame.rowconfigure(2,weight=1)
-	self.leftFrame.rowconfigure(3,weight=1)
-	self.leftFrame.rowconfigure(4,weight=1)
-	self.leftFrame.rowconfigure(5,weight=1)
-	
+            self.tabs.grid(row=1, column=0)
+            self.grid_columnconfigure(0,weight=1)
+            self.grid_columnconfigure(1,weight=1)
+            self.grid_rowconfigure(0,weight=1)
+            self.leftFrame.columnconfigure(0,weight=1)
+            self.leftFrame.columnconfigure(1,weight=1)
+            self.leftFrame.rowconfigure(0,weight=1)
+            self.leftFrame.rowconfigure(1,weight=1)
+            self.leftFrame.rowconfigure(2,weight=1)
+            self.leftFrame.rowconfigure(3,weight=1)
+            self.leftFrame.rowconfigure(4,weight=1)
+            self.leftFrame.rowconfigure(5,weight=1)
+            self.rightFrame.rowconfigure(0, weight=1)
+            self.rightFrame.rowconfigure(1, weight=1)
+            self.rightFrame.columnconfigure(0, weight=1)
+    
 
-	#self.resizable(False, False)
+    
 
     def update_algo_values(self):
         self.algo_values["LRU"]["algo"] = self.controller.lru

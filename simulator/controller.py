@@ -19,7 +19,7 @@ class Controller(object):
         self.main_memory_size = simulation_values["memory"] * (2 ** 30)  # GB
         self.page_size = simulation_values["page_size"] * (2 ** 10)  # KB
         #self.number_frames = self.main_memory_size / self.page_size
-        self.number_frames = 50
+        self.number_frames = 5
         self.simulation_window_size = simulation_values["window"]
         self.process_size = simulation_values["vas"] * (2 ** 30)  # GB 
         self.number_virtual_pages = self.process_size / self.page_size

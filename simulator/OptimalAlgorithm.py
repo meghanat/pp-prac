@@ -42,7 +42,7 @@ class Optimal(Algorithm.Algorithm):
 
         for frame_no,frame in enumerate(self.memory):
             try:
-                i=self.page_num_stream.index([pid,frame["virtual_page_no"]],0,self.simulation_window_size)
+                i=self.page_num_stream.index([frame["pid"],frame["virtual_page_no"]],0,self.simulation_window_size)
                 #print frame_no," index: ",i
                 if i> next_access:
                     next_access=i
