@@ -5,26 +5,30 @@ class Switcher(object):
 		self.other_algorithms=other_algorithms
 		self.optimal=optimal
 
-	def switch(self):
+	def switch(self, swithing_event):
+		swithing_event.clear()
 		print "Switch"
 		best = min(self.other_algorithms, key=lambda x: x.get_page_fault_count())
 		#print best.name
 		for i in self.other_algorithms:
 			print i.name, i.get_page_fault_count()
+			print i.name, i.pages_accessed
 		print self.optimal.get_page_fault_count()
+		print self.optimal.pages_accessed
 
 		for i in self.other_algorithms:
 			i.reset_memory(self.current_algorithm.memory)
-			i.page_tables=dict(self.current_algorithm.page_tables)
+			i.reset_page_tables(self.current_algorithm.page_tables)
 			i.page_fault_count=0
 		self.optimal.page_fault_count=0 # since optimal is also passed but isnt part of other_algorithms[]
 		self.optimal.reset_memory(self.current_algorithm.memory)
-		self.optimal.page_tables=dict(self.current_algorithm.page_tables)
+		self.optimal.reset_page_tables(self.current_algorithm.page_tables)
 	
 		for i in self.other_algorithms:
 			i.pages_accessed=0
 		self.optimal.pages_accessed=0 # since the pages being accessed must be the same across all algorithms	
 
 		self.current_algorithm = best
+		swithing_event.set()
 
 

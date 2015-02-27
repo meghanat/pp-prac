@@ -5,10 +5,10 @@ import time
 
 class FIFO(Algorithm.Algorithm):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set, simulation_window_size=10):
+                       page_num_stream, event_page_stream, read_lock, thread_set, simulation_window_size, swiching_event):
 
         Algorithm.Algorithm.__init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set,"FIFO",simulation_window_size)
+                       page_num_stream, event_page_stream, read_lock, thread_set,"FIFO",simulation_window_size, swiching_event)
         
         self.memory = [{"pid": -1, "virtual_page_no": -1} for i in range(number_frames)]
         self.name = "FIFO"

@@ -1,9 +1,10 @@
 import thread
 import time
+import copy
 class Algorithm:
 
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set,name,simulation_window_size=10):
+                       page_num_stream, event_page_stream, read_lock, thread_set,name,simulation_window_size, switching_event):
         self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
@@ -20,12 +21,16 @@ class Algorithm:
         self.pages_accessed=0
         self.logs = []
         self.name=name
+        self.switching_event = switching_event
 
     def get_current_memory_mappings(self):
         virtual_addresses = []
         for frame in self.memory:      
             virtual_addresses.append(frame["virtual_page_no"])
         return virtual_addresses
+
+    def reset_page_tables(self, current_page_table):
+        self.page_tables = copy.deepcopy(current_page_table)
 
     def get_next_log(self):
         if len(self.logs) > 0:
@@ -52,11 +57,10 @@ class Algorithm:
 
     def __call__(self,switcher):
         self.switcher=switcher
+        no_wins = 1
         while self.simulating:
 
-            while(self.pages_accessed == self.simulation_window_size):
-                pass
-            
+            self.switching_event.wait()            
             thread_id = thread.get_ident()
 
             if thread_id not in self.thread_set:  # Only if the thread hasn't already
@@ -93,6 +97,13 @@ class Algorithm:
 
                 self.thread_set.add(thread_id)  # This thread has read the address
             self.read_lock.acquire()
+
+            # if(self.pages_accessed == self.simulation_window_size):
+            #     print self.name, " : ", self.get_page_fault_count(), " Window: ", no_wins, " \n"
+            #     self.page_fault_count = 0
+            #     self.pages_accessed = 0
+            #     no_wins += 1
+
             #print thread_id, " LRU in 1"
             if(len(self.page_num_stream) != 0 and len(self.thread_set) == self.number_pr_threads):  # If all threads have read the value
                 #print "Popped"
@@ -102,7 +113,8 @@ class Algorithm:
                     self.event.clear() 
 
                 if(self.pages_accessed == self.simulation_window_size):
-                    self.switcher.switch()
+                    self.switcher.switch(self.switching_event)
+                    
                 
             self.read_lock.release()
             #print thread_id, " LRU out 1"

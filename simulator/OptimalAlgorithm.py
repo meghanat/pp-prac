@@ -4,11 +4,11 @@ import Algorithm
 
 class Optimal(Algorithm.Algorithm):
     def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size=10):
+                       page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size, switching_event):
         
        
         Algorithm.Algorithm.__init__(self, number_virtual_pages, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set,"Optimal",simulation_window_size)
+                       page_num_stream, event_page_stream, read_lock, thread_set,"Optimal",simulation_window_size, switching_event)
 
         self.memory = [{"pid": -1, "virtual_page_no": -1} for i in range(number_frames)]
         self.name = "Optimal"
@@ -42,7 +42,7 @@ class Optimal(Algorithm.Algorithm):
 
         for frame_no,frame in enumerate(self.memory):
             try:
-                i=self.page_num_stream.index([frame["pid"],frame["virtual_page_no"]],0,self.simulation_window_size)
+                i=self.page_num_stream.index([frame["pid"],frame["virtual_page_no"]],0,self.simulation_window_size-self.pages_accessed)
                 #print frame_no," index: ",i
                 if i> next_access:
                     next_access=i
