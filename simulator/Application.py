@@ -142,7 +142,6 @@ class Simulator(tk.Tk):
                 self.algo_values[algo]["log"].configure(state=tk.NORMAL)
                 self.algo_values[algo]["log"].insert(tk.END, str(self.algo_values[algo]["algo"].get_next_log()))
                 self.algo_values[algo]["log"].configure(state=tk.DISABLED)
-            # time.sleep(1)
             self.update_idletasks()
 
 if __name__ == "__main__":

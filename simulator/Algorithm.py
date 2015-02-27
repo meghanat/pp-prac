@@ -98,13 +98,6 @@ class Algorithm:
                 self.thread_set.add(thread_id)  # This thread has read the address
             self.read_lock.acquire()
 
-            # if(self.pages_accessed == self.simulation_window_size):
-            #     print self.name, " : ", self.get_page_fault_count(), " Window: ", no_wins, " \n"
-            #     self.page_fault_count = 0
-            #     self.pages_accessed = 0
-            #     no_wins += 1
-
-            #print thread_id, " LRU in 1"
             if(len(self.page_num_stream) != 0 and len(self.thread_set) == self.number_pr_threads):  # If all threads have read the value
                 #print "Popped"
                 self.page_num_stream.pop(0)
@@ -117,4 +110,3 @@ class Algorithm:
                     
                 
             self.read_lock.release()
-            #print thread_id, " LRU out 1"
