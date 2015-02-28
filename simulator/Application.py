@@ -21,10 +21,8 @@ class Simulator(tk.Tk):
                               "padx": 10, "pady": 10}
         self.spinbox_options = {"width": 10}
         self.spinBoxes = {}
-        self.spinbox_names = ["vas", "memory", "page_size",
-                              "num_processes", "window"]
-        self.label_texts = ["VAS(GB)", "Physical Memory(GB)", "Page Size(KB)",
-                            "Number of procesess", "Simulation Window"]
+        self.spinbox_names = ["vas", "frames", "num_processes", "window"]
+        self.label_texts = ["VAS(GB)", "Number of frames", "Number of procesess", "Simulation Window"]
         self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO"]
         self.algo_values = {"LRU": {}, "LFU": {}, "OPTIMAL": {}, "FIFO": {}}
         for text in self.algo_texts:
@@ -52,7 +50,7 @@ class Simulator(tk.Tk):
         self.leftFrame.columnconfigure(1, pad=10)
         self.leftFrame.columnconfigure(0, pad=10)
         self.simulate_button = tk.Button(self.leftFrame, text="Simulate", command=self.start_simulation)
-        self.simulate_button.grid(column=0, row=6, columnspan=2, padx=10, pady=10)
+        self.simulate_button.grid(column=0, row=5, columnspan=2, padx=10, pady=10)
 
         f = tkFont.Font(self.label_param, self.label_param.cget("font"))
         f.configure(underline=True)

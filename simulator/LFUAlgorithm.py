@@ -3,10 +3,10 @@ import thread
 
 
 class LFU(Algorithm.Algorithm):
-    def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
+    def __init__(self, number_frames, number_pr_threads, 
                        page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size, switching_event):
 
-        Algorithm.Algorithm.__init__(self, number_virtual_pages, number_frames, number_pr_threads, 
+        Algorithm.Algorithm.__init__(self, number_frames, number_pr_threads, 
                        page_num_stream, event_page_stream, read_lock, thread_set,"LFU",simulation_window_size, switching_event)
 
         self.memory = [{"frequency" : 0, "pid": -1, "virtual_page_no": -1} for i in range(number_frames)]

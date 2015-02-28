@@ -1,11 +1,11 @@
 import thread
 import time
 import copy
-class Algorithm:
 
-    def __init__(self, number_virtual_pages, number_frames, number_pr_threads, 
+
+class Algorithm:
+    def __init__(self, number_frames, number_pr_threads, 
                        page_num_stream, event_page_stream, read_lock, thread_set,name,simulation_window_size, switching_event):
-        self.number_virtual_pages = number_virtual_pages
         self.number_pr_threads = number_pr_threads
         self.page_tables = { }  # Structure: PID => Page Table
                                 # { virtual_page_no : 
