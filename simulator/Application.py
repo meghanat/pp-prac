@@ -29,7 +29,7 @@ class Simulator(tk.Tk):
             self.algo_values[text]["label"] = None
             self.algo_values[text]["string_var"] = tk.StringVar()
 
-        ranges = [(2, 4), (1, 4), (4, 8), (1, 1000), (1, 1000)]
+        self.ranges = [(2, 4), (1, 4), (4, 8), (1, 1000), (1, 1000)]
 
         self.leftFrame = tk.Frame(self, bg="gainsboro", relief=tk.GROOVE, bd=5)
         self.leftFrame.grid(column=0, row=0, sticky="EWNS", padx=10, pady=10)
@@ -57,13 +57,12 @@ class Simulator(tk.Tk):
         self.label_param.configure(font=f)
         self.label_value.configure(font=f)
 
-        for i, text in enumerate(self.label_texts):
-            label = tk.Label(self.leftFrame, self.label_options, text=text)
-            label.grid(column=0, row=i+1)
-            self.spinBoxes[self.spinbox_names[i]] = tk.Spinbox(self.leftFrame,
-                           self.spinbox_options, from_=ranges[i][0], to=ranges[i][1])
-            self.spinBoxes[self.spinbox_names[i]].grid(column=1, row=i+1)
+        self.create_input_labels()
+        self.create_page_count_labels()
+        self.create_log_frames()
+        self.enable_uniform_resize()
 
+    def create_page_count_labels(self):
         for i, text in enumerate(self.algo_texts):
             label = tk.Label(self.rightTopFrame, self.label_options, text=text)
             label.grid(column=0, row=i)
@@ -73,6 +72,15 @@ class Simulator(tk.Tk):
                                                        textvariable=self.algo_values[text]["string_var"])
             self.algo_values[text]["label"].grid(column=1, row=i)
 
+    def create_input_labels(self):
+        for i, text in enumerate(self.label_texts):
+            label = tk.Label(self.leftFrame, self.label_options, text=text)
+            label.grid(column=0, row=i+1)
+            self.spinBoxes[self.spinbox_names[i]] = tk.Spinbox(self.leftFrame,
+                           self.spinbox_options, from_=self.ranges[i][0], to=self.ranges[i][1])
+            self.spinBoxes[self.spinbox_names[i]].grid(column=1, row=i+1)
+
+    def create_log_frames(self):
         self.tabs = ttk.Notebook(self.rightBottomFrame)
         for algo in self.algo_texts:
             frame = ttk.Frame(self.tabs)
@@ -85,23 +93,24 @@ class Simulator(tk.Tk):
             self.algo_values[algo]["log"] = textArea
             self.tabs.add(frame, text=algo)
             self.tabs.grid(row=1, column=0)
-            self.grid_columnconfigure(0,weight=1)
-            self.grid_columnconfigure(1,weight=1)
-            self.grid_rowconfigure(0,weight=1)
-            self.leftFrame.columnconfigure(0,weight=1)
-            self.leftFrame.columnconfigure(1,weight=1)
-            self.leftFrame.rowconfigure(0,weight=1)
-            self.leftFrame.rowconfigure(1,weight=1)
-            self.leftFrame.rowconfigure(2,weight=1)
-            self.leftFrame.rowconfigure(3,weight=1)
-            self.leftFrame.rowconfigure(4,weight=1)
-            self.leftFrame.rowconfigure(5,weight=1)
-            self.rightFrame.rowconfigure(0, weight=1)
-            self.rightFrame.rowconfigure(1, weight=1)
-            self.rightFrame.columnconfigure(0, weight=1)
-    
 
-    
+        self.enable_uniform_resize()
+
+    def enable_uniform_resize(self):
+        self.grid_columnconfigure(0,weight=1)
+        self.grid_columnconfigure(1,weight=1)
+        self.grid_rowconfigure(0,weight=1)
+        self.leftFrame.columnconfigure(0,weight=1)
+        self.leftFrame.columnconfigure(1,weight=1)
+        self.leftFrame.rowconfigure(0,weight=1)
+        self.leftFrame.rowconfigure(1,weight=1)
+        self.leftFrame.rowconfigure(2,weight=1)
+        self.leftFrame.rowconfigure(3,weight=1)
+        self.leftFrame.rowconfigure(4,weight=1)
+        self.leftFrame.rowconfigure(5,weight=1)
+        self.rightFrame.rowconfigure(0, weight=1)
+        self.rightFrame.rowconfigure(1, weight=1)
+        self.rightFrame.columnconfigure(0, weight=1)
 
     def update_algo_values(self):
         self.algo_values["LRU"]["algo"] = self.controller.lru
