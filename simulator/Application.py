@@ -60,17 +60,8 @@ class Simulator(tk.Tk):
         self.create_input_labels()
         self.create_page_count_labels()
         self.create_log_frames()
+        self.create_menu_bar()
         self.enable_uniform_resize()
-
-    def create_page_count_labels(self):
-        for i, text in enumerate(self.algo_texts):
-            label = tk.Label(self.rightTopFrame, self.label_options, text=text)
-            label.grid(column=0, row=i)
-            self.algo_values[text]["label"] = tk.Label(self.rightTopFrame,
-                                                       self.label_options,
-                                                       bg="white",
-                                                       textvariable=self.algo_values[text]["string_var"])
-            self.algo_values[text]["label"].grid(column=1, row=i)
 
     def create_input_labels(self):
         for i, text in enumerate(self.label_texts):
@@ -94,7 +85,31 @@ class Simulator(tk.Tk):
             self.tabs.add(frame, text=algo)
             self.tabs.grid(row=1, column=0)
 
-        self.enable_uniform_resize()
+    def create_menu_bar(self):
+        menubar = tk.Menu(self)
+        filemenu = tk.Menu(self, tearoff=0)
+        filemenu.add_command(label="Load Access Stream From")
+        filemenu.add_command(label="Save Logs As")
+        filemenu.add_command(label="Save Access Stream As")
+        filemenu.add_separator()
+        filemenu.add_command(label="Exit", command=self.quit)
+        menubar.add_cascade(label="File", menu=filemenu)
+
+        helpmenu = tk.Menu(menubar, tearoff=0)
+        helpmenu.add_command(label="About")
+        menubar.add_cascade(label="Help", menu=helpmenu)
+
+        self.config(menu=menubar)
+
+    def create_page_count_labels(self):
+        for i, text in enumerate(self.algo_texts):
+            label = tk.Label(self.rightTopFrame, self.label_options, text=text)
+            label.grid(column=0, row=i)
+            self.algo_values[text]["label"] = tk.Label(self.rightTopFrame,
+                                                       self.label_options,
+                                                       bg="white",
+                                                       textvariable=self.algo_values[text]["string_var"])
+            self.algo_values[text]["label"].grid(column=1, row=i)
 
     def enable_uniform_resize(self):
         self.grid_columnconfigure(0,weight=1)
