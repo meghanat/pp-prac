@@ -1,9 +1,10 @@
-import Tkinter as tk
 import controller
-import time
+import tkFileDialog
 import tkFont
+import Tkinter as tk
 import ttk
 import threading
+import time
 
 
 class Simulator(tk.Tk):
@@ -89,7 +90,7 @@ class Simulator(tk.Tk):
         menubar = tk.Menu(self)
         filemenu = tk.Menu(self, tearoff=0)
         filemenu.add_command(label="Load Access Stream From")
-        filemenu.add_command(label="Save Logs As")
+        filemenu.add_command(label="Save Logs As", command=self.save_logs)
         filemenu.add_command(label="Save Access Stream As")
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.quit)
@@ -127,11 +128,8 @@ class Simulator(tk.Tk):
         self.rightFrame.rowconfigure(1, weight=1)
         self.rightFrame.columnconfigure(0, weight=1)
 
-    def update_algo_values(self):
-        self.algo_values["LRU"]["algo"] = self.controller.lru
-        self.algo_values["LFU"]["algo"] = self.controller.lfu
-        self.algo_values["OPTIMAL"]["algo"] = self.controller.optimal
-        self.algo_values["FIFO"]["algo"] = self.controller.fifo
+    def save_logs(self):
+        file_name = tkFileDialog.asksaveasfilename()        
 
     def start_simulation(self):
         simulation_values = {}
@@ -146,6 +144,12 @@ class Simulator(tk.Tk):
         self.update_log_thread = threading.Thread(target=self.update_logs)
         self.update_log_thread.start()
 
+    def update_algo_values(self):
+        self.algo_values["LRU"]["algo"] = self.controller.lru
+        self.algo_values["LFU"]["algo"] = self.controller.lfu
+        self.algo_values["OPTIMAL"]["algo"] = self.controller.optimal
+        self.algo_values["FIFO"]["algo"] = self.controller.fifo
+    
     def update_labels(self):
         while True:
             self.algo_values["LRU"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
