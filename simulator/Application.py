@@ -130,6 +130,16 @@ class Simulator(tk.Tk):
 
     def save_logs(self):
         file_name = tkFileDialog.asksaveasfilename()        
+        file_handle = open(file_name, "w")
+        for algo in self.algo_texts:
+            file_handle.write("-" * 100)
+            file_handle.write("\n")
+            file_handle.write(algo + "\n")
+            file_handle.write("-" * 100)
+            file_handle.write("\n")
+            file_handle.write(self.algo_values[algo]["log"].get("1.0", tk.END))
+        file_handle.close()
+
 
     def start_simulation(self):
         simulation_values = {}

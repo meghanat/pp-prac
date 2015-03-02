@@ -1,0 +1,805 @@
+----------------------------------------------------------------------------------------------------LRU
+----------------------------------------------------------------------------------------------------LRU: Fill frame 0 with 797651
+LRU: Fill frame 1 with 375940
+LRU: Fill frame 2 with 676801
+LRU: Fill frame 3 with 375941
+LRU: Fill frame 4 with 390318
+LRU: Fill frame 5 with 440041
+LRU: Fill frame 6 with 644362
+LRU: Fill frame 7 with 310485
+LRU: Fill frame 8 with 543442
+LRU: Fill frame 9 with 610287
+LRU: Fill frame 10 with 604619
+LRU: Fill frame 11 with 556114
+LRU: Fill frame 12 with 1011462
+LRU: Fill frame 13 with 838255
+LRU: Fill frame 14 with 402878
+LRU: Fill frame 15 with 677655
+LRU: Fill frame 16 with 673171
+LRU: Fill frame 17 with 928284
+LRU: Fill frame 18 with 981103
+LRU: Fill frame 19 with 807908
+LRU: Fill frame 20 with 311527
+LRU: Fill frame 21 with 528173
+LRU: Fill frame 22 with 461392
+LRU: Fill frame 23 with 582340
+LRU: Fill frame 24 with 862503
+LRU: Fill frame 25 with 748716
+LRU: Fill frame 26 with 637322
+LRU: Fill frame 27 with 316624
+LRU: Fill frame 28 with 906983
+LRU: Fill frame 29 with 543486
+LRU: Fill frame 30 with 597037
+LRU: Fill frame 31 with 576470
+LRU: Fill frame 32 with 885723
+LRU: Fill frame 33 with 631799
+LRU: Fill frame 34 with 468098
+LRU: Fill frame 35 with 263379
+LRU: Fill frame 36 with 850077
+LRU: Fill frame 37 with 588658
+LRU: Fill frame 38 with 882037
+LRU: Fill frame 39 with 538775
+LRU: Fill frame 40 with 862454
+LRU: Fill frame 41 with 348967
+LRU: Fill frame 42 with 526381
+LRU: Fill frame 43 with 599485
+LRU: Fill frame 44 with 794848
+LRU: Fill frame 45 with 942437
+LRU: Fill frame 46 with 987657
+LRU: Fill frame 47 with 782106
+LRU: Fill frame 48 with 646483
+LRU: Fill frame 49 with 555200
+LRU: Fill frame 50 with 499159
+LRU: Fill frame 51 with 906334
+LRU: Fill frame 52 with 449151
+LRU: Fill frame 53 with 667346
+LRU: Fill frame 54 with 600411
+LRU: Fill frame 55 with 604751
+LRU: Fill frame 56 with 963937
+LRU: Fill frame 57 with 926881
+LRU: Fill frame 58 with 920633
+LRU: Fill frame 59 with 672548
+LRU: Fill frame 60 with 958333
+LRU: Fill frame 61 with 990251
+LRU: Fill frame 62 with 313795
+LRU: Fill frame 63 with 859131
+LRU: Fill frame 64 with 966332
+LRU: Fill frame 65 with 327916
+LRU: Fill frame 66 with 264308
+LRU: Fill frame 67 with 265728
+LRU: Fill frame 68 with 574643
+LRU: Fill frame 69 with 511277
+LRU: Fill frame 70 with 831441
+LRU: Fill frame 71 with 607188
+LRU: Fill frame 72 with 527911
+LRU: Fill frame 73 with 884863
+LRU: Fill frame 74 with 836093
+LRU: Fill frame 75 with 441451
+LRU: Fill frame 76 with 947352
+LRU: Fill frame 77 with 509824
+LRU: Fill frame 78 with 581430
+LRU: Fill frame 79 with 852309
+LRU: Fill frame 80 with 958818
+LRU: Fill frame 81 with 269842
+LRU: Fill frame 82 with 650302
+LRU: Fill frame 83 with 549781
+LRU: Fill frame 84 with 980567
+LRU: Fill frame 85 with 493962
+LRU: Fill frame 86 with 386375
+LRU: Fill frame 87 with 588829
+LRU: Fill frame 88 with 735520
+LRU: Fill frame 89 with 383866
+LRU: Fill frame 90 with 274038
+LRU: Fill frame 91 with 876763
+LRU: Fill frame 92 with 435450
+LRU: Fill frame 93 with 1006072
+LRU: Fill frame 94 with 292301
+LRU: Fill frame 95 with 361427
+LRU: Fill frame 96 with 611032
+LRU: Fill frame 97 with 450157
+LRU: Fill frame 98 with 396704
+LRU: Fill frame 99 with 832092
+Replace page 375940 in frame 1 with page 344234 of process 90
+Replace page 644362 in frame 6 with page 294104 of process 91
+Replace page 604619 in frame 10 with page 743269 of process 92
+Replace page 310485 in frame 7 with page 912739 of process 93
+Replace page 807908 in frame 19 with page 642213 of process 94
+Replace page 637322 in frame 26 with page 399093 of process 67
+Replace page 882037 in frame 38 with page 777220 of process 95
+Replace page 631799 in frame 33 with page 600481 of process 96
+Replace page 906334 in frame 51 with page 374899 of process 97
+Replace page 885723 in frame 32 with page 399456 of process 98
+Replace page 509824 in frame 77 with page 795047 of process 99
+Replace page 862503 in frame 24 with page 462631 of process 83
+Replace page 1011462 in frame 12 with page 318574 of process 100
+Replace page 313795 in frame 62 with page 384902 of process 86
+Replace page 947352 in frame 76 with page 765844 of process 89
+Replace page 1006072 in frame 93 with page 313795 of process 54
+Replace page 611032 in frame 96 with page 862503 of process 20
+Replace page 607188 in frame 71 with page 781026 of process 98
+Replace page 832092 in frame 99 with page 314695 of process 100
+Replace page 862454 in frame 40 with page 607188 of process 62
+Replace page 677655 in frame 15 with page 862454 of process 35
+Replace page 399456 in frame 32 with page 1011462 of process 11
+Replace page 795047 in frame 77 with page 677655 of process 12
+Replace page 676801 in frame 2 with page 795047 of process 99
+Replace page 318574 in frame 12 with page 676801 of process 3
+Replace page 797651 in frame 0 with page 765844 of process 89
+Replace page 399093 in frame 1 with page 344234 of process 90
+Replace page 676801 in frame 2 with page 294104 of process 91
+Replace page 375941 in frame 3 with page 743269 of process 92
+Replace page 462631 in frame 6 with page 912739 of process 93
+Replace page 310485 in frame 7 with page 642213 of process 94
+Replace page 543442 in frame 8 with page 399093 of process 67
+Replace page 374899 in frame 10 with page 777220 of process 95
+Replace page 556114 in frame 11 with page 600481 of process 96
+Replace page 677655 in frame 15 with page 556114 of process 10
+Replace page 981103 in frame 18 with page 677655 of process 12
+Replace page 314695 in frame 19 with page 781026 of process 98
+Replace page 461392 in frame 22 with page 795047 of process 99
+Replace page 582340 in frame 23 with page 462631 of process 83
+Replace page 748716 in frame 25 with page 374899 of process 97
+Replace page 384902 in frame 26 with page 676801 of process 3
+Replace page 576470 in frame 31 with page 981103 of process 15
+Replace page 885723 in frame 32 with page 748716 of process 21
+Replace page 631799 in frame 33 with page 314695 of process 100
+Replace page 850077 in frame 36 with page 797651 of process 1
+Replace page 588658 in frame 37 with page 582340 of process 19
+Replace page 882037 in frame 38 with page 461392 of process 18
+Replace page 794848 in frame 44 with page 384902 of process 86
+Replace page 942437 in frame 45 with page 588658 of process 32
+Replace page 906334 in frame 51 with page 576470 of process 22
+Replace page 836093 in frame 74 with page 375941 of process 2
+Replace page 947352 in frame 76 with page 836093 of process 65
+Replace page 509824 in frame 77 with page 543442 of process 8
+Replace page 1006072 in frame 93 with page 794848 of process 39
+Replace page 611032 in frame 96 with page 850077 of process 31
+Replace page 832092 in frame 99 with page 942437 of process 40
+Replace page 390318 in frame 4 with page 294105 of process 91
+Replace page 862503 in frame 24 with page 390318 of process 4
+Replace page 543486 in frame 29 with page 862503 of process 20
+
+----------------------------------------------------------------------------------------------------LFU
+----------------------------------------------------------------------------------------------------Fill frame 0 with 797651
+Fill frame 1 with 375940
+Fill frame 2 with 676801
+Fill frame 3 with 375941
+Fill frame 4 with 390318
+Fill frame 5 with 440041
+Fill frame 6 with 644362
+Fill frame 7 with 310485
+Fill frame 8 with 543442
+Fill frame 9 with 610287
+Fill frame 10 with 604619
+Fill frame 11 with 556114
+Fill frame 12 with 1011462
+Fill frame 13 with 838255
+Fill frame 14 with 402878
+Fill frame 15 with 677655
+Fill frame 16 with 673171
+Fill frame 17 with 928284
+Fill frame 18 with 981103
+Fill frame 19 with 807908
+Fill frame 20 with 311527
+Fill frame 21 with 528173
+Fill frame 22 with 461392
+Fill frame 23 with 582340
+Fill frame 24 with 862503
+Fill frame 25 with 748716
+Fill frame 26 with 637322
+Fill frame 27 with 316624
+Fill frame 28 with 906983
+Fill frame 29 with 543486
+Fill frame 30 with 597037
+Fill frame 31 with 576470
+Fill frame 32 with 885723
+Fill frame 33 with 631799
+Fill frame 34 with 468098
+Fill frame 35 with 263379
+Fill frame 36 with 850077
+Fill frame 37 with 588658
+Fill frame 38 with 882037
+Fill frame 39 with 538775
+Fill frame 40 with 862454
+Fill frame 41 with 348967
+Fill frame 42 with 526381
+Fill frame 43 with 599485
+Fill frame 44 with 794848
+Fill frame 45 with 942437
+Fill frame 46 with 987657
+Fill frame 47 with 782106
+Fill frame 48 with 646483
+Fill frame 49 with 555200
+Fill frame 50 with 499159
+Fill frame 51 with 906334
+Fill frame 52 with 449151
+Fill frame 53 with 667346
+Fill frame 54 with 600411
+Fill frame 55 with 604751
+Fill frame 56 with 963937
+Fill frame 57 with 926881
+Fill frame 58 with 920633
+Fill frame 59 with 672548
+Fill frame 60 with 958333
+Fill frame 61 with 990251
+Fill frame 62 with 313795
+Fill frame 63 with 859131
+Fill frame 64 with 966332
+Fill frame 65 with 327916
+Fill frame 66 with 264308
+Fill frame 67 with 265728
+Fill frame 68 with 574643
+Fill frame 69 with 511277
+Fill frame 70 with 831441
+Fill frame 71 with 607188
+Fill frame 72 with 527911
+Fill frame 73 with 884863
+Fill frame 74 with 836093
+Fill frame 75 with 441451
+Fill frame 76 with 947352
+Fill frame 77 with 509824
+Fill frame 78 with 581430
+Fill frame 79 with 852309
+Fill frame 80 with 958818
+Fill frame 81 with 269842
+Fill frame 82 with 650302
+Fill frame 83 with 549781
+Fill frame 84 with 980567
+Fill frame 85 with 493962
+Fill frame 86 with 386375
+Fill frame 87 with 588829
+Fill frame 88 with 735520
+Fill frame 89 with 383866
+Fill frame 90 with 274038
+Fill frame 91 with 876763
+Fill frame 92 with 435450
+Fill frame 93 with 1006072
+Fill frame 94 with 292301
+Fill frame 95 with 361427
+Fill frame 96 with 611032
+Fill frame 97 with 450157
+Fill frame 98 with 396704
+Fill frame 99 with 832092
+Replace page 375940 in frame 1 with page 344234 of process 90
+Replace page 344234 in frame 1 with page 294104 of process 91
+Replace page 294104 in frame 1 with page 743269 of process 92
+Replace page 743269 in frame 1 with page 912739 of process 93
+Replace page 912739 in frame 1 with page 642213 of process 94
+Replace page 642213 in frame 1 with page 399093 of process 67
+Replace page 644362 in frame 6 with page 777220 of process 95
+Replace page 777220 in frame 6 with page 600481 of process 96
+Replace page 600481 in frame 6 with page 374899 of process 97
+Replace page 374899 in frame 6 with page 399456 of process 98
+Replace page 399456 in frame 6 with page 795047 of process 99
+Replace page 795047 in frame 6 with page 462631 of process 83
+Replace page 462631 in frame 6 with page 318574 of process 100
+Replace page 318574 in frame 6 with page 384902 of process 86
+Replace page 384902 in frame 6 with page 765844 of process 89
+Replace page 765844 in frame 6 with page 344234 of process 90
+Replace page 344234 in frame 6 with page 294104 of process 91
+Replace page 294104 in frame 6 with page 743269 of process 92
+Replace page 743269 in frame 6 with page 912739 of process 93
+Replace page 912739 in frame 6 with page 642213 of process 94
+Replace page 642213 in frame 6 with page 777220 of process 95
+Replace page 777220 in frame 6 with page 600481 of process 96
+Replace page 600481 in frame 6 with page 374899 of process 97
+Replace page 374899 in frame 6 with page 781026 of process 98
+Replace page 781026 in frame 6 with page 462631 of process 83
+Replace page 604619 in frame 10 with page 314695 of process 100
+Replace page 314695 in frame 10 with page 384902 of process 86
+Replace page 384902 in frame 10 with page 765844 of process 89
+Replace page 765844 in frame 10 with page 344234 of process 90
+Replace page 344234 in frame 10 with page 294104 of process 91
+Replace page 294104 in frame 10 with page 912739 of process 93
+Replace page 912739 in frame 10 with page 642213 of process 94
+Replace page 642213 in frame 10 with page 777220 of process 95
+Replace page 777220 in frame 10 with page 600481 of process 96
+Replace page 600481 in frame 10 with page 374899 of process 97
+Replace page 374899 in frame 10 with page 795047 of process 99
+Replace page 795047 in frame 10 with page 314695 of process 100
+Replace page 314695 in frame 10 with page 384902 of process 86
+Replace page 384902 in frame 10 with page 765844 of process 89
+Replace page 765844 in frame 10 with page 344234 of process 90
+Replace page 344234 in frame 10 with page 294104 of process 91
+Replace page 294104 in frame 10 with page 743269 of process 92
+Replace page 743269 in frame 10 with page 912739 of process 93
+Replace page 912739 in frame 10 with page 642213 of process 94
+Replace page 642213 in frame 10 with page 777220 of process 95
+Replace page 777220 in frame 10 with page 600481 of process 96
+Replace page 600481 in frame 10 with page 374899 of process 97
+Replace page 807908 in frame 19 with page 795047 of process 99
+Replace page 795047 in frame 19 with page 314695 of process 100
+Replace page 637322 in frame 26 with page 384902 of process 86
+Replace page 384902 in frame 26 with page 765844 of process 89
+Replace page 765844 in frame 26 with page 344234 of process 90
+Replace page 344234 in frame 26 with page 294104 of process 91
+Replace page 294104 in frame 26 with page 743269 of process 92
+Replace page 743269 in frame 26 with page 912739 of process 93
+Replace page 912739 in frame 26 with page 642213 of process 94
+Replace page 642213 in frame 26 with page 777220 of process 95
+Replace page 777220 in frame 26 with page 600481 of process 96
+Replace page 600481 in frame 26 with page 781026 of process 98
+Replace page 781026 in frame 26 with page 384902 of process 86
+Replace page 797651 in frame 0 with page 765844 of process 89
+Replace page 765844 in frame 0 with page 344234 of process 90
+Replace page 344234 in frame 0 with page 294104 of process 91
+Replace page 294104 in frame 0 with page 743269 of process 92
+Replace page 743269 in frame 0 with page 912739 of process 93
+Replace page 912739 in frame 0 with page 642213 of process 94
+Replace page 676801 in frame 2 with page 777220 of process 95
+Replace page 777220 in frame 2 with page 600481 of process 96
+Replace page 600481 in frame 2 with page 781026 of process 98
+Replace page 781026 in frame 2 with page 795047 of process 99
+Replace page 795047 in frame 2 with page 676801 of process 3
+Replace page 676801 in frame 2 with page 797651 of process 1
+Replace page 797651 in frame 2 with page 765844 of process 89
+Replace page 765844 in frame 2 with page 344234 of process 90
+Replace page 344234 in frame 2 with page 294104 of process 91
+Replace page 294104 in frame 2 with page 743269 of process 92
+Replace page 743269 in frame 2 with page 912739 of process 93
+Replace page 912739 in frame 2 with page 777220 of process 95
+Replace page 777220 in frame 2 with page 600481 of process 96
+Replace page 600481 in frame 2 with page 781026 of process 98
+Replace page 781026 in frame 2 with page 795047 of process 99
+Replace page 795047 in frame 2 with page 676801 of process 3
+Replace page 676801 in frame 2 with page 765844 of process 89
+Replace page 765844 in frame 2 with page 344234 of process 90
+Replace page 344234 in frame 2 with page 294104 of process 91
+Replace page 294104 in frame 2 with page 743269 of process 92
+Replace page 743269 in frame 2 with page 777220 of process 95
+Replace page 777220 in frame 2 with page 600481 of process 96
+Replace page 600481 in frame 2 with page 795047 of process 99
+Replace page 795047 in frame 2 with page 781026 of process 98
+Replace page 781026 in frame 2 with page 797651 of process 1
+Replace page 797651 in frame 2 with page 765844 of process 89
+Replace page 765844 in frame 2 with page 344234 of process 90
+Replace page 344234 in frame 2 with page 294104 of process 91
+Replace page 294104 in frame 2 with page 743269 of process 92
+Replace page 310485 in frame 7 with page 912739 of process 93
+Replace page 912739 in frame 7 with page 600481 of process 96
+Replace page 600481 in frame 7 with page 676801 of process 3
+Replace page 676801 in frame 7 with page 797651 of process 1
+Replace page 797651 in frame 7 with page 765844 of process 89
+Replace page 765844 in frame 7 with page 344234 of process 90
+Replace page 344234 in frame 7 with page 294104 of process 91
+Replace page 294104 in frame 7 with page 777220 of process 95
+Replace page 777220 in frame 7 with page 795047 of process 99
+Replace page 795047 in frame 7 with page 781026 of process 98
+Replace page 781026 in frame 7 with page 676801 of process 3
+Replace page 676801 in frame 7 with page 797651 of process 1
+Replace page 797651 in frame 7 with page 765844 of process 89
+Replace page 765844 in frame 7 with page 294104 of process 91
+Replace page 294104 in frame 7 with page 912739 of process 93
+Replace page 912739 in frame 7 with page 777220 of process 95
+Replace page 777220 in frame 7 with page 600481 of process 96
+Replace page 600481 in frame 7 with page 795047 of process 99
+Replace page 795047 in frame 7 with page 781026 of process 98
+Replace page 781026 in frame 7 with page 676801 of process 3
+Replace page 676801 in frame 7 with page 797651 of process 1
+Replace page 797651 in frame 7 with page 765844 of process 89
+Replace page 765844 in frame 7 with page 344234 of process 90
+Replace page 344234 in frame 7 with page 294104 of process 91
+Replace page 294104 in frame 7 with page 912739 of process 93
+Replace page 912739 in frame 7 with page 600481 of process 96
+Replace page 600481 in frame 7 with page 795047 of process 99
+Replace page 795047 in frame 7 with page 781026 of process 98
+Replace page 781026 in frame 7 with page 676801 of process 3
+Replace page 885723 in frame 32 with page 797651 of process 1
+Replace page 797651 in frame 32 with page 765844 of process 89
+Replace page 765844 in frame 32 with page 344234 of process 90
+Replace page 344234 in frame 32 with page 294104 of process 91
+Replace page 294104 in frame 32 with page 912739 of process 93
+Replace page 912739 in frame 32 with page 777220 of process 95
+Replace page 777220 in frame 32 with page 600481 of process 96
+Replace page 600481 in frame 32 with page 781026 of process 98
+Replace page 781026 in frame 32 with page 797651 of process 1
+Replace page 797651 in frame 32 with page 765844 of process 89
+Replace page 631799 in frame 33 with page 344234 of process 90
+Replace page 344234 in frame 33 with page 294104 of process 91
+Replace page 294104 in frame 33 with page 912739 of process 93
+Replace page 912739 in frame 33 with page 777220 of process 95
+Replace page 777220 in frame 33 with page 600481 of process 96
+Replace page 600481 in frame 33 with page 795047 of process 99
+Replace page 795047 in frame 33 with page 781026 of process 98
+Replace page 781026 in frame 33 with page 797651 of process 1
+Replace page 797651 in frame 33 with page 344234 of process 90
+Replace page 344234 in frame 33 with page 294104 of process 91
+Replace page 294104 in frame 33 with page 912739 of process 93
+Replace page 912739 in frame 33 with page 777220 of process 95
+Replace page 777220 in frame 33 with page 795047 of process 99
+Replace page 795047 in frame 33 with page 781026 of process 98
+Replace page 882037 in frame 38 with page 797651 of process 1
+Replace page 642213 in frame 7 with page 294105 of process 91
+Replace page 294105 in frame 7 with page 642213 of process 94
+
+----------------------------------------------------------------------------------------------------OPTIMAL
+----------------------------------------------------------------------------------------------------Fill frame 0 with 797651
+Fill frame 1 with 375940
+Fill frame 2 with 676801
+Fill frame 3 with 375941
+Fill frame 4 with 390318
+Fill frame 5 with 440041
+Fill frame 6 with 644362
+Fill frame 7 with 310485
+Fill frame 8 with 543442
+Fill frame 9 with 610287
+Fill frame 10 with 604619
+Fill frame 11 with 556114
+Fill frame 12 with 1011462
+Fill frame 13 with 838255
+Fill frame 14 with 402878
+Fill frame 15 with 677655
+Fill frame 16 with 673171
+Fill frame 17 with 928284
+Fill frame 18 with 981103
+Fill frame 19 with 807908
+Fill frame 20 with 311527
+Fill frame 21 with 528173
+Fill frame 22 with 461392
+Fill frame 23 with 582340
+Fill frame 24 with 862503
+Fill frame 25 with 748716
+Fill frame 26 with 637322
+Fill frame 27 with 316624
+Fill frame 28 with 906983
+Fill frame 29 with 543486
+Fill frame 30 with 597037
+Fill frame 31 with 576470
+Fill frame 32 with 885723
+Fill frame 33 with 631799
+Fill frame 34 with 468098
+Fill frame 35 with 263379
+Fill frame 36 with 850077
+Fill frame 37 with 588658
+Fill frame 38 with 882037
+Fill frame 39 with 538775
+Fill frame 40 with 862454
+Fill frame 41 with 348967
+Fill frame 42 with 526381
+Fill frame 43 with 599485
+Fill frame 44 with 794848
+Fill frame 45 with 942437
+Fill frame 46 with 987657
+Fill frame 47 with 782106
+Fill frame 48 with 646483
+Fill frame 49 with 555200
+Fill frame 50 with 499159
+Fill frame 51 with 906334
+Fill frame 52 with 449151
+Fill frame 53 with 667346
+Fill frame 54 with 600411
+Fill frame 55 with 604751
+Fill frame 56 with 963937
+Fill frame 57 with 926881
+Fill frame 58 with 920633
+Fill frame 59 with 672548
+Fill frame 60 with 958333
+Fill frame 61 with 990251
+Fill frame 62 with 313795
+Fill frame 63 with 859131
+Fill frame 64 with 966332
+Fill frame 65 with 327916
+Fill frame 66 with 264308
+Fill frame 67 with 265728
+Fill frame 68 with 574643
+Fill frame 69 with 511277
+Fill frame 70 with 831441
+Fill frame 71 with 607188
+Fill frame 72 with 527911
+Fill frame 73 with 884863
+Fill frame 74 with 836093
+Fill frame 75 with 441451
+Fill frame 76 with 947352
+Fill frame 77 with 509824
+Fill frame 78 with 581430
+Fill frame 79 with 852309
+Fill frame 80 with 958818
+Fill frame 81 with 269842
+Fill frame 82 with 650302
+Fill frame 83 with 549781
+Fill frame 84 with 980567
+Fill frame 85 with 493962
+Fill frame 86 with 386375
+Fill frame 87 with 588829
+Fill frame 88 with 735520
+Fill frame 89 with 383866
+Fill frame 90 with 274038
+Fill frame 91 with 876763
+Fill frame 92 with 435450
+Fill frame 93 with 1006072
+Fill frame 94 with 292301
+Fill frame 95 with 361427
+Fill frame 96 with 611032
+Fill frame 97 with 450157
+Fill frame 98 with 396704
+Fill frame 99 with 832092
+Optimal: Replace page 375940 in frame 1 with page 344234 of process 90
+Optimal: Replace page 644362 in frame 6 with page 294104 of process 91
+Optimal: Replace page 310485 in frame 7 with page 743269 of process 92
+Optimal: Replace page 604619 in frame 10 with page 912739 of process 93
+Optimal: Replace page 807908 in frame 19 with page 642213 of process 94
+Optimal: Replace page 637322 in frame 26 with page 399093 of process 67
+Optimal: Replace page 885723 in frame 32 with page 777220 of process 95
+Optimal: Replace page 631799 in frame 33 with page 600481 of process 96
+Optimal: Replace page 882037 in frame 38 with page 374899 of process 97
+Optimal: Replace page 906334 in frame 51 with page 399456 of process 98
+Optimal: Replace page 399456 in frame 51 with page 795047 of process 99
+Optimal: Replace page 947352 in frame 76 with page 462631 of process 83
+Optimal: Replace page 509824 in frame 77 with page 318574 of process 100
+Optimal: Replace page 318574 in frame 77 with page 384902 of process 86
+Optimal: Replace page 1006072 in frame 93 with page 765844 of process 89
+Optimal: Replace page 611032 in frame 96 with page 781026 of process 98
+Optimal: Replace page 832092 in frame 99 with page 314695 of process 100
+Optimal: Replace page 310485 in frame 7 with page 765844 of process 89
+Optimal: Replace page 885723 in frame 32 with page 344234 of process 90
+Optimal: Replace page 631799 in frame 33 with page 294104 of process 91
+Optimal: Replace page 882037 in frame 38 with page 743269 of process 92
+Optimal: Replace page 906334 in frame 51 with page 912739 of process 93
+Optimal: Replace page 947352 in frame 76 with page 642213 of process 94
+Optimal: Replace page 509824 in frame 77 with page 777220 of process 95
+Optimal: Replace page 1006072 in frame 93 with page 600481 of process 96
+Optimal: Replace page 611032 in frame 96 with page 781026 of process 98
+Optimal: Replace page 832092 in frame 99 with page 795047 of process 99
+Optimal: Replace page 294104 in frame 2 with page 294105 of process 91
+
+----------------------------------------------------------------------------------------------------FIFO
+----------------------------------------------------------------------------------------------------Fill frame 0 with 797651
+Fill frame 1 with 375940
+Fill frame 2 with 676801
+Fill frame 3 with 375941
+Fill frame 4 with 390318
+Fill frame 5 with 440041
+Fill frame 6 with 644362
+Fill frame 7 with 310485
+Fill frame 8 with 543442
+Fill frame 9 with 610287
+Fill frame 10 with 604619
+Fill frame 11 with 556114
+Fill frame 12 with 1011462
+Fill frame 13 with 838255
+Fill frame 14 with 402878
+Fill frame 15 with 677655
+Fill frame 16 with 673171
+Fill frame 17 with 928284
+Fill frame 18 with 981103
+Fill frame 19 with 807908
+Fill frame 20 with 311527
+Fill frame 21 with 528173
+Fill frame 22 with 461392
+Fill frame 23 with 582340
+Fill frame 24 with 862503
+Fill frame 25 with 748716
+Fill frame 26 with 637322
+Fill frame 27 with 316624
+Fill frame 28 with 906983
+Fill frame 29 with 543486
+Fill frame 30 with 597037
+Fill frame 31 with 576470
+Fill frame 32 with 885723
+Fill frame 33 with 631799
+Fill frame 34 with 468098
+Fill frame 35 with 263379
+Fill frame 36 with 850077
+Fill frame 37 with 588658
+Fill frame 38 with 882037
+Fill frame 39 with 538775
+Fill frame 40 with 862454
+Fill frame 41 with 348967
+Fill frame 42 with 526381
+Fill frame 43 with 599485
+Fill frame 44 with 794848
+Fill frame 45 with 942437
+Fill frame 46 with 987657
+Fill frame 47 with 782106
+Fill frame 48 with 646483
+Fill frame 49 with 555200
+Fill frame 50 with 499159
+Fill frame 51 with 906334
+Fill frame 52 with 449151
+Fill frame 53 with 667346
+Fill frame 54 with 600411
+Fill frame 55 with 604751
+Fill frame 56 with 963937
+Fill frame 57 with 926881
+Fill frame 58 with 920633
+Fill frame 59 with 672548
+Fill frame 60 with 958333
+Fill frame 61 with 990251
+Fill frame 62 with 313795
+Fill frame 63 with 859131
+Fill frame 64 with 966332
+Fill frame 65 with 327916
+Fill frame 66 with 264308
+Fill frame 67 with 265728
+Fill frame 68 with 574643
+Fill frame 69 with 511277
+Fill frame 70 with 831441
+Fill frame 71 with 607188
+Fill frame 72 with 527911
+Fill frame 73 with 884863
+Fill frame 74 with 836093
+Fill frame 75 with 441451
+Fill frame 76 with 947352
+Fill frame 77 with 509824
+Fill frame 78 with 581430
+Fill frame 79 with 852309
+Fill frame 80 with 958818
+Fill frame 81 with 269842
+Fill frame 82 with 650302
+Fill frame 83 with 549781
+Fill frame 84 with 980567
+Fill frame 85 with 493962
+Fill frame 86 with 386375
+Fill frame 87 with 588829
+Fill frame 88 with 735520
+Fill frame 89 with 383866
+Fill frame 90 with 274038
+Fill frame 91 with 876763
+Fill frame 92 with 435450
+Fill frame 93 with 1006072
+Fill frame 94 with 292301
+Fill frame 95 with 361427
+Fill frame 96 with 611032
+Fill frame 97 with 450157
+Fill frame 98 with 396704
+Fill frame 99 with 832092
+Replace page 797651 in frame 0 with page 344234 of process 90
+Replace page 375940 in frame 1 with page 294104 of process 91
+Replace page 676801 in frame 2 with page 743269 of process 92
+Replace page 375941 in frame 3 with page 912739 of process 93
+Replace page 390318 in frame 4 with page 642213 of process 94
+Replace page 440041 in frame 5 with page 399093 of process 67
+Replace page 644362 in frame 6 with page 777220 of process 95
+Replace page 310485 in frame 7 with page 600481 of process 96
+Replace page 543442 in frame 8 with page 374899 of process 97
+Replace page 610287 in frame 9 with page 399456 of process 98
+Replace page 604619 in frame 10 with page 795047 of process 99
+Replace page 556114 in frame 11 with page 462631 of process 83
+Replace page 1011462 in frame 12 with page 676801 of process 3
+Replace page 838255 in frame 13 with page 318574 of process 100
+Replace page 402878 in frame 14 with page 797651 of process 1
+Replace page 677655 in frame 15 with page 384902 of process 86
+Replace page 673171 in frame 16 with page 375941 of process 2
+Replace page 928284 in frame 17 with page 765844 of process 89
+Replace page 981103 in frame 18 with page 673171 of process 13
+Replace page 807908 in frame 19 with page 440041 of process 5
+Replace page 311527 in frame 20 with page 610287 of process 6
+Replace page 528173 in frame 21 with page 390318 of process 4
+Replace page 461392 in frame 22 with page 528173 of process 16
+Replace page 582340 in frame 23 with page 543442 of process 8
+Replace page 862503 in frame 24 with page 838255 of process 9
+Replace page 748716 in frame 25 with page 862503 of process 20
+Replace page 637322 in frame 26 with page 928284 of process 14
+Replace page 316624 in frame 27 with page 402878 of process 7
+Replace page 906983 in frame 28 with page 556114 of process 10
+Replace page 543486 in frame 29 with page 781026 of process 98
+Replace page 597037 in frame 30 with page 981103 of process 15
+Replace page 576470 in frame 31 with page 314695 of process 100
+Replace page 885723 in frame 32 with page 748716 of process 21
+Replace page 631799 in frame 33 with page 582340 of process 19
+Replace page 468098 in frame 34 with page 461392 of process 18
+Replace page 263379 in frame 35 with page 576470 of process 22
+Replace page 850077 in frame 36 with page 311527 of process 17
+Replace page 588658 in frame 37 with page 316624 of process 23
+Replace page 882037 in frame 38 with page 468098 of process 29
+Replace page 538775 in frame 39 with page 906983 of process 24
+Replace page 862454 in frame 40 with page 1011462 of process 11
+Replace page 348967 in frame 41 with page 263379 of process 30
+Replace page 526381 in frame 42 with page 543486 of process 25
+Replace page 599485 in frame 43 with page 526381 of process 37
+Replace page 794848 in frame 44 with page 677655 of process 12
+Replace page 942437 in frame 45 with page 794848 of process 39
+Replace page 987657 in frame 46 with page 597037 of process 26
+Replace page 782106 in frame 47 with page 942437 of process 40
+Replace page 646483 in frame 48 with page 987657 of process 41
+Replace page 555200 in frame 49 with page 588658 of process 32
+Replace page 499159 in frame 50 with page 782106 of process 33
+Replace page 906334 in frame 51 with page 538775 of process 34
+Replace page 449151 in frame 52 with page 646483 of process 42
+Replace page 667346 in frame 53 with page 555200 of process 43
+Replace page 600411 in frame 54 with page 862454 of process 35
+Replace page 604751 in frame 55 with page 499159 of process 44
+Replace page 963937 in frame 56 with page 348967 of process 36
+Replace page 926881 in frame 57 with page 449151 of process 46
+Replace page 920633 in frame 58 with page 599485 of process 38
+Replace page 672548 in frame 59 with page 667346 of process 47
+Replace page 958333 in frame 60 with page 850077 of process 31
+Replace page 990251 in frame 61 with page 600411 of process 48
+Replace page 313795 in frame 62 with page 604751 of process 49
+Replace page 859131 in frame 63 with page 963937 of process 50
+Replace page 966332 in frame 64 with page 926881 of process 51
+Replace page 327916 in frame 65 with page 920633 of process 28
+Replace page 264308 in frame 66 with page 672548 of process 52
+Replace page 265728 in frame 67 with page 958333 of process 45
+Replace page 574643 in frame 68 with page 990251 of process 53
+Replace page 511277 in frame 69 with page 313795 of process 54
+Replace page 831441 in frame 70 with page 859131 of process 55
+Replace page 607188 in frame 71 with page 966332 of process 56
+Replace page 527911 in frame 72 with page 264308 of process 58
+Replace page 884863 in frame 73 with page 327916 of process 57
+Replace page 836093 in frame 74 with page 265728 of process 59
+Replace page 441451 in frame 75 with page 574643 of process 60
+Replace page 947352 in frame 76 with page 511277 of process 27
+Replace page 509824 in frame 77 with page 765844 of process 89
+Replace page 581430 in frame 78 with page 344234 of process 90
+Replace page 852309 in frame 79 with page 294104 of process 91
+Replace page 958818 in frame 80 with page 743269 of process 92
+Replace page 269842 in frame 81 with page 912739 of process 93
+Replace page 650302 in frame 82 with page 642213 of process 94
+Replace page 549781 in frame 83 with page 777220 of process 95
+Replace page 980567 in frame 84 with page 852309 of process 70
+Replace page 493962 in frame 85 with page 600481 of process 96
+Replace page 386375 in frame 86 with page 269842 of process 72
+Replace page 588829 in frame 87 with page 958818 of process 71
+Replace page 735520 in frame 88 with page 781026 of process 98
+Replace page 383866 in frame 89 with page 795047 of process 99
+Replace page 274038 in frame 90 with page 650302 of process 73
+Replace page 876763 in frame 91 with page 980567 of process 75
+Replace page 435450 in frame 92 with page 549781 of process 74
+Replace page 1006072 in frame 93 with page 493962 of process 76
+Replace page 292301 in frame 94 with page 386375 of process 77
+Replace page 361427 in frame 95 with page 383866 of process 80
+Replace page 611032 in frame 96 with page 274038 of process 81
+Replace page 450157 in frame 97 with page 876763 of process 82
+Replace page 396704 in frame 98 with page 435450 of process 68
+Replace page 832092 in frame 99 with page 581430 of process 69
+Replace page 797651 in frame 0 with page 292301 of process 84
+Replace page 399093 in frame 1 with page 361427 of process 85
+Replace page 676801 in frame 2 with page 450157 of process 87
+Replace page 375941 in frame 3 with page 396704 of process 88
+Replace page 390318 in frame 4 with page 375941 of process 2
+Replace page 440041 in frame 5 with page 588829 of process 78
+Replace page 462631 in frame 6 with page 735520 of process 79
+Replace page 310485 in frame 7 with page 390318 of process 4
+Replace page 543442 in frame 8 with page 399093 of process 67
+Replace page 610287 in frame 9 with page 462631 of process 83
+Replace page 374899 in frame 10 with page 797651 of process 1
+Replace page 556114 in frame 11 with page 440041 of process 5
+Replace page 1011462 in frame 12 with page 610287 of process 6
+Replace page 838255 in frame 13 with page 543442 of process 8
+Replace page 402878 in frame 14 with page 1011462 of process 11
+Replace page 677655 in frame 15 with page 838255 of process 9
+Replace page 673171 in frame 16 with page 402878 of process 7
+Replace page 928284 in frame 17 with page 556114 of process 10
+Replace page 981103 in frame 18 with page 677655 of process 12
+Replace page 314695 in frame 19 with page 374899 of process 97
+Replace page 311527 in frame 20 with page 676801 of process 3
+Replace page 528173 in frame 21 with page 981103 of process 15
+Replace page 461392 in frame 22 with page 314695 of process 100
+Replace page 582340 in frame 23 with page 461392 of process 18
+Replace page 862503 in frame 24 with page 311527 of process 17
+Replace page 748716 in frame 25 with page 673171 of process 13
+Replace page 384902 in frame 26 with page 528173 of process 16
+Replace page 316624 in frame 27 with page 862503 of process 20
+Replace page 906983 in frame 28 with page 928284 of process 14
+Replace page 543486 in frame 29 with page 748716 of process 21
+Replace page 597037 in frame 30 with page 582340 of process 19
+Replace page 576470 in frame 31 with page 384902 of process 86
+Replace page 885723 in frame 32 with page 576470 of process 22
+Replace page 631799 in frame 33 with page 316624 of process 23
+Replace page 468098 in frame 34 with page 906983 of process 24
+Replace page 263379 in frame 35 with page 543486 of process 25
+Replace page 850077 in frame 36 with page 597037 of process 26
+Replace page 588658 in frame 37 with page 468098 of process 29
+Replace page 882037 in frame 38 with page 263379 of process 30
+Replace page 538775 in frame 39 with page 850077 of process 31
+Replace page 862454 in frame 40 with page 588658 of process 32
+Replace page 348967 in frame 41 with page 538775 of process 34
+Replace page 526381 in frame 42 with page 862454 of process 35
+Replace page 599485 in frame 43 with page 348967 of process 36
+Replace page 794848 in frame 44 with page 599485 of process 38
+Replace page 942437 in frame 45 with page 794848 of process 39
+Replace page 987657 in frame 46 with page 526381 of process 37
+Replace page 782106 in frame 47 with page 942437 of process 40
+Replace page 646483 in frame 48 with page 987657 of process 41
+Replace page 555200 in frame 49 with page 782106 of process 33
+Replace page 499159 in frame 50 with page 646483 of process 42
+Replace page 906334 in frame 51 with page 555200 of process 43
+Replace page 449151 in frame 52 with page 499159 of process 44
+Replace page 667346 in frame 53 with page 449151 of process 46
+Replace page 600411 in frame 54 with page 667346 of process 47
+Replace page 604751 in frame 55 with page 600411 of process 48
+Replace page 963937 in frame 56 with page 604751 of process 49
+Replace page 926881 in frame 57 with page 963937 of process 50
+Replace page 920633 in frame 58 with page 294105 of process 91
+
