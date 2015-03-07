@@ -29,5 +29,10 @@ Make sure you don't have valgrind already installed, before proceeding with the 
 valgrind a.out > log.txt 2>&1
 ```
 
+###Segregate lackey's output from program's output
+```sh
+valgrind -q --trace-children=yes --tool=lackey --trace-mem=yes --log-file=log.txt ./a.out
+```
+
  
 
