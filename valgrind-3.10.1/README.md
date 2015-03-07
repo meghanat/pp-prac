@@ -1,6 +1,6 @@
 ##To print PID with --trace-mem
 
-to print Action, Virtual Address, PID, use following command
+to print Virtual Address, PID, use following command
 ```sh
 valgrind --trace-children=yes --tool=lackey --trace-mem=yes <program-name>
 ```
