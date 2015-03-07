@@ -450,22 +450,22 @@ static Int   events_used = 0;
 
 static VG_REGPARM(2) void trace_instr(Addr addr, SizeT size)
 {
-   VG_(printf)("%08lx,%lu,%d\n", addr, size,VG_(getpid)());
+   VG_(printf)("%08lx,%d\n", addr,VG_(getpid)());
 }
 
 static VG_REGPARM(2) void trace_load(Addr addr, SizeT size)
 {
-   VG_(printf)("%08lx,%lu,%d\n", addr, size,VG_(getpid)());
+   VG_(printf)("%08lx,%d\n", addr,VG_(getpid)());
 }
 
 static VG_REGPARM(2) void trace_store(Addr addr, SizeT size)
 {
-   VG_(printf)("%08lx,%lu,%d\n", addr, size,VG_(getpid)());
+   VG_(printf)("%08lx,%d\n", addr,VG_(getpid)());
 }
 
 static VG_REGPARM(2) void trace_modify(Addr addr, SizeT size)
 {
-   VG_(printf)("%08lx,%lu,%d\n", addr, size,VG_(getpid)());
+   VG_(printf)("%08lx,%d\n", addr,VG_(getpid)());
 }
 
 
