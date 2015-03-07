@@ -24,5 +24,10 @@ Make sure you don't have valgrind already installed, before proceeding with the 
      bombs out with some complaint.  In that case, please let us know
      (see www.valgrind.org).
 
+###Redirect lackey's output to a file
+```sh
+valgrind a.out > log.txt 2>&1
+```
+
  
 
