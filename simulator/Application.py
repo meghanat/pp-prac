@@ -111,14 +111,20 @@ class Simulator(tk.Tk):
         self.config(menu=menubar)
 
     def create_page_count_labels(self):
+        self.total_count = tk.StringVar()
+        self.total_count_label = tk.Label(self.rightTopFrame, self.label_options, text="TOTAL")
+        self.total_count_label.grid(column = 0, row = 0)
+
+        self.total_count_box = tk.Label(self.rightTopFrame, self.label_options, bg="white", textvariable=self.total_count)
+        self.total_count_box.grid(column=1, row=0)
         for i, text in enumerate(self.algo_texts):
             label = tk.Label(self.rightTopFrame, self.label_options, text=text)
-            label.grid(column=0, row=i)
+            label.grid(column=0, row=i+1)
             self.algo_values[text]["label"] = tk.Label(self.rightTopFrame,
                                                        self.label_options,
                                                        bg="white",
                                                        textvariable=self.algo_values[text]["string_var"])
-            self.algo_values[text]["label"].grid(column=1, row=i)
+            self.algo_values[text]["label"].grid(column=1, row=i+1)
 
     def enable_uniform_resize(self):
         self.grid_columnconfigure(0,weight=1)
@@ -171,8 +177,6 @@ class Simulator(tk.Tk):
     def save_accesses(self):
             pass
 
-
-
     def start_simulation(self):
         self.simulation_values = {}
         self.stop_button.configure(state=tk.NORMAL)
@@ -198,7 +202,6 @@ class Simulator(tk.Tk):
 
     def stop_simulation(self):
         self.simulation_values["simulating"]=False
-        pass
 
     def update_algo_values(self):
         self.algo_values["LRU"]["algo"] = self.controller.lru
@@ -208,6 +211,7 @@ class Simulator(tk.Tk):
     
     def update_labels(self):
         while self.simulation_values["simulating"]:
+            self.total_count.set(self.controller.switcher.get_total_count())
             self.algo_values["LRU"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
             self.algo_values["LFU"]["string_var"].set(str(self.controller.lfu.get_page_fault_count()))
             self.algo_values["OPTIMAL"]["string_var"].set(str(self.controller.optimal.get_page_fault_count()))

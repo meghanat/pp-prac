@@ -4,6 +4,7 @@ class Switcher(object):
 		self.current_algorithm=current_algorithm
 		self.other_algorithms=other_algorithms
 		self.optimal=optimal
+		self.total_count = 0
 
 	def switch(self, swithing_event):
 		swithing_event.clear()
@@ -15,6 +16,8 @@ class Switcher(object):
 		# 	print i.name, i.pages_accessed
 		# print self.optimal.get_page_fault_count()
 		# print self.optimal.pages_accessed
+
+		self.total_count += self.current_algorithm.get_page_fault_count()
 
 		for i in self.other_algorithms:
 			i.reset_memory(self.current_algorithm.memory)
@@ -31,4 +34,6 @@ class Switcher(object):
 		self.current_algorithm = best
 		swithing_event.set()
 
+	def get_total_count(self):
+		return self.total_count
 

@@ -54,7 +54,7 @@ class Controller(object):
                 thread.start()
 
             while(len(self.simulation_values["page_num_stream"]) < self.simulation_values["window"]):
-                print len(self.simulation_values["page_num_stream"])
+                #print len(self.simulation_values["page_num_stream"])
                 self.simulation_values["progress_bar"].grid(column=1, row=5)
                 self.simulation_values["progress_bar"].config(maximum=self.simulation_values["window"], value=len(self.simulation_values["page_num_stream"]))
                 pass
@@ -62,8 +62,7 @@ class Controller(object):
 
             print "sim_win filled"
             print len(self.simulation_values["page_num_stream"])
-            
-            
+                  
             thread_optimal = threading.Thread(target=self.optimal, args=(self.switcher,))
             self.threads.append(thread_optimal)
             thread_optimal.start()
@@ -79,8 +78,6 @@ class Controller(object):
             thread_fifo = threading.Thread(target=self.fifo, args=(self.switcher,))
             self.threads.append(thread_fifo)
             thread_fifo.start()
-
-
 
         except Exception as e:
             print "Failed to start thread:", e
