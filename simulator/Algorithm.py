@@ -4,24 +4,27 @@ import copy
 
 
 class Algorithm:
-    def __init__(self, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set,name,simulation_window_size, switching_event):
-        self.number_pr_threads = number_pr_threads
+    def __init__(self,simulation_values):
+        self.number_pr_threads = simulation_values["number_pr_threads"]
         self.page_tables = { }  # Structure: PID => Page Table
                                 # { virtual_page_no : 
                                 #        { frame_no: #, present_bit: 1/0 } }
                                 # index of page table is the virtual page number
-        self.page_num_stream = page_num_stream
-        self.event = event_page_stream
-        self.simulating = True
-        self.read_lock = read_lock
+
+
+        self.page_num_stream = simulation_values["page_num_stream"]
+        self.event = simulation_values["event_page_stream"]
+        
+        self.read_lock = simulation_values["read_lock"]
         self.page_fault_count = 0
-        self.thread_set = thread_set
-        self.simulation_window_size=simulation_window_size
+        self.thread_set = simulation_values["thread_set"]
+        self.simulation_window_size=simulation_values["window"]
         self.pages_accessed=0
         self.logs = []
-        self.name=name
-        self.switching_event = switching_event
+        self.name=simulation_values["name"]
+        #print self.name, simulation_values
+        self.switching_event = simulation_values["switching_event"]
+        self.simulation_values=simulation_values
 
     def get_current_memory_mappings(self):
         virtual_addresses = []
@@ -58,7 +61,7 @@ class Algorithm:
     def __call__(self,switcher):
         self.switcher=switcher
         no_wins = 1
-        while self.simulating:
+        while self.simulation_values["simulating"]:
 
             self.switching_event.wait()            
             thread_id = thread.get_ident()

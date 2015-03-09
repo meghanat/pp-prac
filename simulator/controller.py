@@ -11,33 +11,30 @@ from Switcher import Switcher
 class Controller(object):
     
     def __init__(self, simulation_values):        
-        self.page_num_stream = []  # Each List Entry: [pid, virtual_page_number]
-        self.event_page_stream = threading.Event()  # Used to wait for an address to be 
+        self.simulation_values=simulation_values
+        self.simulation_values["page_num_stream"] = []  # Each List Entry: [pid, virtual_page_number]
+        self.simulation_values["event_page_stream"] = threading.Event()  # Used to wait for an address to be 
                                                     # available in page_num_stream
-        self.switching_event = threading.Event()
-        self.switching_event.set()
-        self.lock = threading.Lock()                                 
-        self.number_processes = simulation_values["num_processes"] 
-        self.number_frames = simulation_values["frames"]
-        self.simulation_window_size = simulation_values["window"]
-        self.process_size = simulation_values["vas"] * (2 ** 30)  # GB 
+        self.simulation_values["switching_event"] = threading.Event()
+        self.simulation_values["switching_event"].set()
+        self.simulation_values["read_lock"] = threading.Lock()                                 
+        self.simulation_values["process_size"] = simulation_values["vas"] * (2 ** 30)  # GB 
 
         self.read_from_file=simulation_values["read_from_file"]
 
-        self.number_pr_threads = 4  # No of page replacement algorithms
+        self.simulation_values["number_pr_threads"] = 4  # No of page replacement algorithms
         self.threads = []  # Array of PR started. Used to wait on them
-        self.thread_set = set()  # Global set; Used to indicate reading of an elem by all algos.
+        self.simulation_values["thread_set"] = set()  # Global set; Used to indicate reading of an elem by all algos.
 
-        
+
         if(self.read_from_file):
-            self.page_num_stream=simulation_values["page_accesses"]
-            self.event_page_stream.set()
+            self.simulation_values["page_num_stream"]=simulation_values["page_accesses"]
+            self.simulation_values["event_page_stream"].set()
 
-        self.lru = LRU(self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size, self.switching_event)
-        self.optimal = Optimal(self.number_frames, self.number_pr_threads, self.page_num_stream, 
-             self.event_page_stream, self.lock,self.thread_set, self.simulation_window_size, self.switching_event)
-        self.lfu = LFU(self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size, self.switching_event)
-        self.fifo = FIFO(self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size, self.switching_event)
+        self.lru = LRU(self.simulation_values)
+        self.optimal = Optimal(self.simulation_values)
+        self.lfu = LFU(self.simulation_values)
+        self.fifo = FIFO(self.simulation_values)
         self.current_algorithm = self.lfu
         self.other_algorithms = [self.lfu,self.lru,self.fifo]
 
@@ -51,17 +48,16 @@ class Controller(object):
 
             if(not self.read_from_file):
 
-                thread = threading.Thread(target=lambda : cpu.start_CPU(self.number_processes, 
-                                            self.page_num_stream, self.event_page_stream, self.lock, self.simulation_window_size), args=())
+                thread = threading.Thread(target=lambda : cpu.start_CPU(self.simulation_values), args=())
                 self.threads.append(thread)
                 thread.start()
 
-            while(len(self.page_num_stream) < self.simulation_window_size):
-                print len(self.page_num_stream)
+            while(len(self.simulation_values["page_num_stream"]) < self.simulation_values["window"]):
+                #print len(self.simulation_values["page_num_stream"])
                 pass
 
             print "sim_win filled"
-            print len(self.page_num_stream)
+            print len(self.simulation_values["page_num_stream"])
             
             
             thread_optimal = threading.Thread(target=self.optimal, args=(self.switcher,))
