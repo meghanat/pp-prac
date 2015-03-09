@@ -52,6 +52,10 @@ class Simulator(tk.Tk):
         self.leftFrame.columnconfigure(0, pad=10)
         self.simulate_button = tk.Button(self.leftFrame, text="Simulate", command=self.start_simulation)
         self.simulate_button.grid(column=0, row=5, columnspan=2, padx=10, pady=10)
+        
+        self.stop_button = tk.Button(self.leftFrame, text=" Stop", command=self.stop_simulation,state=tk.DISABLED)
+        self.stop_button.grid(column=0, row=6, columnspan=2, padx=10, pady=10)
+
 
         f = tkFont.Font(self.label_param, self.label_param.cget("font"))
         f.configure(underline=True)
@@ -143,6 +147,7 @@ class Simulator(tk.Tk):
 
     def start_simulation(self):
         simulation_values = {}
+        self.stop_button.configure(state=tk.NORMAL)
         for parameter in self.spinbox_names:
             simulation_values[parameter] = int(self.spinBoxes[parameter].get())
         self.controller = controller.Controller(simulation_values)
@@ -153,6 +158,9 @@ class Simulator(tk.Tk):
         self.update_thread.start()
         self.update_log_thread = threading.Thread(target=self.update_logs)
         self.update_log_thread.start()
+
+    def stop_simulation(self):
+        pass
 
     def update_algo_values(self):
         self.algo_values["LRU"]["algo"] = self.controller.lru
