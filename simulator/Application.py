@@ -12,6 +12,7 @@ class Simulator(tk.Tk):
         tk.Tk.__init__(self, parent)
         self.parent = parent
         self.controller = None
+        self.read_from_file=False
 
     def initialize(self):
         self.padx = 10
@@ -93,9 +94,9 @@ class Simulator(tk.Tk):
     def create_menu_bar(self):
         menubar = tk.Menu(self)
         filemenu = tk.Menu(self, tearoff=0)
-        filemenu.add_command(label="Load Access Stream From")
+        filemenu.add_command(label="Load Access Stream From",command=self.load_accesses)
         filemenu.add_command(label="Save Logs As", command=self.save_logs)
-        filemenu.add_command(label="Save Access Stream As")
+        filemenu.add_command(label="Save Access Stream As",command=self.save_accesses)
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.quit)
         menubar.add_cascade(label="File", menu=filemenu)
@@ -143,6 +144,33 @@ class Simulator(tk.Tk):
             file_handle.write("\n")
             file_handle.write(self.algo_values[algo]["log"].get("1.0", tk.END))
         file_handle.close()
+
+    def load_accesses(self):
+        try:
+            print "in load_accesses"
+            file_handle=tkFileDialog.askopenfile()
+            self.read_from_file=True
+
+            logs =file_handle.read().strip()
+            logs=logs.split("=")[0].strip()#get only accesses, trim whitespaces
+
+            logs=logs.split("\n")
+            self.page_accesses=list()
+
+            for i in logs:
+                i=i.strip().split(",")
+                self.page_accesses.append([i[1],i[0]])
+
+            # print self.page_accesses[:10]
+
+
+        except:
+            print "Fail"
+            self.read_from_file=False
+            
+    def save_accesses(self):
+            pass
+
 
 
     def start_simulation(self):
