@@ -2,7 +2,7 @@
 
 Make sure you don't have valgrind already installed, before proceeding with the installation :
 
-  1. Download valgrind <a href="http://valgrind.org/downloads/valgrind-3.10.1.tar.bz2">source</a>.
+  1. Download valgrind's <a href="http://valgrind.org/downloads/valgrind-3.10.1.tar.bz2">source</a>.
   
   2.  cd into the source directory.
   
