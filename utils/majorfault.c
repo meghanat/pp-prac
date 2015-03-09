@@ -5,26 +5,33 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 int main(int argc, char ** argv) {
-  int i = 0; 
-  int fd = open(argv[1], O_RDWR);
-  struct stat stats;
-  fstat(fd, &stats);
-  posix_fadvise(fd, 0, stats.st_size, POSIX_FADV_DONTNEED);
+    int i = 0; 
+    int fd = open(argv[1], O_RDWR);
+    struct stat stats;
+    int rounded_down;
+    int page_size;
 
-  char * map = (char *) mmap(NULL, stats.st_size/4096 * 4096 , PROT_READ|PROT_WRITE, MAP_SHARED|MAP_NORESERVE, fd, 0);
-  if (map == MAP_FAILED) {
-    perror("Failed to mmap");
-    return 1;
-  }
-  
-  // Access every 100th page to generate major page faults  
-  for (i = 0; i < stats.st_size; i+= 4096 * 100) {
-    map[i] = 12;
-  }
+    fstat(fd, &stats);
+    posix_fadvise(fd, 0, stats.st_size, POSIX_FADV_DONTNEED);
 
-  munmap(map, stats.st_size);
+    page_size = getpagesize();
+    rounded_down = stats.st_size/page_size * page_size;
 
-  return 0;
+    char * map = (char *) mmap(NULL,  rounded_down, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_NORESERVE, fd, 0);
+    if (map == MAP_FAILED) {
+        perror("Failed to mmap");
+        return 1;
+    }
+
+    // Access every 100th page to generate major page faults  
+    for (i = 0; i < rounded_down; i+= page_size * 100) {
+        map[i] = 12;
+    }
+
+    munmap(map, rounded_down);
+
+    return 0;
 }
