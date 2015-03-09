@@ -1,6 +1,7 @@
 import controller
 import tkFileDialog
 import tkFont
+import tkMessageBox
 import Tkinter as tk
 import ttk
 import threading
@@ -178,13 +179,15 @@ class Simulator(tk.Tk):
         self.simulation_values = {}
         self.stop_button.configure(state=tk.NORMAL)
         for parameter in self.spinbox_names:
-            self.simulation_values[parameter] = int(self.spinBoxes[parameter].get())
+            try:
+                self.simulation_values[parameter] = int(self.spinBoxes[parameter].get())
+            except:
+                tkMessageBox.showerror("Error", "Invalid Input : " + parameter)
+                return
+
         self.simulation_values["read_from_file"]=self.read_from_file
         self.simulation_values["page_accesses"]=self.page_accesses
         self.simulation_values["simulating"]=True
-
-        # print self.simulation_values
-
         self.controller = controller.Controller(self.simulation_values)
         self.update_algo_values()
         self.controller_thread = threading.Thread(target=self.controller.start_simulation)

@@ -53,7 +53,7 @@ class Controller(object):
                 thread.start()
 
             while(len(self.simulation_values["page_num_stream"]) < self.simulation_values["window"]):
-                #print len(self.simulation_values["page_num_stream"])
+                print len(self.simulation_values["page_num_stream"])
                 pass
 
             print "sim_win filled"
