@@ -22,9 +22,16 @@ class Controller(object):
         self.simulation_window_size = simulation_values["window"]
         self.process_size = simulation_values["vas"] * (2 ** 30)  # GB 
 
+        self.read_from_file=simulation_values["read_from_file"]
+
         self.number_pr_threads = 4  # No of page replacement algorithms
         self.threads = []  # Array of PR started. Used to wait on them
         self.thread_set = set()  # Global set; Used to indicate reading of an elem by all algos.
+
+        
+        if(self.read_from_file):
+            self.page_num_stream=simulation_values["page_accesses"]
+            self.event_page_stream.set()
 
         self.lru = LRU(self.number_frames, self.number_pr_threads, self.page_num_stream, self.event_page_stream, self.lock, self.thread_set,self.simulation_window_size, self.switching_event)
         self.optimal = Optimal(self.number_frames, self.number_pr_threads, self.page_num_stream, 
@@ -36,12 +43,18 @@ class Controller(object):
 
         self.switcher = Switcher(self.current_algorithm, self.other_algorithms, self.optimal)
 
+
+
     def start_simulation(self):
         try:
-            thread = threading.Thread(target=lambda : cpu.start_CPU(self.number_processes, 
-                                        self.page_num_stream, self.event_page_stream, self.lock, self.simulation_window_size), args=())
-            self.threads.append(thread)
-            thread.start()
+
+
+            if(not self.read_from_file):
+
+                thread = threading.Thread(target=lambda : cpu.start_CPU(self.number_processes, 
+                                            self.page_num_stream, self.event_page_stream, self.lock, self.simulation_window_size), args=())
+                self.threads.append(thread)
+                thread.start()
 
             while(len(self.page_num_stream) < self.simulation_window_size):
                 print len(self.page_num_stream)

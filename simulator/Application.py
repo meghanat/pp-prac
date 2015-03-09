@@ -13,6 +13,7 @@ class Simulator(tk.Tk):
         self.parent = parent
         self.controller = None
         self.read_from_file=False
+        self.page_accesses=None
 
     def initialize(self):
         self.padx = 10
@@ -178,6 +179,8 @@ class Simulator(tk.Tk):
         self.stop_button.configure(state=tk.NORMAL)
         for parameter in self.spinbox_names:
             simulation_values[parameter] = int(self.spinBoxes[parameter].get())
+        simulation_values["read_from_file"]=self.read_from_file
+        simulation_values["page_accesses"]=self.page_accesses
         self.controller = controller.Controller(simulation_values)
         self.update_algo_values()
         self.controller_thread = threading.Thread(target=self.controller.start_simulation)
