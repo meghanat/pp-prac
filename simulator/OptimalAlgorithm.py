@@ -3,14 +3,13 @@ import time
 import Algorithm
 
 class Optimal(Algorithm.Algorithm):
-    def __init__(self, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set,simulation_window_size, switching_event):
+    def __init__(self, simulation_values):
         
        
-        Algorithm.Algorithm.__init__(self, number_frames, number_pr_threads, 
-                       page_num_stream, event_page_stream, read_lock, thread_set,"Optimal",simulation_window_size, switching_event)
+        simulation_values["name"]="Optimal"
+        Algorithm.Algorithm.__init__(self,simulation_values)
 
-        self.memory = [{"pid": -1, "virtual_page_no": -1} for i in range(number_frames)]
+        self.memory = [{"pid": -1, "virtual_page_no": -1} for i in range(simulation_values["number_frames"])]
         self.name = "Optimal"
 
 

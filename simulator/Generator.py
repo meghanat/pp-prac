@@ -6,7 +6,7 @@ import threading
 
 class VirtualAddressGenerator:
     pid = 0
-    def __init__(self, address_stream, event, prob_dist=[0.6, 0.3, 0.1], process_size=1 << 32,simulation_window_size=10):
+    def __init__(self,simulation_values, address_stream, event, prob_dist=[0.6, 0.3, 0.1], process_size=1 << 32,simulation_window_size=10):
         self.process_size = process_size
         self.kernel_space = 1 << 30  # Remove this hard coded value
         self.prob_dist = prob_dist
@@ -15,6 +15,7 @@ class VirtualAddressGenerator:
         self.address_stream = address_stream
         self.event = event
         self.simulation_window_size = simulation_window_size
+        self.simulation_values=simulation_values
         try:
             thread = threading.Thread(target=self.generate_virtual_address, args=())
             thread.start()
@@ -72,7 +73,7 @@ class VirtualAddressGenerator:
     def generate_virtual_address(self):
         VirtualAddressGenerator.pid += 1
         pid = VirtualAddressGenerator.pid
-        while (True):
+        while (self.simulation_values["simulating"]):
 
             gen_value = numpy.random.choice(self.values, None, self.prob_dist)
         

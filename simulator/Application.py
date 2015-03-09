@@ -12,6 +12,8 @@ class Simulator(tk.Tk):
         tk.Tk.__init__(self, parent)
         self.parent = parent
         self.controller = None
+        self.read_from_file=False
+        self.page_accesses=None
 
     def initialize(self):
         self.padx = 10
@@ -22,7 +24,7 @@ class Simulator(tk.Tk):
                               "padx": 10, "pady": 10}
         self.spinbox_options = {"width": 10}
         self.spinBoxes = {}
-        self.spinbox_names = ["vas", "frames", "num_processes", "window"]
+        self.spinbox_names = ["vas", "number_frames", "number_processes", "window"]
         self.label_texts = ["VAS(GB)", "Number of frames", "Number of procesess", "Simulation Window"]
         self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO"]
         self.algo_values = {"LRU": {}, "LFU": {}, "OPTIMAL": {}, "FIFO": {}}
@@ -93,9 +95,9 @@ class Simulator(tk.Tk):
     def create_menu_bar(self):
         menubar = tk.Menu(self)
         filemenu = tk.Menu(self, tearoff=0)
-        filemenu.add_command(label="Load Access Stream From")
+        filemenu.add_command(label="Load Access Stream From",command=self.load_accesses)
         filemenu.add_command(label="Save Logs As", command=self.save_logs)
-        filemenu.add_command(label="Save Access Stream As")
+        filemenu.add_command(label="Save Access Stream As",command=self.save_accesses)
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.quit)
         menubar.add_cascade(label="File", menu=filemenu)
@@ -144,13 +146,46 @@ class Simulator(tk.Tk):
             file_handle.write(self.algo_values[algo]["log"].get("1.0", tk.END))
         file_handle.close()
 
+    def load_accesses(self):
+        try:
+            print "in load_accesses"
+            file_handle=tkFileDialog.askopenfile()
+            self.read_from_file=True
+
+            logs =file_handle.read().strip()
+            logs=logs.split("=")[0].strip()#get only accesses, trim whitespaces
+
+            logs=logs.split("\n")
+            self.page_accesses=list()
+
+            for i in logs:
+                i=i.strip().split(",")
+                self.page_accesses.append([i[1],i[0]])
+
+            # print self.page_accesses[:10]
+
+
+        except:
+            print "Fail"
+            self.read_from_file=False
+            
+    def save_accesses(self):
+            pass
+
+
 
     def start_simulation(self):
-        simulation_values = {}
+        self.simulation_values = {}
         self.stop_button.configure(state=tk.NORMAL)
         for parameter in self.spinbox_names:
-            simulation_values[parameter] = int(self.spinBoxes[parameter].get())
-        self.controller = controller.Controller(simulation_values)
+            self.simulation_values[parameter] = int(self.spinBoxes[parameter].get())
+        self.simulation_values["read_from_file"]=self.read_from_file
+        self.simulation_values["page_accesses"]=self.page_accesses
+        self.simulation_values["simulating"]=True
+
+        # print self.simulation_values
+
+        self.controller = controller.Controller(self.simulation_values)
         self.update_algo_values()
         self.controller_thread = threading.Thread(target=self.controller.start_simulation)
         self.controller_thread.start()
@@ -160,6 +195,7 @@ class Simulator(tk.Tk):
         self.update_log_thread.start()
 
     def stop_simulation(self):
+        self.simulation_values["simulating"]=False
         pass
 
     def update_algo_values(self):
@@ -169,7 +205,7 @@ class Simulator(tk.Tk):
         self.algo_values["FIFO"]["algo"] = self.controller.fifo
     
     def update_labels(self):
-        while True:
+        while self.simulation_values["simulating"]:
             self.algo_values["LRU"]["string_var"].set(str(self.controller.lru.get_page_fault_count()))
             self.algo_values["LFU"]["string_var"].set(str(self.controller.lfu.get_page_fault_count()))
             self.algo_values["OPTIMAL"]["string_var"].set(str(self.controller.optimal.get_page_fault_count()))
@@ -181,7 +217,7 @@ class Simulator(tk.Tk):
             self.update_idletasks()
 
     def update_logs(self):
-        while True:
+        while self.simulation_values["simulating"]:
             for algo in self.algo_texts:
                 self.algo_values[algo]["log"].configure(state=tk.NORMAL)
                 self.algo_values[algo]["log"].insert(tk.END, str(self.algo_values[algo]["algo"].get_next_log()))
