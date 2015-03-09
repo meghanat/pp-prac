@@ -8,6 +8,7 @@ from OptimalAlgorithm import Optimal
 from Switcher import Switcher
 
 
+
 class Controller(object):
     
     def __init__(self, simulation_values):        
@@ -54,7 +55,10 @@ class Controller(object):
 
             while(len(self.simulation_values["page_num_stream"]) < self.simulation_values["window"]):
                 print len(self.simulation_values["page_num_stream"])
+                self.simulation_values["progress_bar"].grid(column=1, row=5)
+                self.simulation_values["progress_bar"].config(maximum=self.simulation_values["window"], value=len(self.simulation_values["page_num_stream"]))
                 pass
+            self.simulation_values["progress_bar"].grid_forget()
 
             print "sim_win filled"
             print len(self.simulation_values["page_num_stream"])

@@ -59,6 +59,7 @@ class Simulator(tk.Tk):
         self.stop_button = tk.Button(self.leftFrame, text=" Stop", command=self.stop_simulation,state=tk.DISABLED)
         self.stop_button.grid(column=0, row=6, columnspan=2, padx=10, pady=10)
 
+        self.progress_bar = ttk.Progressbar(self.leftFrame, orient="horizontal", length=100, mode="determinate")
 
         f = tkFont.Font(self.label_param, self.label_param.cget("font"))
         f.configure(underline=True)
@@ -163,9 +164,6 @@ class Simulator(tk.Tk):
                 i=i.strip().split(",")
                 self.page_accesses.append([i[1],i[0]])
 
-            # print self.page_accesses[:10]
-
-
         except:
             print "Fail"
             self.read_from_file=False
@@ -188,6 +186,7 @@ class Simulator(tk.Tk):
         self.simulation_values["read_from_file"]=self.read_from_file
         self.simulation_values["page_accesses"]=self.page_accesses
         self.simulation_values["simulating"]=True
+        self.simulation_values["progress_bar"] = self.progress_bar
         self.controller = controller.Controller(self.simulation_values)
         self.update_algo_values()
         self.controller_thread = threading.Thread(target=self.controller.start_simulation)
