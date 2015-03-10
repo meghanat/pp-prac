@@ -8,7 +8,6 @@ class Switcher(object):
 
 	def switch(self, swithing_event):
 		swithing_event.clear()
-		# print "Switch"
 		best = min(self.other_algorithms, key=lambda x: x.get_page_fault_count())
 		#print best.name
 		# for i in self.other_algorithms:
@@ -17,7 +16,9 @@ class Switcher(object):
 		# print self.optimal.get_page_fault_count()
 		# print self.optimal.pages_accessed
 
+		
 		self.total_count += self.current_algorithm.get_page_fault_count()
+		
 
 		for i in self.other_algorithms:
 			i.reset_memory(self.current_algorithm.memory)

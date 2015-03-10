@@ -1,4 +1,5 @@
 import Algorithm
+import itertools
 import thread
 import time
 
@@ -8,8 +9,13 @@ class FIFO(Algorithm.Algorithm):
 
         simulation_values["name"]="FIFO"
         Algorithm.Algorithm.__init__(self,simulation_values)
-        
-        self.memory = [{"pid": -1, "virtual_page_no": -1} for i in range(simulation_values["number_frames"])]
+        self.memory = []
+
+        for i in itertools.count(0):
+            if i == simulation_values["number_frames"]:
+                break
+            self.memory.append({"pid": -1, "virtual_page_no": -1})
+            
         self.name = "FIFO"
         self.i = -1
         

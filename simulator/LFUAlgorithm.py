@@ -1,17 +1,19 @@
 import Algorithm
+import itertools
 import thread
 
 
 class LFU(Algorithm.Algorithm):
     def __init__(self, simulation_values):
-
         simulation_values["name"]="LFU"
-
         Algorithm.Algorithm.__init__(self,simulation_values)
+        self.memory = []
 
-        self.memory = [{"frequency" : 0, "pid": -1, "virtual_page_no": -1} for i in range(simulation_values["number_frames"])]
-        
-
+        for i in itertools.count(0):
+            if i == simulation_values["number_frames"]:
+                break
+            self.memory.append({"frequency" : 0, "pid": -1, "virtual_page_no": -1})
+            
 
     def reset_memory(self,current_memory):
         self.memory=[{"frequency" : 0, "pid": i["pid"], "virtual_page_no": i["virtual_page_no"]} for i in current_memory]
