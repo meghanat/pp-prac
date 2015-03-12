@@ -168,7 +168,7 @@ class Simulator(tk.Tk):
 
             for i in logs:
                 i=i.strip().split(",")
-                self.page_accesses.append([i[1],i[0]])
+                self.page_accesses.append([i[1],int(i[0], 16) >> 12])
 
         except:
             print "Fail"
