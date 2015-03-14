@@ -18,7 +18,7 @@ class Algorithm:
         self.read_lock = simulation_values["read_lock"]
         self.page_fault_count = 0
         self.thread_set = simulation_values["thread_set"]
-        self.simulation_window_size=simulation_values["window"]
+        self.switcher_size=simulation_values["window"]
         self.pages_accessed=0
         self.logs = []
         self.name=simulation_values["name"]
@@ -105,10 +105,10 @@ class Algorithm:
                 #print "Popped"
                 self.page_num_stream.pop(0)
                 self.thread_set.clear()
-                if(len(self.page_num_stream) < self.simulation_window_size):  # Wait for an access to be made
+                if(len(self.page_num_stream) < self.switcher_size):  # Wait for an access to be made
                     self.event.clear() 
 
-                if(self.pages_accessed == self.simulation_window_size):
+                if(self.pages_accessed == self.switcher_size):
                     self.switcher.switch(self.switching_event)
                     
                 

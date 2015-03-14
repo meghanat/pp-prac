@@ -81,12 +81,12 @@ class Simulator(tk.Tk):
             self.spinBoxes[self.spinbox_names[i]].grid(column=1, row=i+1)
             
 
-        self.sim_win_label=tk.Label(self.leftFrame,self.label_options,text="Switching Window")
-        self.sim_win_label.grid(column=0,row=len(self.label_texts)+1)
+        self.switcher_label=tk.Label(self.leftFrame,self.label_options,text="Switching Window")
+        self.switcher_label.grid(column=0,row=len(self.label_texts)+1)
         
-        self.sim_win_slider=tk.Scale(self.leftFrame,from_=0,to=10000,orient=tk.HORIZONTAL)
-        self.sim_win_slider.set(1000)
-        self.sim_win_slider.grid(column=1,row=len(self.label_texts)+1)
+        self.switcher_slider=tk.Scale(self.leftFrame,from_=0,to=10000,orient=tk.HORIZONTAL)
+        self.switcher_slider.set(1000)
+        self.switcher_slider.grid(column=1,row=len(self.label_texts)+1)
         
 
 
@@ -207,7 +207,7 @@ class Simulator(tk.Tk):
             except:
                 tkMessageBox.showerror("Error", "Invalid Input : " + parameter)
                 return
-        self.simulation_values["window"]=int(self.sim_win_slider.get())
+        self.simulation_values["window"]=int(self.switcher_slider.get())
         self.simulation_values["read_from_file"]=self.read_from_file
         self.simulation_values["page_accesses"]=self.page_accesses
         self.simulation_values["simulating"]=True

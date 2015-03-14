@@ -14,9 +14,9 @@ class CPU:
         self.event_page_stream = simulation_values["event_page_stream"]
         self.PAGE_SHIFT = 12 # Get page size log to the base 2 of this
         self.lock = simulation_values["read_lock"]
-        self.simulation_window_size = simulation_values["window"]
+        self.switcher_size = simulation_values["window"]
         try:
-            self.objects = [Generator.VirtualAddressGenerator(self.simulation_values,self.addr_access_stream, self.event_access_stream, simulation_window_size=self.simulation_window_size) for i in range(self.num_processes)]
+            self.objects = [Generator.VirtualAddressGenerator(self.simulation_values,self.addr_access_stream, self.event_access_stream, switcher_size=self.switcher_size) for i in range(self.num_processes)]
         except Exception as e:
             print e
 

@@ -6,7 +6,7 @@ import threading
 
 class VirtualAddressGenerator:
     pid = 0
-    def __init__(self,simulation_values, address_stream, event, prob_dist=[0.6, 0.3, 0.1], process_size=1 << 32,simulation_window_size=10):
+    def __init__(self,simulation_values, address_stream, event, prob_dist=[0.6, 0.3, 0.1], process_size=1 << 32,switcher_size=10):
         self.process_size = process_size
         self.kernel_space = 1 << 30  # Remove this hard coded value
         self.prob_dist = prob_dist
@@ -14,7 +14,7 @@ class VirtualAddressGenerator:
         self.current_address = random.randrange(self.kernel_space, self.process_size, 4)
         self.address_stream = address_stream
         self.event = event
-        self.simulation_window_size = simulation_window_size
+        self.switcher_size = switcher_size
         self.simulation_values=simulation_values
         try:
             thread = threading.Thread(target=self.generate_virtual_address, args=())
@@ -27,7 +27,7 @@ class VirtualAddressGenerator:
         self.current_address += 4
         # print self.current_address
         self.address_stream.append((pid, self.current_address))
-        if(len(self.address_stream) >= self.simulation_window_size):
+        if(len(self.address_stream) >= self.switcher_size):
             self.event.set()
 
     def generate_loop_addresses(self, pid):
@@ -42,13 +42,13 @@ class VirtualAddressGenerator:
             for j in range(self.current_address, self.current_address + offset, 4):
                 #print "Address: ", j, "; Process: ", pid, "\n"
                 self.address_stream.append((pid, j))
-                if(len(self.address_stream) >= self.simulation_window_size):
+                if(len(self.address_stream) >= self.switcher_size):
                     self.event.set()
 
         self.current_address += offset + 4
         #print "Address: ", self.current_address, "; Process: ", pid, "\n"
         self.address_stream.append((pid, self.current_address))
-        if(len(self.address_stream) >= self.simulation_window_size):
+        if(len(self.address_stream) >= self.switcher_size):
             self.event.set()
 
 
@@ -61,13 +61,13 @@ class VirtualAddressGenerator:
         for j in range(jump_to, jump_to + offset, 4):
             #print "Address: ", j, "; Process: ", pid, "\n"
             self.address_stream.append((pid, j))
-            if(len(self.address_stream) >= self.simulation_window_size):
+            if(len(self.address_stream) >= self.switcher_size):
                 self.event.set()
 
         self.current_address += 4
         #print "Address: ", self.current_address, "; Process: ", pid, "\n"
         self.address_stream.append((pid, self.current_address))
-        if(len(self.address_stream) >= self.simulation_window_size):
+        if(len(self.address_stream) >= self.switcher_size):
             self.event.set()
 
     def generate_virtual_address(self):
