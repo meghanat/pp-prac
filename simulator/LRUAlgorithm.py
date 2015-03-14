@@ -22,7 +22,7 @@ class LRU(Algorithm.Algorithm):
 
     #fill empty frame
     def fill_frame(self,virtual_page_no,pid,frame_no):
-        self.logs.append("LRU: Fill frame " + str(frame_no) + " with " + str(virtual_page_no) + "\n")
+        self.logs.append("Fill frame " + str(frame_no) + " with " + str(virtual_page_no) + "\n")
 
         page_table=self.page_tables[pid]
         #  Update the page table of this process

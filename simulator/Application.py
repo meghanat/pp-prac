@@ -81,7 +81,7 @@ class Simulator(tk.Tk):
             self.spinBoxes[self.spinbox_names[i]].grid(column=1, row=i+1)
             
 
-        self.sim_win_label=tk.Label(self.leftFrame,self.label_options,text="Simulation Window")
+        self.sim_win_label=tk.Label(self.leftFrame,self.label_options,text="Switching Window")
         self.sim_win_label.grid(column=0,row=len(self.label_texts)+1)
         
         self.sim_win_slider=tk.Scale(self.leftFrame,from_=0,to=10000,orient=tk.HORIZONTAL)
@@ -192,6 +192,13 @@ class Simulator(tk.Tk):
             pass
 
     def start_simulation(self):
+
+        #clear logs
+        for algo in self.algo_texts:
+            self.algo_values[algo]["log"].configure(state=tk.NORMAL)
+            self.algo_values[algo]["log"].delete(1.0, tk.END)
+            self.algo_values[algo]["log"].configure(state=tk.DISABLED)
+
         self.simulation_values = {}
         self.stop_button.configure(state=tk.NORMAL)
         for parameter in self.spinbox_names:
@@ -215,7 +222,8 @@ class Simulator(tk.Tk):
         self.update_log_thread.start()
 
     def stop_simulation(self):
-        self.simulation_values["simulating"]=False
+        self.simulation_values["simulating"]=False 
+
 
     def update_algo_values(self):
         self.algo_values["LRU"]["algo"] = self.controller.lru
