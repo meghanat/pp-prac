@@ -181,9 +181,12 @@ class Simulator(tk.Tk):
                 i=i.strip().split(",")
                 self.page_accesses.append([i[1],int(i[0], 16) >> 12])
 
+            self.spinBoxes["number_processes"].config(state=tk.DISABLED)
+
         except:
             print "Fail"
             self.read_from_file=False
+            self.spinBoxes["number_processes"].config(state=tk.NORMAL)
             
     def save_accesses(self):
             pass
