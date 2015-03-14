@@ -25,8 +25,8 @@ class Simulator(tk.Tk):
                               "padx": 10, "pady": 10}
         self.spinbox_options = {"width": 10}
         self.spinBoxes = {}
-        self.spinbox_names = ["vas", "number_frames", "number_processes", "window"]
-        self.label_texts = ["VAS(GB)", "Number of frames", "Number of procesess", "Simulation Window"]
+        self.spinbox_names = ["vas", "number_frames", "number_processes"]
+        self.label_texts = ["VAS(GB)", "Number of frames", "Number of procesess"]
         self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO"]
         self.algo_values = {"LRU": {}, "LFU": {}, "OPTIMAL": {}, "FIFO": {}}
         for text in self.algo_texts:
@@ -79,6 +79,17 @@ class Simulator(tk.Tk):
             self.spinBoxes[self.spinbox_names[i]] = tk.Spinbox(self.leftFrame,
                            self.spinbox_options, from_=self.ranges[i][0], to=self.ranges[i][1])
             self.spinBoxes[self.spinbox_names[i]].grid(column=1, row=i+1)
+            
+
+        self.sim_win_label=tk.Label(self.leftFrame,self.label_options,text="Simulation Window")
+        self.sim_win_label.grid(column=0,row=len(self.label_texts)+1)
+        
+        self.sim_win_slider=tk.Scale(self.leftFrame,from_=0,to=10000,orient=tk.HORIZONTAL)
+        self.sim_win_slider.set(1000)
+        self.sim_win_slider.grid(column=1,row=len(self.label_texts)+1)
+        
+
+
 
     def create_log_frames(self):
         self.tabs = ttk.Notebook(self.rightBottomFrame)
@@ -186,7 +197,7 @@ class Simulator(tk.Tk):
             except:
                 tkMessageBox.showerror("Error", "Invalid Input : " + parameter)
                 return
-
+        self.simulation_values["window"]=int(self.sim_win_slider.get())
         self.simulation_values["read_from_file"]=self.read_from_file
         self.simulation_values["page_accesses"]=self.page_accesses
         self.simulation_values["simulating"]=True
