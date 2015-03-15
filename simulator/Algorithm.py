@@ -1,6 +1,8 @@
 import thread
 import time
 import copy
+import tkMessageBox
+
 
 
 class Algorithm:
@@ -106,6 +108,11 @@ class Algorithm:
                 self.page_num_stream.pop(0)
                 self.thread_set.clear()
                 if(len(self.page_num_stream) < self.switcher_size):  # Wait for an access to be made
+                    if(self.simulation_values["read_from_file"]):
+                        self.simulation_values["simulating"]=False
+                        print "Sim stopped"
+                        tkMessageBox.showerror("Alert","Simulation stopped")
+
                     self.event.clear() 
 
                 if(self.pages_accessed == self.switcher_size):
