@@ -50,9 +50,7 @@ class Controller(object):
     def start_simulation(self):
         try:
 
-
             if(not self.read_from_file):
-
                 thread = threading.Thread(target=lambda : cpu.start_CPU(self.simulation_values), args=())
                 self.threads.append(thread)
                 thread.start()
@@ -71,25 +69,11 @@ class Controller(object):
             self.threads.append(thread_optimal)
             thread_optimal.start()
             
-            thread_lru = threading.Thread(target=self.lru, args=(self.switcher,))
-            self.threads.append(thread_lru)
-            thread_lru.start()
-            
-            thread_lfu = threading.Thread(target=self.lfu, args=(self.switcher,))
-            self.threads.append(thread_lfu)
-            thread_lfu.start()
-            
-            thread_fifo = threading.Thread(target=self.fifo, args=(self.switcher,))
-            self.threads.append(thread_fifo)
-            thread_fifo.start()
+            for algo in self.other_algorithms:
+                thread = threading.Thread(target=algo, args=(self.switcher,))
+                self.threads.append(thread)
+                thread.start()
 
-            thread_random = threading.Thread(target=self.random, args=(self.switcher,))
-            self.threads.append(thread_random)
-            thread_random.start()
-
-            thread_clock = threading.Thread(target=self.clock, args=(self.switcher,))
-            self.threads.append(thread_clock)
-            thread_clock.start()
         except Exception as e:
             print "Failed to start thread:", e
 
