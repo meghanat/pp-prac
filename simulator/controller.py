@@ -5,6 +5,7 @@ from FIFOAlgorithm import FIFO
 from LRUAlgorithm import LRU
 from LFUAlgorithm import LFU
 from OptimalAlgorithm import Optimal
+from RandomAlgorithm import Random
 from Switcher import Switcher
 
 
@@ -36,8 +37,9 @@ class Controller(object):
         self.optimal = Optimal(self.simulation_values)
         self.lfu = LFU(self.simulation_values)
         self.fifo = FIFO(self.simulation_values)
+        self.random = Random(self.simulation_values)
         self.current_algorithm = self.lfu
-        self.other_algorithms = [self.lfu,self.lru,self.fifo]
+        self.other_algorithms = [self.lfu,self.lru,self.fifo,self.random]
 
         self.switcher = Switcher(self.current_algorithm, self.other_algorithms, self.optimal)
 

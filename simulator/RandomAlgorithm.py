@@ -5,7 +5,7 @@ import time
 from random import randint
 
 
-class Optimal(Algorithm.Algorithm):
+class Random(Algorithm.Algorithm):
     def __init__(self, simulation_values):
         
        
@@ -62,7 +62,7 @@ class Optimal(Algorithm.Algorithm):
         page_table[virtual_page_no]["frame_no"] = frame_no_to_replace
         page_table[virtual_page_no]["present_bit"] = 1
 
-        self.logs.append("Optimal: Replace page " + str(self.memory[frame_no_to_replace]["virtual_page_no"]) +
+        self.logs.append("Replace page " + str(self.memory[frame_no_to_replace]["virtual_page_no"]) +
               " in frame " + str(frame_no_to_replace) + " with page " + str(virtual_page_no) + " of process " + str(pid) + "\n")
         # Update the frame entry's PID and time stamp
         self.memory[frame_no_to_replace]["pid"] = pid

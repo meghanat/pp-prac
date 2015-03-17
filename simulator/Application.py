@@ -230,6 +230,7 @@ class Simulator(tk.Tk):
         self.algo_values["LFU"]["algo"] = self.controller.lfu
         self.algo_values["OPTIMAL"]["algo"] = self.controller.optimal
         self.algo_values["FIFO"]["algo"] = self.controller.fifo
+        self.algo_values["RANDOM"]["algo"]=self.controller.random
     
     def update_labels(self):
         while self.simulation_values["simulating"]:
@@ -238,6 +239,7 @@ class Simulator(tk.Tk):
             self.algo_values["LFU"]["string_var"].set(str(self.controller.lfu.get_page_fault_count()))
             self.algo_values["OPTIMAL"]["string_var"].set(str(self.controller.optimal.get_page_fault_count()))
             self.algo_values["FIFO"]["string_var"].set(str(self.controller.fifo.get_page_fault_count()))
+            self.algo_values["RANDOM"]["string_var"].set(str(self.controller.random.get_page_fault_count()))
             for algo in self.algo_values:
                 self.algo_values[algo]["label"].config(bg="white")
             self.algo_values[self.controller.switcher.current_algorithm.name]["label"].config(bg="green")
