@@ -1,6 +1,7 @@
 import cpu
 import threading
 import thread
+from ClockAlgorithm import Clock
 from FIFOAlgorithm import FIFO
 from LRUAlgorithm import LRU
 from LFUAlgorithm import LFU
@@ -38,8 +39,9 @@ class Controller(object):
         self.lfu = LFU(self.simulation_values)
         self.fifo = FIFO(self.simulation_values)
         self.random = Random(self.simulation_values)
+        self.clock = Clock(self.simulation_values)
         self.current_algorithm = self.lfu
-        self.other_algorithms = [self.lfu,self.lru,self.fifo,self.random]
+        self.other_algorithms = [self.lfu, self.lru, self.fifo, self.random, self.clock]
 
         self.switcher = Switcher(self.current_algorithm, self.other_algorithms, self.optimal)
 
@@ -85,6 +87,9 @@ class Controller(object):
             self.threads.append(thread_random)
             thread_random.start()
 
+            thread_clock = threading.Thread(target=self.clock, args=(self.switcher,))
+            self.threads.append(thread_clock)
+            thread_clock.start()
         except Exception as e:
             print "Failed to start thread:", e
 
