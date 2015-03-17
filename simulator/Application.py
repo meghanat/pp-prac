@@ -27,8 +27,8 @@ class Simulator(tk.Tk):
         self.spinBoxes = {}
         self.spinbox_names = ["vas", "number_frames", "number_processes"]
         self.label_texts = ["VAS(GB)", "Number of frames", "Number of procesess"]
-        self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO","RANDOM"]
-        self.algo_values = {"LRU": {}, "LFU": {}, "OPTIMAL": {}, "FIFO": {},"RANDOM":{}}
+        self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO", "RANDOM", "CLOCK"]
+        self.algo_values = {"LRU": {}, "LFU": {}, "OPTIMAL": {}, "FIFO": {}, "RANDOM":{}, "CLOCK": {}}
         for text in self.algo_texts:
             self.algo_values[text]["label"] = None
             self.algo_values[text]["string_var"] = tk.StringVar()
@@ -87,9 +87,6 @@ class Simulator(tk.Tk):
         self.switcher_slider=tk.Scale(self.leftFrame,from_=0,to=10000,orient=tk.HORIZONTAL)
         self.switcher_slider.set(1000)
         self.switcher_slider.grid(column=1,row=len(self.label_texts)+1)
-        
-
-
 
     def create_log_frames(self):
         self.tabs = ttk.Notebook(self.rightBottomFrame)
@@ -118,7 +115,6 @@ class Simulator(tk.Tk):
         helpmenu = tk.Menu(menubar, tearoff=0)
         helpmenu.add_command(label="About")
         menubar.add_cascade(label="Help", menu=helpmenu)
-
         self.config(menu=menubar)
 
     def create_page_count_labels(self):
@@ -230,7 +226,8 @@ class Simulator(tk.Tk):
         self.algo_values["LFU"]["algo"] = self.controller.lfu
         self.algo_values["OPTIMAL"]["algo"] = self.controller.optimal
         self.algo_values["FIFO"]["algo"] = self.controller.fifo
-        self.algo_values["RANDOM"]["algo"]=self.controller.random
+        self.algo_values["RANDOM"]["algo"] = self.controller.random
+        self.algo_values["CLOCK"]["algo"]  = self.controller.clock
     
     def update_labels(self):
         while self.simulation_values["simulating"]:
@@ -240,6 +237,8 @@ class Simulator(tk.Tk):
             self.algo_values["OPTIMAL"]["string_var"].set(str(self.controller.optimal.get_page_fault_count()))
             self.algo_values["FIFO"]["string_var"].set(str(self.controller.fifo.get_page_fault_count()))
             self.algo_values["RANDOM"]["string_var"].set(str(self.controller.random.get_page_fault_count()))
+            self.algo_values["CLOCK"]["string_var"].set(str(self.controller.clock.get_page_fault_count()))
+
             for algo in self.algo_values:
                 self.algo_values[algo]["label"].config(bg="white")
             self.algo_values[self.controller.switcher.current_algorithm.name]["label"].config(bg="green")

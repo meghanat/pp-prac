@@ -6,7 +6,7 @@ import time
 
 class Clock(Algorithm.Algorithm):    
     def __init__(self,  simulation_values):
-        simulation_values["name"] = "Clock"
+        simulation_values["name"] = "CLOCK"
         Algorithm.Algorithm.__init__(self, simulation_values)
         self.memory = []
         self.next_frame_pointer = 0
