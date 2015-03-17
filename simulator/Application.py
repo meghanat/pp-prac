@@ -27,8 +27,8 @@ class Simulator(tk.Tk):
         self.spinBoxes = {}
         self.spinbox_names = ["vas", "number_frames", "number_processes"]
         self.label_texts = ["VAS(GB)", "Number of frames", "Number of procesess"]
-        self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO"]
-        self.algo_values = {"LRU": {}, "LFU": {}, "OPTIMAL": {}, "FIFO": {}}
+        self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO","RANDOM"]
+        self.algo_values = {"LRU": {}, "LFU": {}, "OPTIMAL": {}, "FIFO": {},"RANDOM":{}}
         for text in self.algo_texts:
             self.algo_values[text]["label"] = None
             self.algo_values[text]["string_var"] = tk.StringVar()
