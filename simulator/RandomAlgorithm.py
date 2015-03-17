@@ -27,7 +27,7 @@ class Random(Algorithm.Algorithm):
 
     #fill empty frame
     def fill_frame(self,virtual_page_no, pid, frame_no):
-        print "In fill_frame\n"
+        #print "In fill_frame\n"
         self.logs.append("Fill frame " +  str(frame_no) + " with " + str(virtual_page_no) + "\n")
         page_table=self.page_tables[pid]
         #  Update the page table of this process
@@ -45,14 +45,14 @@ class Random(Algorithm.Algorithm):
      #swap out page from memory
     def replace_frame(self,virtual_page_no,pid):
 
-        print "In replace_frame\n"
+        # print "In replace_frame\n"
         next_access=-1
 
         frame_no_to_replace=randint(0,len(self.memory)-1)
 
         frame_to_replace=self.memory[frame_no_to_replace]
 
-        print "frame_no_to_replace :",frame_no_to_replace," frame_to_replace: ",frame_to_replace,"\n"
+        #print "frame_no_to_replace :",frame_no_to_replace," frame_to_replace: ",frame_to_replace,"\n"
         self.page_fault_count += 1
 
         # For the frame which is being replaced, make it's process'

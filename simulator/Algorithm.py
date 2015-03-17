@@ -75,8 +75,8 @@ class Algorithm:
                 self.event.wait()
                 
                 pid, virtual_page_no = self.page_num_stream[0]
-                if(self.name=="Random"):
-                    print "pid: ",pid," virtual_page_no: ",virtual_page_no,"\n"
+                # if(self.name=="Random"):
+                #     print "pid: ",pid," virtual_page_no: ",virtual_page_no,"\n"
 
                 self.read_lock.release()
                 self.pages_accessed+=1
