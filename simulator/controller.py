@@ -24,7 +24,7 @@ class Controller(object):
 
         self.read_from_file=simulation_values["read_from_file"]
 
-        self.simulation_values["number_pr_threads"] = 4  # No of page replacement algorithms
+        self.simulation_values["number_pr_threads"] = 5  # No of page replacement algorithms
         self.threads = []  # Array of PR started. Used to wait on them
         self.simulation_values["thread_set"] = set()  # Global set; Used to indicate reading of an elem by all algos.
 
@@ -80,6 +80,10 @@ class Controller(object):
             thread_fifo = threading.Thread(target=self.fifo, args=(self.switcher,))
             self.threads.append(thread_fifo)
             thread_fifo.start()
+
+            thread_random = threading.Thread(target=self.random, args=(self.switcher,))
+            self.threads.append(thread_random)
+            thread_random.start()
 
         except Exception as e:
             print "Failed to start thread:", e
