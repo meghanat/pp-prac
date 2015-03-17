@@ -25,7 +25,7 @@ class Controller(object):
 
         self.read_from_file=simulation_values["read_from_file"]
 
-        self.simulation_values["number_pr_threads"] = 5  # No of page replacement algorithms
+        self.simulation_values["number_pr_threads"] = 6  # No of page replacement algorithms
         self.threads = []  # Array of PR started. Used to wait on them
         self.simulation_values["thread_set"] = set()  # Global set; Used to indicate reading of an elem by all algos.
 
