@@ -40,8 +40,6 @@ class Clock(Algorithm.Algorithm):
         self.page_fault_count += 1
         self.next_frame_pointer = (self.next_frame_pointer + 1) % self.number_frames
 
-    def check_next_frame_use_bit(self):
-
     def get_frame_to_replace(self):
         current = self.next_frame_pointer
 
