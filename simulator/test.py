@@ -70,7 +70,18 @@ class TestAlgorithmPageFaultCounts(unittest.TestCase):
             self.simulation_values["event_page_stream"].set()
             self.simulation_values["switching_event"].set()
         thread_lfu._Thread__stop()
-        self.assertEqual(expected_faults, lfuob.get_page_fault_count())        
+        self.assertEqual(expected_faults, lfuob.get_page_fault_count()) 
+
+    def test_clock_page_fault_count(self):
+        expected_faults = 7
+        clock_ob = lfu.LFU(self.simulation_values)
+        thread_clock = threading.Thread(target=clock_ob, args=(None,))
+        thread_clock.start()
+        while len(self.simulation_values["page_num_stream"]) > 0:
+            self.simulation_values["event_page_stream"].set()
+            self.simulation_values["switching_event"].set()
+        thread_clock._Thread__stop()
+        self.assertEqual(expected_faults, clock_ob.get_page_fault_count())            
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)
