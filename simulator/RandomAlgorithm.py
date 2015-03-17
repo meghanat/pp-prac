@@ -9,7 +9,7 @@ class Random(Algorithm.Algorithm):
     def __init__(self, simulation_values):
         
        
-        simulation_values["name"]="Random"
+        self.name=simulation_values["name"]="RANDOM"
         Algorithm.Algorithm.__init__(self,simulation_values)
         self.memory = []
 
@@ -17,7 +17,7 @@ class Random(Algorithm.Algorithm):
             if i == simulation_values["number_frames"]:
                 break
             self.memory.append({"pid": -1, "virtual_page_no": -1})
-        self.name = "Random"
+        self.name = "RANDOM"
 
 
     def reset_memory(self,current_memory):

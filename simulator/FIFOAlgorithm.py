@@ -7,7 +7,7 @@ import time
 class FIFO(Algorithm.Algorithm):
     def __init__(self, simulation_values):
 
-        simulation_values["name"]="FIFO"
+        self.name=simulation_values["name"]="FIFO"
         Algorithm.Algorithm.__init__(self,simulation_values)
         self.memory = []
 
@@ -16,7 +16,7 @@ class FIFO(Algorithm.Algorithm):
                 break
             self.memory.append({"pid": -1, "virtual_page_no": -1})
             
-        self.name = "FIFO"
+       
         self.i = -1
         
 

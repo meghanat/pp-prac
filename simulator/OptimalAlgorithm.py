@@ -8,7 +8,7 @@ class Optimal(Algorithm.Algorithm):
     def __init__(self, simulation_values):
         
        
-        simulation_values["name"]="Optimal"
+        self.name=simulation_values["name"]="OPTIMAL"
         Algorithm.Algorithm.__init__(self,simulation_values)
         self.memory = []
 
@@ -16,7 +16,7 @@ class Optimal(Algorithm.Algorithm):
             if i == simulation_values["number_frames"]:
                 break
             self.memory.append({"pid": -1, "virtual_page_no": -1})
-        self.name = "Optimal"
+        
 
 
     def reset_memory(self,current_memory):

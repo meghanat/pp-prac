@@ -5,7 +5,7 @@ import thread
 
 class LFU(Algorithm.Algorithm):
     def __init__(self, simulation_values):
-        simulation_values["name"]="LFU"
+        self.name=simulation_values["name"]="LFU"
         Algorithm.Algorithm.__init__(self,simulation_values)
         self.memory = []
 

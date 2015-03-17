@@ -7,7 +7,7 @@ import time
 class LRU(Algorithm.Algorithm):
     
     def __init__(self,  simulation_values):
-        simulation_values["name"]="LRU"
+        self.name=simulation_values["name"]="LRU"
         Algorithm.Algorithm.__init__(self,simulation_values)
         self.memory = []
 
