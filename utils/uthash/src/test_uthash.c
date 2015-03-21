@@ -7,7 +7,15 @@
 # include <asm/pgtable.h>
 # include <asm/highmem.h>
 
-# include "uthash.h"
+
+#include <linux/slab.h>
+#include <linux/gfp.h>
+#include "uthash.h"
+
+#undef uthash_malloc
+#undef uthash_free
+#define uthash_malloc(sz) kmalloc(sz, GFP_ATOMIC)
+#define uthash_free(ptr,sz) kfree(ptr)
 
 
 MODULE_LICENSE("GPL");
@@ -26,9 +34,29 @@ typedef struct {
     UT_hash_handle hh;
 } table_entry_t;
 
-void test_uthash()
+int test_uthash(void)
 {
+    table_entry_t l, *p, *r, *tmp, *records = NULL;
     printk(KERN_DEBUG "Testing uthash\n");
+
+    r = (table_entry_t*)kmalloc( sizeof(table_entry_t), GFP_ATOMIC );
+    memset(r, 0, sizeof(table_entry_t));
+    r->key.pid = 1;
+    r->key.virtual_page_no = 100;
+    HASH_ADD(hh, records, key, sizeof(table_key_t), r);
+
+    memset(&l, 0, sizeof(table_entry_t));
+    l.key.pid = 1;
+    l.key.virtual_page_no = 100;
+    HASH_FIND(hh, records, &l.key, sizeof(table_key_t), p);
+
+    if (p) printk(KERN_DEBUG "found %d %d\n", p->key.pid, p->key.virtual_page_no);
+
+    HASH_ITER(hh, records, p, tmp) {
+      HASH_DEL(records, p);
+      kfree(p);
+    }
+
 }
 
 static int __init uthash_init(void)
