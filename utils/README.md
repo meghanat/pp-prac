@@ -12,3 +12,9 @@ To limit the physical memory(RAM) a process can use:
 4. Run the program pgm as: cgexec -g memory:myGroup pgm
 5. To generate lackey logs for the process, with the memory limit imposed:
 sudo cgexec -g memory:myGroup valgrind -q --trace-children=yes --tool=lackey --trace-mem=yes --log-file=log.txt pgm args
+
+Note that on a modern Ubuntu distribution this example requires installing the cgroup-bin package and editing /etc/default/grub to change GRUB_CMDLINE_LINUX_DEFAULT to:
+
+GRUB_CMDLINE_LINUX_DEFAULT="cgroup_enable=memory swapaccount=1"
+
+and then rebooting to boot with the new kernel boot parameters.
