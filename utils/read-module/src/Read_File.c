@@ -16,7 +16,12 @@ int init_module(void)
     long pid = 0;
     char cur[1];
     mm_segment_t fs;
+
+    struct page_stream_entry_q que;
+    struct page_stream_entry* p;
     
+    TAILQ_INIT(&que);
+
     // Init the buffer with 0
     for(i=0;i<128;i++)
         buf[i] = 0;
@@ -56,13 +61,23 @@ int init_module(void)
                 }
 		buf[i] = '\0';
                 kstrtoul(buf, 16, &pid);
-		
+	
+		struct page_stream_entry entry;
+		entry.pid = pid;
+		entry.virt_page_no = page_no;
+		TAILQ_INSERT_TAIL(&que, &entry, tailq);	
 	 	//printk(KERN_INFO "Page no: %ld\n Pid:%ld\n", page_no, pid);
 
 	}	
-	
+	p = TAILQ_FIRST(&que);
+	printk("Pointer:%p\nPID:%ld\nPage No:%ld\n", p, p->pid, p->virt_page_no);
 
+	p = TAILQ_LAST(&que,page_stream_entry_q);
+	printk("Pointer:%p\nPID:%ld\nPage No:%ld\n",p, p->pid, p->virt_page_no);
 
+	TAILQ_REMOVE(&que, p, tailq);
+	int a = TAILQ_EMPTY(&que);
+	printk("%d\n", a);
 
         // Restore segment descriptor
         set_fs(fs);
