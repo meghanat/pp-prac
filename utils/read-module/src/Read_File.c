@@ -3,6 +3,7 @@
 #include <linux/fs.h>      // Needed by filp
 #include <asm/uaccess.h>   // Needed by segment descriptors
 #include "queue.h"
+#include "page_num_structure.h"
 
 
 int init_module(void)
