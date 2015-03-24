@@ -1,6 +1,7 @@
 #ifndef __ALGO__H
 #define __ALGO__H
 
+#include "page_num_structure.h"
 #include "uthash.h"
 
 #undef uthash_malloc
@@ -19,4 +20,22 @@ typedef struct {
     int present_bit;
     UT_hash_handle hh;
 } table_entry_t;
+
+typedef struct {
+	long virtual_page_no;
+	long pid;
+	union {
+		int freq;
+		int time_stamp;
+	 	int used;
+	} param;  
+} memory_cell;
+
+
+typedef struct {
+	memory_cell * memory;
+	table_entry_t * page_tables;
+	struct page_stream_entry_q * que;
+} algorithm;	
 #endif
+

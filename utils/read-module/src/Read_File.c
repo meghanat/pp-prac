@@ -6,7 +6,6 @@
 #include <linux/gfp.h>
 
 #include "algo.h"
-#include "queue.h"
 #include "page_num_structure.h"
 
 int init_module(void)
