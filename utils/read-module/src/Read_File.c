@@ -2,6 +2,10 @@
 #include <linux/kernel.h>  // Needed for KERN_INFO
 #include <linux/fs.h>      // Needed by filp
 #include <asm/uaccess.h>   // Needed by segment descriptors
+#include <linux/slab.h>
+#include <linux/gfp.h>
+
+
 #include "queue.h"
 #include "page_num_structure.h"
 
@@ -19,6 +23,7 @@ int init_module(void)
 
     struct page_stream_entry_q que;
     struct page_stream_entry* p;
+    struct  page_stream_entry *entry;
     
     TAILQ_INIT(&que);
 
@@ -62,10 +67,10 @@ int init_module(void)
 		buf[i] = '\0';
                 kstrtoul(buf, 16, &pid);
 	
-		struct page_stream_entry entry;
-		entry.pid = pid;
-		entry.virt_page_no = page_no;
-		TAILQ_INSERT_TAIL(&que, &entry, tailq);	
+		entry = kmalloc(sizeof(struct  page_stream_entry), GFP_ATOMIC);
+		entry->pid = pid;
+		entry->virt_page_no = page_no;
+		TAILQ_INSERT_TAIL(&que, entry, tailq);	
 	 	//printk(KERN_INFO "Page no: %ld\n Pid:%ld\n", page_no, pid);
 
 	}	
@@ -75,9 +80,9 @@ int init_module(void)
 	p = TAILQ_LAST(&que,page_stream_entry_q);
 	printk("Pointer:%p\nPID:%ld\nPage No:%ld\n",p, p->pid, p->virt_page_no);
 
-	TAILQ_REMOVE(&que, p, tailq);
+	/*TAILQ_REMOVE(&que, p, tailq);
 	int a = TAILQ_EMPTY(&que);
-	printk("%d\n", a);
+	printk("%d\n", a);*/
 
         // Restore segment descriptor
         set_fs(fs);
