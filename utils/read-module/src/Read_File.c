@@ -5,10 +5,9 @@
 #include <linux/slab.h>
 #include <linux/gfp.h>
 
-
+#include "algo.h"
 #include "queue.h"
 #include "page_num_structure.h"
-
 
 int init_module(void)
 {
@@ -23,7 +22,7 @@ int init_module(void)
 
     struct page_stream_entry_q que;
     struct page_stream_entry* p;
-    struct  page_stream_entry *entry;
+    struct page_stream_entry *entry;
     
     TAILQ_INIT(&que);
 
@@ -47,7 +46,7 @@ int init_module(void)
         // Read the file
 	printk(" Before Read \n");
         while(f->f_op->read(f, cur, 1, &f->f_pos) == 1)
-	{	printk(" After Read \n");
+	{	
 		i = 0;
 		while(cur[0] != ',')
 		{
@@ -62,7 +61,6 @@ int init_module(void)
                 {
                         buf[i++] = cur[0];
                         f->f_op->read(f, cur, 1, &f->f_pos);
-                        //printk(KERN_INFO " After Read \n");
                 }
 		buf[i] = '\0';
                 kstrtoul(buf, 16, &pid);
