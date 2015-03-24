@@ -36,6 +36,13 @@ typedef struct {
 	memory_cell * memory;
 	table_entry_t * page_tables;
 	struct page_stream_entry_q * que;
+	// Add sem* for event
+	// Add sem* for switching
+	// Add read lock for reading
+	int page_fault_count;
+	int * thread_set;
+	int pages_accessed;
+	int switching_window;
 } algorithm;	
 #endif
 

@@ -79,7 +79,7 @@ int init_module(void)
 
 	/*TAILQ_REMOVE(&que, p, tailq);
 	int a = TAILQ_EMPTY(&que);
-	printk("%d\n", a);*/
+	printk("%d\n", a);*/   
 
         // Restore segment descriptor
         set_fs(fs);
