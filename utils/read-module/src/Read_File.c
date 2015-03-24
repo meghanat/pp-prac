@@ -5,8 +5,25 @@
 #include <linux/slab.h>
 #include <linux/gfp.h>
 
+#define WINDOW 100
+#define NO_FRAMES 100
+
 #include "algo.h"
 #include "page_num_structure.h"
+
+void init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set) {
+    algo->memory = kmalloc(sizeof(memory_cell) * NO_FRAMES, GFP_ATOMIC);
+    memset(algo->memory, 0, sizeof(memory_cell) * NO_FRAMES); // PID 0 => Empty Frame
+    algo->que = que;
+    algo->page_fault_count = 0;
+    algo->thread_set = set;
+    algo->pages_accessed = 0;
+    algo->switching_window = WINDOW;
+}
+
+void destroy(algorithm * algo) {
+    // Free memory and page_tables
+}
 
 int init_module(void)
 {
@@ -23,6 +40,9 @@ int init_module(void)
     struct page_stream_entry* p;
     struct page_stream_entry *entry;
     
+    algorithm lru;
+    int set[1] = {0};
+
     TAILQ_INIT(&que);
 
     // Init the buffer with 0
@@ -77,9 +97,7 @@ int init_module(void)
 	p = TAILQ_LAST(&que,page_stream_entry_q);
 	printk("Pointer:%p\nPID:%ld\nPage No:%ld\n",p, p->pid, p->virt_page_no);
 
-	/*TAILQ_REMOVE(&que, p, tailq);
-	int a = TAILQ_EMPTY(&que);
-	printk("%d\n", a);*/   
+  
 
         // Restore segment descriptor
         set_fs(fs);
@@ -87,6 +105,9 @@ int init_module(void)
         printk(KERN_INFO "buf:%s\n",buf);
     }
     filp_close(f,NULL);
+
+    init_algo(&lru, &que, set);
+
     return 0;
 }
 
