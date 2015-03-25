@@ -39,6 +39,7 @@ int init_module(void)
     struct page_stream_entry_q que;
     struct page_stream_entry* p;
     struct page_stream_entry *entry;
+    int count = 0;
     
     algorithm lru;
     int set[1] = {0};
@@ -91,13 +92,14 @@ int init_module(void)
 	 	//printk(KERN_INFO "Page no: %ld\n Pid:%ld\n", page_no, pid);
 
 	}	
-	p = TAILQ_FIRST(&que);
+	/*p = TAILQ_FIRST(&que);
 	printk("Pointer:%p\nPID:%ld\nPage No:%ld\n", p, p->pid, p->virt_page_no);
 
 	p = TAILQ_LAST(&que,page_stream_entry_q);
-	printk("Pointer:%p\nPID:%ld\nPage No:%ld\n",p, p->pid, p->virt_page_no);
-
-  
+	printk("Pointer:%p\nPID:%ld\nPage No:%ld\n",p, p->pid, p->virt_page_no);*/
+	
+	TAILQ_COUNT(p, &que, tailq, count);
+  	printk("Count: %d\n", count);
 
         // Restore segment descriptor
         set_fs(fs);

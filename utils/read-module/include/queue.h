@@ -432,6 +432,14 @@ struct {								\
 	*(elm)->field.tqe_prev = (elm)->field.tqe_next;			\
 } while (/*CONSTCOND*/0)
 
+#define TAILQ_COUNT(var, head, field, count)				\
+	count = 0; 			                                \
+        for ((var) = ((head)->tqh_first);                               \
+                (var);                                                  \
+                (var) = ((var)->field.tqe_next))			\
+		count++;						
+
+
 #define	TAILQ_FOREACH(var, head, field)					\
 	for ((var) = ((head)->tqh_first);				\
 		(var);							\
