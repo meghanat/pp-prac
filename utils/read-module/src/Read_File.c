@@ -2,8 +2,11 @@
 #include <linux/kernel.h>  // Needed for KERN_INFO
 #include <linux/fs.h>      // Needed by filp
 #include <asm/uaccess.h>   // Needed by segment descriptors
+#include <linux/kthread.h>
+
 #include <linux/slab.h>
 #include <linux/gfp.h>
+
 
 #define WINDOW 100
 #define NO_FRAMES 100
@@ -11,7 +14,8 @@
 #include "algo.h"
 #include "page_num_structure.h"
 
-void init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set) {
+void init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, volatile int* simulating) {
+    static int identifier = 1;
     algo->memory = kmalloc(sizeof(memory_cell) * NO_FRAMES, GFP_ATOMIC);
     memset(algo->memory, 0, sizeof(memory_cell) * NO_FRAMES); // PID 0 => Empty Frame
     algo->que = que;
@@ -19,6 +23,9 @@ void init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set) {
     algo->thread_set = set;
     algo->pages_accessed = 0;
     algo->switching_window = WINDOW;
+    algo->simulating = simulating;
+    algo->id = identifier;
+    identifier++;
 }
 
 void destroy(algorithm * algo) {
@@ -35,10 +42,12 @@ int init_module(void)
     long pid = 0;
     char cur[1];
     mm_segment_t fs;
+    volatile int simulating = 1;
 
     struct page_stream_entry_q que;
     struct page_stream_entry* p;
     struct page_stream_entry *entry;
+
     int count = 0;
     
     algorithm lru;
@@ -108,8 +117,9 @@ int init_module(void)
     }
     filp_close(f,NULL);
 
-    init_algo(&lru, &que, set);
-
+    init_algo(&lru, &que, set, &simulating);
+    /*get_task_struct(&thread_struct);
+    printk(KERN_INFO "Tid: %d", thread_struct.pid);*/
     return 0;
 }
 

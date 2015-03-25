@@ -43,6 +43,8 @@ typedef struct {
 	int * thread_set;
 	int pages_accessed;
 	int switching_window;
+	volatile int *simulating;
+	int id;
 } algorithm;	
 #endif
 
