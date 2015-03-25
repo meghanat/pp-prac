@@ -10,6 +10,7 @@
 
 #define WINDOW 100
 #define NO_FRAMES 100
+#define NO_PR_THREADS 1
 
 #include "algo.h"
 #include "page_num_structure.h"
@@ -25,6 +26,7 @@ void init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, vol
     algo->switching_window = WINDOW;
     algo->simulating = simulating;
     algo->id = identifier;
+    algo->no_threads = NO_PR_THREADS;
     identifier++;
 }
 
@@ -51,7 +53,7 @@ int init_module(void)
     int count = 0;
     
     algorithm lru;
-    int set[1] = {0};
+    int set[NO_PR_THREADS] = {0};
 
     TAILQ_INIT(&que);
 

@@ -45,6 +45,7 @@ typedef struct {
 	int switching_window;
 	volatile int *simulating;
 	int id;
+	int no_threads;
 } algorithm;	
 #endif
 
