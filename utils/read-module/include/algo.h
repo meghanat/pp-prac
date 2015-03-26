@@ -25,9 +25,9 @@ typedef struct {
 	long virtual_page_no;
 	long pid;
 	union {
-		int freq;
-		int time_stamp;
-	 	int used;
+		long freq;
+		long time_stamp;
+	 	long used;
 	} param;  
 } memory_cell;
 
