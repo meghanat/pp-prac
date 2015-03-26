@@ -10,14 +10,14 @@
 #define uthash_free(ptr,sz) kfree(ptr)
 
 typedef struct {
-    int pid;
-    int virtual_page_no;
+    long pid;
+    long virtual_page_no;
 } table_key_t;
 
 typedef struct {
     table_key_t key;
-    int frame_no;
-    int present_bit;
+    long frame_no;
+    long present_bit;
     UT_hash_handle hh;
 } table_entry_t;
 
