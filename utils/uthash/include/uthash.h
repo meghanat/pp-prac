@@ -182,11 +182,11 @@ do {                                                                            
 #define HASH_UPDATE(hh,head,fieldname,keylen_in,replacee,replacer,temp)          \
 do {                                                                             \
   temp = NULL;                                                                   \
-  HASH_FIND(hh,head,&((replacee)->fieldname),keylen_in,temp);                         \
+  HASH_FIND(hh,head,&((replacee)->fieldname),keylen_in,temp);                    \
   if(temp != NULL)                                                               \
   {                                                                              \
-    replacee->key.pid = replacer->key.pid;                                       \
-    replacer->key.virtual_page_no = replacer->key.virtual_page_no;               \
+    replacee->frame_no = replacer->frame_no;                                     \
+    replacee->present_bit = replacer->present_bit;				 \
   }                                                                              \
 } while(0)
 

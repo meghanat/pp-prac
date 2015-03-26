@@ -39,8 +39,10 @@ int test_uthash(void)
 
     q = (table_entry_t*)kmalloc( sizeof(table_entry_t), GFP_ATOMIC );
     memset(q, 0, sizeof(table_entry_t));
-    q->key.pid = 2;
-    q->key.virtual_page_no = 200;
+    q->key.pid = 1;
+    q->key.virtual_page_no = 100;
+    q->frame_no = 10000;
+    q->present_bit = 0;
 
     r = (table_entry_t*)kmalloc( sizeof(table_entry_t), GFP_ATOMIC );
     memset(r, 0, sizeof(table_entry_t));
@@ -57,12 +59,25 @@ int test_uthash(void)
 
 
     HASH_UPDATE(hh, records, key, sizeof(table_key_t), p, q, tmp);
-    kfree(r);
-	
-    HASH_FIND(hh, records, &(q->key), sizeof(table_key_t), p);
-    if (p) printk(KERN_DEBUG "found %d %d\n", p->key.pid, p->key.virtual_page_no);
+    printk("P: %d %d\n", p->key.pid, p->key.virtual_page_no);
+    if(q){
+	printk("Q: %d %d\n", q->key.pid, q->key.virtual_page_no);
+    }
+
+    memset(&l, 0, sizeof(table_entry_t));
+    l.key.pid = 1;
+    l.key.virtual_page_no = 100;
+    HASH_FIND(hh, records, &l.key, sizeof(table_key_t), p);
+
+
+    //kfree(r);	
+    //HASH_FIND(hh, records, &(q->key), sizeof(table_key_t), p);
+    if (p) printk(KERN_DEBUG "found %d %d\n", p->frame_no, p->present_bit);
+    
 
     HASH_ITER(hh, records, p, tmp) {
+      printk(KERN_DEBUG "-----------\n");
+      printk(KERN_DEBUG "%d %d\n", p->key.pid, p->key.virtual_page_no);
       HASH_DEL(records, p);
       kfree(p);
     }
