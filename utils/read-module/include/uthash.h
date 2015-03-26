@@ -179,6 +179,17 @@ do {                                                                            
   HASH_ADD(hh,head,fieldname,keylen_in,add);                                     \
 } while(0)
 
+#define HASH_UPDATE(hh,head,fieldname,keylen_in,replacee,replacer,temp)          \
+do {                                                                             \
+  temp = NULL;                                                                   \
+  HASH_FIND(hh,head,&((replacee)->fieldname),keylen_in,temp);                    \
+  if(temp != NULL)                                                               \
+  {                                                                              \
+    replacee->frame_no = replacer->frame_no;                                     \
+    replacee->present_bit = replacer->present_bit;				 \
+  }                                                                              \
+} while(0)
+
 #define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
 do {                                                                             \
  unsigned _ha_bkt;                                                               \
