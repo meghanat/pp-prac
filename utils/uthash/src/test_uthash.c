@@ -34,8 +34,13 @@ typedef struct {
 
 int test_uthash(void)
 {
-    table_entry_t l, *p, *r, *tmp, *records = NULL;
+    table_entry_t l, *p, *q, *r, *tmp, *records = NULL;
     printk(KERN_DEBUG "Testing uthash\n");
+
+    q = (table_entry_t*)kmalloc( sizeof(table_entry_t), GFP_ATOMIC );
+    memset(q, 0, sizeof(table_entry_t));
+    q->key.pid = 2;
+    q->key.virtual_page_no = 200;
 
     r = (table_entry_t*)kmalloc( sizeof(table_entry_t), GFP_ATOMIC );
     memset(r, 0, sizeof(table_entry_t));
@@ -50,11 +55,18 @@ int test_uthash(void)
 
     if (p) printk(KERN_DEBUG "found %d %d\n", p->key.pid, p->key.virtual_page_no);
 
+
+    HASH_UPDATE(hh, records, key, sizeof(table_key_t), p, q, tmp);
+    kfree(r);
+	
+    HASH_FIND(hh, records, &(q->key), sizeof(table_key_t), p);
+    if (p) printk(KERN_DEBUG "found %d %d\n", p->key.pid, p->key.virtual_page_no);
+
     HASH_ITER(hh, records, p, tmp) {
       HASH_DEL(records, p);
       kfree(p);
     }
-
+    return 0;
 }
 
 static int __init uthash_init(void)

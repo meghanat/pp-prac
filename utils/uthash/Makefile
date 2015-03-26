@@ -1,5 +1,5 @@
 obj-m := test_uthash.o
-EXTRA_CFLAGS:= -I/home/deborah/eudyptula/uthash/include # use EXTRA_CFLAGS instead of ccflags-y
+EXTRA_CFLAGS:= -I/home/deborah/Github/pp-prac/utils/uthash/include # use EXTRA_CFLAGS instead of ccflags-y
 test_uthash-y := src/test_uthash.o #relative
 
 

@@ -38,6 +38,10 @@ void update_frame_in_memory(algorithm* algo, int frame_no) {
 	algo->memory[frame_no].param.time_stamp = cur_time.tv_usec; // nanoseconds
 }
 
+void fill_frame(algorithm* algo, struct page_stream_entry* entry) {
+	
+}
+
 
 void call(void * arg) {
 	algorithm * algo = (algorithm *) arg;
@@ -56,6 +60,12 @@ void call(void * arg) {
 					update_frame_in_memory(algo, pte->frame_no);
 				}
 			}
+			else {
+				// free frame availabe
+
+				// replace
+			}
+
 			
 
 		}
