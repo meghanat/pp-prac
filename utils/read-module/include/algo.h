@@ -9,6 +9,10 @@
 #define uthash_malloc(sz) kmalloc(sz, GFP_ATOMIC)
 #define uthash_free(ptr,sz) kfree(ptr)
 
+#define WINDOW 100
+#define NO_FRAMES 100
+#define NO_PR_THREADS 1
+
 typedef struct {
     long pid;
     long virtual_page_no;

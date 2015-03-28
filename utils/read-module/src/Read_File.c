@@ -7,11 +7,6 @@
 #include <linux/slab.h>
 #include <linux/gfp.h>
 
-
-#define WINDOW 100
-#define NO_FRAMES 100
-#define NO_PR_THREADS 1
-
 #include "algo.h"
 #include "page_num_structure.h"
 

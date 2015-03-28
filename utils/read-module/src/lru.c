@@ -34,13 +34,13 @@ table_entry_t* find_in_page_table(algorithm* algo, struct page_stream_entry* ent
     return result;
 }
 
-void update_frame_in_memory(algorithm* algo, int frame_no) {
+void lru_update_frame_in_memory(algorithm* algo, int frame_no) {
 	struct timespec cur_time;
 	cur_time = current_kernel_time();
 	algo->memory[frame_no].param.time_stamp = cur_time.tv_usec; // nanoseconds
 }
 
-void fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no) {
+void lru_fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no) {
 	table_entry_t* entry = kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
 	table_entry_t* found = NULL;
 	table_entry_t* temp = NULL;
@@ -62,7 +62,7 @@ void fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, long fr
 	}
 
 	// Update memory cell
-	update_frame_in_memory(algo, frame_no);
+	algo->update_frame_in_memory(frame_no);
 	algo->memory[frame_no].pid = stream_entry->pid;
 	algo->memory[frame_no].virtual_page_no = stream_entry->virt_page_no;
 	algo->page_fault_count++;
@@ -70,10 +70,70 @@ void fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, long fr
 }
 
 
+
+void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
+	struct timespec cur_time;
+	long min = 0;
+	int i = 0;
+	int frame_no = 0;
+	memory_cell* replacee = NULL;
+	table_entry_t* found;
+	table_entry_t* search;
+	table_entry_t* temp;
+
+	cur_time = current_kernel_time();
+	min = cur_time.tv_usec;
+
+	for(i = 0; i < NO_FRAMES; ++i) {
+		if(algo->memory[i].param.time_stamp < min) {
+			min = algo->memory[i].param.time_stamp;
+			frame_no = i;
+			replacee = &algo->memory[i];
+		}
+	}
+
+	search = kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
+	memset(search, 0, sizeof(table_entry_t));
+	search->pid = replacee->pid;
+	search->virtual_page_no = replacee->virtual_page_no;
+	search->frame_no = frame_no;
+	search->present_bit = 0;
+
+	HASH_FIND(hh, algo->page_tables, &(search->key), sizeof(table_key_t), found);
+
+	if(found) {
+		HASH_UPDATE(hh, algo->page_tables, key, sizeof(table_key_t), found, search, temp);
+	}
+	else{
+		printk(KERN_DEBUG "Replacing frame that doesn't exist");
+	}
+
+	search->pid = entry->pid;
+	search->virtual_page_no = entry->virt_page_no;
+	search->frame_no = frame_no;
+	search->present_bit = 1;
+
+	HASH_FIND(hh, algo->page_tables, &(search->key), sizeof(table_key_t), found);
+	if(found) {
+		HASH_UPDATE(hh, algo->page_tables, key, sizeof(table_key_t), found, search, temp);
+		kfree(search);
+	}
+	else {
+		HASH_ADD(hh, algo->page_tables, key, sizeof(table_key_t), search);
+	}
+
+	replacee->virtual_page_no = entry->virt_page_no;
+	replacee->pid = entry->pid;
+	algo->update_frame_in_memory(algo, frame_no);
+}
+
+
 void call(void * arg) {
 	algorithm * algo = (algorithm *) arg;
 	struct page_stream_entry* entry;
 	table_entry_t* pte;
+	int i = 0;
+	int flag = 0;
 	
 	while(*(algo->simulating)) {
 		// switching event wait
@@ -83,12 +143,22 @@ void call(void * arg) {
 			entry = TAILQ_FIRST(algo->que);
 
 			if((pte = is_in_page_table(algo, entry)) && (pte->present_bit)) {
-				update_frame_in_memory(algo, pte->frame_no);
+				algo->update_frame_in_memory(pte->frame_no);
 			}
 			else {
 				// free frame availabe
+				for(i = 0; i < NO_FRAMES; ++i) {
+					if(algo->memory[i].pid == 0) {
+						algo->fill_frame(entry, i);
+						flag = 1;
+						break;
+					}
+				}
 
 				// replace
+				if(!flag) {
+					algo->replace_frame(entry);
+				}
 			}
 
 			
