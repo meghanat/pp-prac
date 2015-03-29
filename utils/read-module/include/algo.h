@@ -36,7 +36,7 @@ typedef struct {
 } memory_cell;
 
 
-typedef struct {
+struct algorithm_struct{
 	memory_cell * memory;
 	table_entry_t * page_tables;
 	struct page_stream_entry_q * que;
@@ -50,10 +50,12 @@ typedef struct {
 	volatile int *simulating;
 	int id;
 	int no_threads;
-	void (*update_frame)(algorithm* algo, int frame_no);
-	void (*replace_frame)(algorithm* algo, struct  page_stream_entry* entry);
-	void (*fill_frame)(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no);
+	void (*update_frame)(struct algorithm_struct* algo, int frame_no);
+	void (*replace_frame)(struct algorithm_struct* algo, struct  page_stream_entry* entry);
+	void (*fill_frame)(struct algorithm_struct* algo, struct page_stream_entry* stream_entry, long frame_no);
 
-} algorithm;	
+};
+
+typedef struct algorithm_struct algorithm;
 #endif
 

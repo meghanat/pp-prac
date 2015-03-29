@@ -1,4 +1,5 @@
 #include <linux/time.h>
+#include <linux/slab.h>
 
 #include "algo.h"
 
@@ -22,6 +23,7 @@ void add_to_page_table(algorithm* algo, struct page_stream_entry* entry) {
     pte->key.pid = entry->pid;
     pte->key.virtual_page_no = entry->virt_page_no;
     HASH_ADD(hh, algo->page_tables, key, sizeof(table_key_t), pte);
+    return;
 }
 
 table_entry_t* find_in_page_table(algorithm* algo, struct page_stream_entry* entry) {
@@ -37,7 +39,7 @@ table_entry_t* find_in_page_table(algorithm* algo, struct page_stream_entry* ent
 void lru_update_frame_in_memory(algorithm* algo, int frame_no) {
 	struct timespec cur_time;
 	cur_time = current_kernel_time();
-	algo->memory[frame_no].param.time_stamp = cur_time.tv_usec; // nanoseconds
+	algo->memory[frame_no].param.time_stamp = cur_time.tv_nsec; // nanoseconds
 }
 
 void lru_fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no) {
@@ -62,11 +64,11 @@ void lru_fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, lon
 	}
 
 	// Update memory cell
-	algo->update_frame_in_memory(frame_no);
+	algo->update_frame(algo, frame_no);
 	algo->memory[frame_no].pid = stream_entry->pid;
 	algo->memory[frame_no].virtual_page_no = stream_entry->virt_page_no;
 	algo->page_fault_count++;
-
+	return;
 }
 
 
@@ -82,7 +84,7 @@ void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
 	table_entry_t* temp;
 
 	cur_time = current_kernel_time();
-	min = cur_time.tv_usec;
+	min = cur_time.tv_nsec;
 
 	for(i = 0; i < NO_FRAMES; ++i) {
 		if(algo->memory[i].param.time_stamp < min) {
@@ -94,8 +96,8 @@ void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
 
 	search = kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
 	memset(search, 0, sizeof(table_entry_t));
-	search->pid = replacee->pid;
-	search->virtual_page_no = replacee->virtual_page_no;
+	search->key.pid = replacee->pid;
+	search->key.virtual_page_no = replacee->virtual_page_no;
 	search->frame_no = frame_no;
 	search->present_bit = 0;
 
@@ -108,8 +110,8 @@ void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
 		printk(KERN_DEBUG "Replacing frame that doesn't exist");
 	}
 
-	search->pid = entry->pid;
-	search->virtual_page_no = entry->virt_page_no;
+	search->key.pid = entry->pid;
+	search->key.virtual_page_no = entry->virt_page_no;
 	search->frame_no = frame_no;
 	search->present_bit = 1;
 
@@ -124,7 +126,8 @@ void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
 
 	replacee->virtual_page_no = entry->virt_page_no;
 	replacee->pid = entry->pid;
-	algo->update_frame_in_memory(algo, frame_no);
+	algo->update_frame(algo, frame_no);
+	return;
 }
 
 
@@ -137,19 +140,19 @@ void call(void * arg) {
 	
 	while(*(algo->simulating)) {
 		// switching event wait
-		if(!is_in_set(algo) {//TODO FIX THIS0
+		if(!is_in_set(algo)) {//TODO FIX THIS0
 			// Acquire Read Lock
 			// Event wait
 			entry = TAILQ_FIRST(algo->que);
 
-			if((pte = is_in_page_table(algo, entry)) && (pte->present_bit)) {
-				algo->update_frame_in_memory(pte->frame_no);
+			if((pte = find_in_page_table(algo, entry)) && (pte->present_bit)) {
+				algo->update_frame(algo, pte->frame_no);
 			}
 			else {
 				// free frame availabe
 				for(i = 0; i < NO_FRAMES; ++i) {
 					if(algo->memory[i].pid == 0) {
-						algo->fill_frame(entry, i);
+						algo->fill_frame(algo, entry, i);
 						flag = 1;
 						break;
 					}
@@ -157,7 +160,7 @@ void call(void * arg) {
 
 				// replace
 				if(!flag) {
-					algo->replace_frame(entry);
+					algo->replace_frame(algo, entry);
 				}
 			}
 

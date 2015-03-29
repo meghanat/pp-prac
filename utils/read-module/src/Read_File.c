@@ -120,7 +120,7 @@ int init_module(void)
     }
     filp_close(f,NULL);
 
-    init_algo(&lru, &que, set, &simulating,&lru_update_frame_in_memory,&lru_replace_frame,lru_fill_frame);
+    init_algo(&lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame, &lru_fill_frame);
     /*get_task_struct(&thread_struct);
     printk(KERN_INFO "Tid: %d", thread_struct.pid);*/
     return 0;
