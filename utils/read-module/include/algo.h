@@ -50,6 +50,10 @@ typedef struct {
 	volatile int *simulating;
 	int id;
 	int no_threads;
+	void (*update_frame)(algorithm* algo, int frame_no);
+	void (*replace_frame)(algorithm* algo, struct  page_stream_entry* entry);
+	void (*fill_frame)(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no);
+
 } algorithm;	
 #endif
 

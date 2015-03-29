@@ -9,8 +9,11 @@
 
 #include "algo.h"
 #include "page_num_structure.h"
+#include "lru.h"
 
-void init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, volatile int* simulating) {
+void init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, volatile int* simulating,void (*update_func_ptr)(algorithm* algo, int frame_no),
+    void (*replace_func_ptr)(algorithm* algo, struct  page_stream_entry* entry),
+    void (*fill_func_ptr)(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no)) {
     static int identifier = 1;
     algo->memory = kmalloc(sizeof(memory_cell) * NO_FRAMES, GFP_ATOMIC);
     memset(algo->memory, 0, sizeof(memory_cell) * NO_FRAMES); // PID 0 => Empty Frame
@@ -22,6 +25,9 @@ void init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, vol
     algo->simulating = simulating;
     algo->id = identifier;
     algo->no_threads = NO_PR_THREADS;
+    algo->fill_frame=fill_func_ptr;
+    algo->update_frame=update_func_ptr;
+    algo->replace_frame=replace_func_ptr;
     identifier++;
 }
 
@@ -114,7 +120,7 @@ int init_module(void)
     }
     filp_close(f,NULL);
 
-    init_algo(&lru, &que, set, &simulating);
+    init_algo(&lru, &que, set, &simulating,&lru_update_frame_in_memory,&lru_replace_frame,lru_fill_frame);
     /*get_task_struct(&thread_struct);
     printk(KERN_INFO "Tid: %d", thread_struct.pid);*/
     return 0;
