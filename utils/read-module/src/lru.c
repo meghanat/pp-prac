@@ -27,12 +27,14 @@ void add_to_page_table(algorithm* algo, struct page_stream_entry* entry) {
 }
 
 table_entry_t* find_in_page_table(algorithm* algo, struct page_stream_entry* entry) {
-	table_entry_t local;
 	table_entry_t* result;
-	memset(&local, 0, sizeof(table_entry_t));
-    local.key.pid = entry->pid;
-    local.key.virtual_page_no = entry->virt_page_no;
-    HASH_FIND(hh, algo->page_tables, &local.key, sizeof(table_key_t), result);
+	table_entry_t* local = kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
+
+	memset(local, 0, sizeof(table_entry_t));
+    local->key.pid = entry->pid;
+    local->key.virtual_page_no = entry->virt_page_no;
+    HASH_FIND(hh, algo->page_tables, &(local->key), sizeof(table_key_t), result);
+    kfree(local);
     return result;
 }
 
@@ -131,7 +133,7 @@ void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
 }
 
 
-void call(void * arg) {
+int call(void * arg) {
 	algorithm * algo = (algorithm *) arg;
 	struct page_stream_entry* entry;
 	table_entry_t* pte;
@@ -164,8 +166,12 @@ void call(void * arg) {
 				}
 			}
 
-			
+			*(algo->simulating) = 0;
 
 		}
 	}
+}
+
+int print_msg(void* message) {
+	printk(KERN_DEBUG "HIIIIIIIIIIIII\n");
 }
