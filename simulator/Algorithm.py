@@ -120,5 +120,8 @@ class Algorithm:
                 if(self.pages_accessed == self.switcher_size):
                     self.switcher.switch(self.switching_event)
                     
+                elif(self.pages_accessed>=self.switcher_size):
+                    print "problem: ",self.pages_accessed,self.name
+                    
                 
             self.read_lock.release()

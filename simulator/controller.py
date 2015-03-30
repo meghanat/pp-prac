@@ -25,7 +25,7 @@ class Controller(object):
 
         self.read_from_file=simulation_values["read_from_file"]
 
-        self.simulation_values["number_pr_threads"] = 6  # No of page replacement algorithms
+        self.simulation_values["number_pr_threads"] = 7  # No of page replacement algorithms
         self.threads = []  # Array of PR started. Used to wait on them
         self.simulation_values["thread_set"] = set()  # Global set; Used to indicate reading of an elem by all algos.
 
@@ -35,6 +35,9 @@ class Controller(object):
             self.simulation_values["event_page_stream"].set()
 
         self.lru = LRU(self.simulation_values)
+
+        self.lru_standalone=LRU(self.simulation_values,"LRU_STAND")
+
         self.optimal = Optimal(self.simulation_values)
         self.lfu = LFU(self.simulation_values)
         self.fifo = FIFO(self.simulation_values)
@@ -43,7 +46,7 @@ class Controller(object):
         self.current_algorithm = self.lfu
         self.other_algorithms = [self.lfu, self.lru, self.fifo, self.random, self.clock]
 
-        self.switcher = Switcher(self.current_algorithm, self.other_algorithms, self.optimal)
+        self.switcher = Switcher(self.current_algorithm, self.other_algorithms, self.optimal,self.lru_standalone)
 
 
 
@@ -64,6 +67,10 @@ class Controller(object):
 
             print "switch_win filled"
             print len(self.simulation_values["page_num_stream"])
+
+            thread_lru_standalone=threading.Thread(target=self.lru_standalone,args=(self.switcher,))
+            self.threads.append(thread_lru_standalone)
+            thread_lru_standalone.start()
                   
             thread_optimal = threading.Thread(target=self.optimal, args=(self.switcher,))
             self.threads.append(thread_optimal)

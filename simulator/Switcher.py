@@ -1,15 +1,16 @@
 import time
 class Switcher(object):
-	def __init__(self,current_algorithm,other_algorithms,optimal):
+	def __init__(self,current_algorithm,other_algorithms,optimal,lru_standalone):
 		self.current_algorithm=current_algorithm
 		self.other_algorithms=other_algorithms
 		self.optimal=optimal
+		self.lru_standalone=lru_standalone
 		self.total_count = 0
 
 	def switch(self, swithing_event):
 		swithing_event.clear()
 		best = min(self.other_algorithms, key=lambda x: x.get_page_fault_count())
-		#print best.name
+		# print best.name
 		# for i in self.other_algorithms:
 		# 	print i.name, i.get_page_fault_count()
 		# 	print i.name, i.pages_accessed
@@ -19,6 +20,8 @@ class Switcher(object):
 		
 		self.total_count += self.current_algorithm.get_page_fault_count()
 		
+		print "total: ",self.total_count
+		print "lru_standalone: ",self.lru_standalone.get_page_fault_count()
 
 		for i in self.other_algorithms:
 			i.reset_memory(self.current_algorithm.memory)
@@ -30,7 +33,8 @@ class Switcher(object):
 	
 		for i in self.other_algorithms:
 			i.pages_accessed=0
-		self.optimal.pages_accessed=0 # since the pages being accessed must be the same across all algorithms	
+		self.optimal.pages_accessed=0 # since the pages being accessed must be the same across all algorithms
+		self.lru_standalone.pages_accessed=0
 
 		self.current_algorithm = best
 		swithing_event.set()

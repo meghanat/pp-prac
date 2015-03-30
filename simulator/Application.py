@@ -27,8 +27,8 @@ class Simulator(tk.Tk):
         self.spinBoxes = {}
         self.spinbox_names = ["vas", "number_frames", "number_processes"]
         self.label_texts = ["VAS(GB)", "Number of frames", "Number of procesess"]
-        self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO", "RANDOM", "CLOCK"]
-        self.algo_values = {"LRU": {}, "LFU": {}, "OPTIMAL": {}, "FIFO": {}, "RANDOM":{}, "CLOCK": {}}
+        self.algo_texts = ["LRU", "LFU", "OPTIMAL", "FIFO", "RANDOM", "CLOCK","LRU_STAND"]
+        self.algo_values = {"LRU": {}, "LFU": {}, "OPTIMAL": {}, "FIFO": {}, "RANDOM":{}, "CLOCK": {},"LRU_STAND":{}}
         for text in self.algo_texts:
             self.algo_values[text]["label"] = None
             self.algo_values[text]["string_var"] = tk.StringVar()
@@ -228,6 +228,7 @@ class Simulator(tk.Tk):
         self.algo_values["FIFO"]["algo"] = self.controller.fifo
         self.algo_values["RANDOM"]["algo"] = self.controller.random
         self.algo_values["CLOCK"]["algo"]  = self.controller.clock
+        self.algo_values["LRU_STAND"]["algo"]=self.controller.lru_standalone
     
     def update_labels(self):
         while self.simulation_values["simulating"]:
