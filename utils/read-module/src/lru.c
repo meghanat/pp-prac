@@ -17,13 +17,13 @@ int is_in_set(algorithm* algo) {
 }
 
 void add_to_page_table(algorithm* algo, struct page_stream_entry* entry) {
-    /*table_entry_t* pte;
+    table_entry_t* pte;
     pte = (table_entry_t*)kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
     memset(pte, 0, sizeof(table_entry_t));
     pte->key.pid = entry->pid;
     pte->key.virtual_page_no = entry->virt_page_no;
     HASH_ADD(hh, algo->page_tables, key, sizeof(table_key_t), pte);
-    return;*/
+    return;
 }
 
 table_entry_t* find_in_page_table(algorithm* algo, struct page_stream_entry* entry) {
@@ -38,13 +38,13 @@ table_entry_t* find_in_page_table(algorithm* algo, struct page_stream_entry* ent
 }
 
 void lru_update_frame_in_memory(algorithm* algo, int frame_no) {
-    /*struct timespec cur_time;
+    struct timespec cur_time;
     cur_time = current_kernel_time();
-    algo->memory[frame_no].param.time_stamp = cur_time.tv_nsec; // nanoseconds*/
+    algo->memory[frame_no].param.time_stamp = cur_time.tv_nsec; // nanoseconds
 }
 
 void lru_fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no) {
-/*    table_entry_t* entry = kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
+    table_entry_t* entry = kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
     table_entry_t* found = NULL;
     table_entry_t* temp = NULL;
 
@@ -69,13 +69,13 @@ void lru_fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, lon
     algo->memory[frame_no].pid = stream_entry->pid;
     algo->memory[frame_no].virtual_page_no = stream_entry->virt_page_no;
     algo->page_fault_count++;
-    return;*/
+    return;
 }
 
 
 
 void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
-    /*struct timespec cur_time;
+    struct timespec cur_time;
     long min = 0;
     int i = 0;
     int frame_no = 0;
@@ -128,7 +128,7 @@ void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
     replacee->virtual_page_no = entry->virt_page_no;
     replacee->pid = entry->pid;
     algo->update_frame(algo, frame_no);
-    return;*/
+    return;
 }
 
 int call_algo(void * arg){
@@ -146,7 +146,7 @@ int call_algo(void * arg){
                 pte = find_in_page_table(algo, entry);
                 if(pte != NULL) {
                     if(pte->present_bit){
-                        printk(KERN_DEBUG "I'm ok ;) ");
+                        algo->update_frame(algo, pte->frame_no);
                     }
                 }
 
