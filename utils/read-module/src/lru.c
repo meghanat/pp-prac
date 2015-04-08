@@ -16,6 +16,19 @@ int is_in_set(algorithm* algo) {
     return 0;
 }
 
+void add_to_set(algorithm* algo) {
+    int i = 0;
+    // get lock
+    for(i = 0; i < algo->no_threads; ++i) {
+
+        if(algo->thread_set[i] == 0) {
+            algo->thread_set[i] = algo->id;
+            return;
+        }
+    }
+    // unlock
+}
+
 void add_to_page_table(algorithm* algo, struct page_stream_entry* entry) {
     table_entry_t* pte;
     pte = (table_entry_t*)kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
@@ -158,7 +171,16 @@ int call_algo(void * arg){
                             break;
                         }
                     }
+
+                    // No free frame available
+                    if(!flag) {
+                        algo->replace_frame(algo, entry);
+                    }
                 }
+
+                // Add thread id to set
+                add_to_set(algo);
+
             }
         }
 
