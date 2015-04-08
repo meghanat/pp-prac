@@ -149,9 +149,17 @@ int call_algo(void * arg){
                         algo->update_frame(algo, pte->frame_no);
                     }
                 }
-
-            printk(KERN_DEBUG "Hello\n");
+        }
+        else {
+            // free frame availabe
+            for(i = 0; i < NO_FRAMES; ++i) {
+                if(algo->memory[i].pid == 0) {
+                    algo->fill_frame(algo, entry, i);
+                    flag = 1;
+                    break;
+                }
             }
+        }
 
             *(algo->simulating) = 0;
         }
