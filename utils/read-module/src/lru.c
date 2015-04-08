@@ -138,32 +138,33 @@ int call_algo(void * arg){
     int i = 0;
     int flag = 0;
 
-    while(*(algo->simulating)){
+    while(*(algo->simulating)) {
         
         if(!is_in_set(algo)) {
             entry = TAILQ_FIRST(algo->que);
             if(entry){
                 pte = find_in_page_table(algo, entry);
-                if(pte != NULL) {
-                    if(pte->present_bit){
-                        algo->update_frame(algo, pte->frame_no);
-                    }
+
+                // Page already in memory
+                if(pte != NULL && pte->present_bit) {
+                    algo->update_frame(algo, pte->frame_no);
                 }
-        }
-        else {
-            // free frame availabe
-            for(i = 0; i < NO_FRAMES; ++i) {
-                if(algo->memory[i].pid == 0) {
-                    algo->fill_frame(algo, entry, i);
-                    flag = 1;
-                    break;
+                else {
+                    // free frame availabe
+                    for(i = 0; i < NO_FRAMES; ++i) {
+                        if(algo->memory[i].pid == 0) {
+                            algo->fill_frame(algo, entry, i);
+                            flag = 1;
+                            break;
+                        }
+                    }
                 }
             }
         }
 
-            *(algo->simulating) = 0;
-        }
+        *(algo->simulating) = 0;
     }
+    printk(KERN_INFO "%d\n", algo->page_fault_count);
 }
 
 

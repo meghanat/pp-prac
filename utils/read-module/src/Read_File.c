@@ -124,7 +124,6 @@ int init_module(void)
     if(ts == NULL){
         printk(KERN_INFO "Bad");
     }
-
     return 0;
 }
 
