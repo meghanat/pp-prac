@@ -28,6 +28,8 @@ void init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, vol
     algo->fill_frame=fill_func_ptr;
     algo->update_frame=update_func_ptr;
     algo->replace_frame=replace_func_ptr;
+    algo->page_tables = NULL;
+
     identifier++;
 }
 
@@ -35,101 +37,98 @@ void destroy(algorithm * algo) {
     // Free memory and page_tables
 }
 
+struct task_struct *ts = NULL;
+
 int init_module(void)
 {
     // Create variables
-    struct file *f;
+    struct file *f = NULL;
     char buf[128];
-    int i =0;
+    int i = 0;
     long page_no = 0;
     long pid = 0;
     char cur[1];
     mm_segment_t fs;
     volatile int simulating = 1;
-
+    
     struct page_stream_entry_q que;
-    struct page_stream_entry* p;
-    struct page_stream_entry *entry;
+    struct page_stream_entry *p = NULL;
+    struct page_stream_entry *entry = NULL;
 
     int count = 0;
-    
-    algorithm lru;
     int set[NO_PR_THREADS] = {0};
+    algorithm lru;
 
     TAILQ_INIT(&que);
 
-    // Init the buffer with 0
-    for(i=0;i<128;i++)
+    for(i = 0;i < 128; i++)
         buf[i] = 0;
-    // To see in /var/log/messages that the module is operating
-    printk(KERN_INFO "My module is loaded\n");
-    // I am using Fedora and for the test I have chosen following file
-    // Obviously it is much smaller than the 128 bytes, but hell with it =)
+    
+    printk(KERN_INFO "Module is loaded\n");
+    
     f = filp_open("/home/deborah/file", O_RDONLY, 0);
     if(f == NULL)
-        printk(KERN_ALERT "filp_open error!!.\n");
+        printk(KERN_ALERT "filp_open error.\n");
     else{
         // Get current segment descriptor
         fs = get_fs();
         // Set segment descriptor associated to kernel space
         set_fs(get_ds());
-	
-	i = 0;
-        // Read the file
-	printk(" Before Read \n");
+    
+        i = 0;
+
         while(f->f_op->read(f, cur, 1, &f->f_pos) == 1)
-	{	
-		i = 0;
-		while(cur[0] != ',')
-		{
-			buf[i++] = cur[0];
-			f->f_op->read(f, cur, 1, &f->f_pos);
-		}
-		buf[i] = '\0';
-		kstrtoul(buf, 16, &page_no);
-		f->f_op->read(f, cur, 1, &f->f_pos);
-		i = 0;
-		while(cur[0] != '\n')
-                {
-                        buf[i++] = cur[0];
-                        f->f_op->read(f, cur, 1, &f->f_pos);
-                }
-		buf[i] = '\0';
-                kstrtoul(buf, 16, &pid);
-	
-		entry = kmalloc(sizeof(struct  page_stream_entry), GFP_ATOMIC);
-		entry->pid = pid;
-		entry->virt_page_no = page_no;
-		TAILQ_INSERT_TAIL(&que, entry, tailq);	
-	 	//printk(KERN_INFO "Page no: %ld\n Pid:%ld\n", page_no, pid);
+        {   
+            i = 0;
+            while(cur[0] != ',')
+            {
+                buf[i++] = cur[0];
+                f->f_op->read(f, cur, 1, &f->f_pos);
+            }
+            buf[i] = '\0';
+            kstrtoul(buf, 16, &page_no);
+            f->f_op->read(f, cur, 1, &f->f_pos);
+            i = 0;
+            while(cur[0] != '\n')
+            {
+                buf[i++] = cur[0];
+                f->f_op->read(f, cur, 1, &f->f_pos);
+            }
+            buf[i] = '\0';
+            kstrtoul(buf, 10, &pid);
+        
+            entry = kmalloc(sizeof(struct  page_stream_entry), GFP_ATOMIC);
+            entry->pid = pid;
+            entry->virt_page_no = page_no;
+            TAILQ_INSERT_TAIL(&que, entry, tailq);  
+            //printk(KERN_INFO "Page no: %ld\n Pid:%ld\n", page_no, pid);
 
-	}	
-	/*p = TAILQ_FIRST(&que);
-	printk("Pointer:%p\nPID:%ld\nPage No:%ld\n", p, p->pid, p->virt_page_no);
+        }   
+        /*p = TAILQ_FIRST(&que);
+        printk("Pointer:%p\nPID:%ld\nPage No:%ld\n", p, p->pid, p->virt_page_no);
 
-	p = TAILQ_LAST(&que,page_stream_entry_q);
-	printk("Pointer:%p\nPID:%ld\nPage No:%ld\n",p, p->pid, p->virt_page_no);*/
-	
-	TAILQ_COUNT(p, &que, tailq, count);
-  	printk("Count: %d\n", count);
+        p = TAILQ_LAST(&que,page_stream_entry_q);
+        printk("Pointer:%p\nPID:%ld\nPage No:%ld\n",p, p->pid, p->virt_page_no);*/
+        
+        TAILQ_COUNT(p, &que, tailq, count);
+        printk("Count: %d\n", count);
 
         // Restore segment descriptor
         set_fs(fs);
-        // See what we read from file
-        printk(KERN_INFO "buf:%s\n",buf);
     }
-    filp_close(f,NULL);
+    filp_close(f, NULL);
 
     init_algo(&lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame, &lru_fill_frame);
-    /*get_task_struct(&thread_struct);
-    printk(KERN_INFO "Tid: %d", thread_struct.pid);*/
-
-    kthread_run(call, &lru , "LRU");
+    
+    ts = kthread_run(call_algo, &lru , "LRU");
+    if(ts == NULL){
+        printk(KERN_INFO "Bad");
+    }
 
     return 0;
 }
 
 void cleanup_module(void)
 {
-    printk(KERN_INFO "My module is unloaded\n");
+    printk(KERN_INFO "Module is unloaded\n");
 }

@@ -58,7 +58,7 @@ struct algorithm_struct{
 
 typedef struct algorithm_struct algorithm;
 
-int call(void * arg);
+int call_algo(void * arg);
 int print_msg(void* message);
 #endif
 
