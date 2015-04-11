@@ -6,48 +6,51 @@
 
 int is_in_set(algorithm* algo) {
     int i = 0;
-    // put lock
+    down(algo->set_sem);
     for(i = 0; i < algo->no_threads; ++i) {
         if(algo->thread_set[i] == algo->id) {
+            up(algo->set_sem);
             return 1;
         }
     }
-    //unlock
+    up(algo->set_sem);
     return 0;
 }
 
 void add_to_set(algorithm* algo) {
     int i = 0;
-    // get lock
+    down(algo->set_sem);
     for(i = 0; i < algo->no_threads; ++i) {
 
         if(algo->thread_set[i] == 0) {
             algo->thread_set[i] = algo->id;
+            up(algo->set_sem);
             return;
         }
     }
-    // unlock
+    up(algo->set_sem);
 }
 
 int is_set_full(algorithm* algo) {
     int i = 0;
-    // lock
+    down(algo->set_sem);
     for(i = 0; i < algo->no_threads; ++i){
         if(algo->thread_set[i] == 0) {
+            up(algo->set_sem);
             return 0;
         }
     }
-    // unlock
+    up(algo->set_sem);
     return 1;
 }
 
 void clear_set(algorithm* algo) {
     int i = 0;
-    // lock
+    down(algo->set_sem);
     for (i = 0; i < algo->no_threads; ++i) {
             algo->thread_set[i] = 0;
     }
-    // unlock
+    up(algo->set_sem);
 }
 
 void add_to_page_table(algorithm* algo, struct page_stream_entry* entry) {
