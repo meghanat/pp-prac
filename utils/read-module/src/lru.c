@@ -122,8 +122,6 @@ void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
     min = cur_time.tv_nsec;
 
     for(i = 0; i < NO_FRAMES; ++i) {
-        printk(KERN_INFO "%d\n", algo->memory[i].param.time_stamp);
-        printk(KERN_INFO "%d\n", min);
         if(algo->memory[i].param.time_stamp <= min) {
             min = algo->memory[i].param.time_stamp;
             frame_no = i;
@@ -169,10 +167,13 @@ void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
             HASH_ADD(hh, algo->page_tables, key, sizeof(table_key_t), search);
         }
 
-        /*replacee->virtual_page_no = entry->virt_page_no;
+        // Update the memory frame also
+        // Set it's virtual page number and pid
+        // To that of the incoming entry
+        replacee->virtual_page_no = entry->virt_page_no;
         replacee->pid = entry->pid;
         algo->update_frame(algo, frame_no);
-        algo->page_fault_count++;*/
+        algo->page_fault_count++;
     }
     else
     {
@@ -188,28 +189,28 @@ int call_algo(void * arg){
     struct page_stream_entry* entry = NULL;
     table_entry_t* pte = NULL;
     int i = 0;
-    int j = 4;
     int flag = 0;
 
     while(*(algo->simulating)) {
         flag = 0;
-        //printk(KERN_INFO "simulating");
+        printk(KERN_INFO "Simulating\n");
         if(!is_in_set(algo)) {
             entry = TAILQ_FIRST(algo->que);
             
             if(entry){
                 printk(KERN_INFO "%d %d\n", entry->pid, entry->virt_page_no);
                 pte = find_in_page_table(algo, entry);
+
                 // Page already in memory
                 if(pte != NULL && pte->present_bit) {
-                    printk("updating");
+                    printk(KERN_INFO "Updating\n");
                     algo->update_frame(algo, pte->frame_no);
                 }
                 else {
                     // free frame availabe
                     for(i = 0; i < NO_FRAMES; ++i) {
                         if(algo->memory[i].pid == 0) {
-                            printk(KERN_INFO "Filling");
+                            printk(KERN_INFO "Filling\n");
                             algo->fill_frame(algo, entry, i);
                             flag = 1;
                             break;
@@ -218,6 +219,7 @@ int call_algo(void * arg){
                     printk(KERN_INFO "FLag: %d\n", flag);
                     // No free frame available
                     if(!flag) {
+                        printk(KERN_INFO "Replacing\n");
                         algo->replace_frame(algo, entry);
                     }
                 }
