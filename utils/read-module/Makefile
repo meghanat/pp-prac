@@ -2,6 +2,7 @@ obj-m := Read_File.o
 EXTRA_CFLAGS:= -I/home/deborah/Github/pp-prac/utils/read-module/include # use EXTRA_CFLAGS instead of ccflags-y
 Read_File-y := src/Read_File.o #relative
 Read_File-y += src/lru.o
+Read_File-y += src/common.o
 TREE=/lib/modules/3.5.0-23-generic/build
 MY_CFLAGS += -g -DDEBUG
 ccflags-y += ${MY_CFLAGS}

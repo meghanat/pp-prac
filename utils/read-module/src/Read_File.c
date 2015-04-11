@@ -9,6 +9,7 @@
 #include <linux/slab.h>
 
 #include "algo.h"
+#include "common.h"
 #include "lru.h"
 #include "page_num_structure.h"
 
