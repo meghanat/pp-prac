@@ -14,7 +14,8 @@
 
 int init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, volatile int* simulating,void (*update_func_ptr)(algorithm* algo, int frame_no),
     void (*replace_func_ptr)(algorithm* algo, struct  page_stream_entry* entry),
-    void (*fill_func_ptr)(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no)) {
+    void (*fill_func_ptr)(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no),
+    struct semaphore* set_sem) {
     static int identifier = 1;
     algo->memory = kmalloc(sizeof(memory_cell) * NO_FRAMES, GFP_ATOMIC);
     if(algo->memory == NULL) {
@@ -34,6 +35,7 @@ int init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, vola
     algo->update_frame=update_func_ptr;
     algo->replace_frame=replace_func_ptr;
     algo->page_tables = NULL;
+    algo->set_sem = set_sem;
 
     identifier++;
     return 0;
@@ -61,10 +63,15 @@ int init_module(void)
     struct page_stream_entry *p = NULL;
     struct page_stream_entry *entry = NULL;
 
+    struct semaphore set_sem;
+
     int count = 0;
     int result = 0;
     int set[NO_PR_THREADS] = {0};
     algorithm lru;
+
+    // Initialize semaphores
+    sema_init(&set_sem, 1);
 
     TAILQ_INIT(&que);
 
@@ -125,7 +132,7 @@ int init_module(void)
     }
     filp_close(f, NULL);
 
-    result = init_algo(&lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame, &lru_fill_frame);
+    result = init_algo(&lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame, &lru_fill_frame, &set_sem);
 
     if(result != 0) {
         return -1;
