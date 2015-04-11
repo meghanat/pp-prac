@@ -12,6 +12,7 @@
 #include "algo.h"
 #include "common.h"
 #include "fifo.h"
+#include "lfu.h"
 #include "lru.h"
 #include "page_num_structure.h"
 
@@ -85,6 +86,7 @@ int init_module(void)
 
     struct completion lru_completion;
     struct completion fifo_completion;
+    struct completion lfu_completion;
 
     int count = 0;
     int result = 0;
@@ -92,6 +94,7 @@ int init_module(void)
 
     algorithm lru;
     algorithm fifo;
+    algorithm lfu;
 
     // Initialize semaphores
     sema_init(&set_sem, 1);
@@ -100,6 +103,7 @@ int init_module(void)
     // Initialize completion
     init_completion(&lru_completion);
     init_completion(&fifo_completion);
+    init_completion(&lfu_completion);
 
     TAILQ_INIT(&que);
 
@@ -173,6 +177,12 @@ int init_module(void)
         return -1;
     }
 
+    result = init_algo("LFU", &lfu, &que, set, &simulating, &lfu_update_frame_in_memory, &lfu_replace_frame, 
+                       &set_sem, &tailq_sem, &lfu_completion);
+    if(result != 0) {
+        return -1;
+    }
+
     
     ts = kthread_run(call_algo, &lru , "LRU");
     if(ts == NULL){
@@ -184,8 +194,14 @@ int init_module(void)
         printk(KERN_INFO "Bad");
     }
 
+    ts = kthread_run(call_algo, &lfu , "FIFO");
+    if(ts == NULL){
+        printk(KERN_INFO "Bad");
+    }
+
     wait_for_completion(&lru_completion);
     wait_for_completion(&fifo_completion);
+    wait_for_completion(&lfu_completion);
     
     destroy(&lru);
     destroy(&fifo);

@@ -3,14 +3,13 @@
 #include <linux/kthread.h>
 #include "algo.h"
 
-
-void fifo_update_frame_in_memory(algorithm* algo, int frame_no) {
+void lfu_update_frame_in_memory(algorithm* algo, int frame_no) {
     struct timespec cur_time;
     cur_time = current_kernel_time();
     algo->memory[frame_no].param.time_stamp = cur_time.tv_nsec; // nanoseconds
 }
 
-void fifo_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
+void lfu_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
     struct timespec cur_time;
     long min = 0;
     int i = 0;

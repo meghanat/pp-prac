@@ -4,6 +4,7 @@ Read_File-y := src/Read_File.o #relative
 Read_File-y += src/lru.o
 Read_File-y += src/common.o
 Read_File-y += src/fifo.o
+Read_File-y += src/lfu.o
 TREE=/lib/modules/3.5.0-23-generic/build
 MY_CFLAGS += -g -DDEBUG
 ccflags-y += ${MY_CFLAGS}
