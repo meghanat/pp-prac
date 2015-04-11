@@ -11,11 +11,15 @@
 #include "page_num_structure.h"
 #include "lru.h"
 
-void init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, volatile int* simulating,void (*update_func_ptr)(algorithm* algo, int frame_no),
+int init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, volatile int* simulating,void (*update_func_ptr)(algorithm* algo, int frame_no),
     void (*replace_func_ptr)(algorithm* algo, struct  page_stream_entry* entry),
     void (*fill_func_ptr)(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no)) {
     static int identifier = 1;
     algo->memory = kmalloc(sizeof(memory_cell) * NO_FRAMES, GFP_ATOMIC);
+    if(algo->memory == NULL) {
+        printk(KERN_ALERT "kmalloc Failed\n");
+        return -1;
+    }
     memset(algo->memory, 0, sizeof(memory_cell) * NO_FRAMES); // PID 0 => Empty Frame
     algo->que = que;
     algo->page_fault_count = 0;
@@ -31,10 +35,11 @@ void init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, vol
     algo->page_tables = NULL;
 
     identifier++;
+    return 0;
 }
 
 void destroy(algorithm * algo) {
-    // Free memory and page_tables
+    kfree(algo->memory);
 }
 
 struct task_struct *ts = NULL;
@@ -56,6 +61,7 @@ int init_module(void)
     struct page_stream_entry *entry = NULL;
 
     int count = 0;
+    int result = 0;
     int set[NO_PR_THREADS] = {0};
     algorithm lru;
 
@@ -118,12 +124,25 @@ int init_module(void)
     }
     filp_close(f, NULL);
 
-    init_algo(&lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame, &lru_fill_frame);
+    result = init_algo(&lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame, &lru_fill_frame);
+
+    if(result != 0) {
+        return -1;
+    }
+
+    /*TAILQ_FOREACH(p, &que, tailq){
+        printk(KERN_INFO "%d %d\n", p->pid, p->virt_page_no);
+    }*/
     
-    ts = kthread_run(call_algo, &lru , "LRU");
+    /*ts = kthread_run(call_algo, &lru , "LRU");
     if(ts == NULL){
         printk(KERN_INFO "Bad");
-    }
+    }*/
+    call_algo(&lru);
+    destroy(&lru);
+
+    
+
     return 0;
 }
 

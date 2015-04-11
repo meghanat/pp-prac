@@ -29,6 +29,27 @@ void add_to_set(algorithm* algo) {
     // unlock
 }
 
+int is_set_full(algorithm* algo) {
+    int i = 0;
+    // lock
+    for(i = 0; i < algo->no_threads; ++i){
+        if(algo->thread_set[i] == 0) {
+            return 0;
+        }
+    }
+    // unlock
+    return 1;
+}
+
+void clear_set(algorithm* algo) {
+    int i = 0;
+    // lock
+    for (i = 0; i < algo->no_threads; ++i) {
+            algo->thread_set[i] = 0;
+    }
+    // unlock
+}
+
 void add_to_page_table(algorithm* algo, struct page_stream_entry* entry) {
     table_entry_t* pte;
     pte = (table_entry_t*)kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
@@ -149,15 +170,17 @@ int call_algo(void * arg){
     struct page_stream_entry* entry = NULL;
     table_entry_t* pte = NULL;
     int i = 0;
+    int j = 4;
     int flag = 0;
 
     while(*(algo->simulating)) {
-        
+        printk(KERN_INFO "simulating");
         if(!is_in_set(algo)) {
             entry = TAILQ_FIRST(algo->que);
+            
             if(entry){
+                printk(KERN_INFO "%d %d\n", entry->pid, entry->virt_page_no);
                 pte = find_in_page_table(algo, entry);
-
                 // Page already in memory
                 if(pte != NULL && pte->present_bit) {
                     algo->update_frame(algo, pte->frame_no);
@@ -181,10 +204,22 @@ int call_algo(void * arg){
                 // Add thread id to set
                 add_to_set(algo);
 
+                if(is_set_full(algo))
+                {    
+                    if(!TAILQ_EMPTY(algo->que)) {
+                        TAILQ_REMOVE(algo->que, entry, tailq);
+                    }
+                    clear_set(algo);
+                    if(TAILQ_EMPTY(algo->que)) {
+                    *(algo->simulating) = 0;
+                    }
+                    
+                }
+
             }
         }
 
-        *(algo->simulating) = 0;
+        
     }
     printk(KERN_INFO "%d\n", algo->page_fault_count);
 }
