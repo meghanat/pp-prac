@@ -3,14 +3,13 @@
 #include <linux/kthread.h>
 #include "algo.h"
 
+#define LARGE_INT 2147483647
+
 void lfu_update_frame_in_memory(algorithm* algo, int frame_no) {
-    struct timespec cur_time;
-    cur_time = current_kernel_time();
-    algo->memory[frame_no].param.time_stamp = cur_time.tv_nsec; // nanoseconds
+    algo->memory[frame_no].param.freq += 1;
 }
 
 void lfu_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
-    struct timespec cur_time;
     long min = 0;
     int i = 0;
     int frame_no = 0;
@@ -19,12 +18,11 @@ void lfu_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
     table_entry_t* search = NULL;
     table_entry_t* temp = NULL;
 
-    cur_time = current_kernel_time();
-    min = cur_time.tv_nsec;
+    min = LARGE_INT;
 
     for(i = 0; i < NO_FRAMES; ++i) {
-        if(algo->memory[i].param.time_stamp <= min) {
-            min = algo->memory[i].param.time_stamp;
+        if(algo->memory[i].param.freq <= min) {
+            min = algo->memory[i].param.freq;
             frame_no = i;
             replacee = &(algo->memory[i]);
         }
