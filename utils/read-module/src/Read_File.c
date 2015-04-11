@@ -46,7 +46,18 @@ int init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, vola
 }
 
 void destroy(algorithm * algo) {
+    table_entry_t* p = NULL;
+    table_entry_t* tmp = NULL;
+
+    // Free algorithm memory
     kfree(algo->memory);
+
+    // Free algorithm page tables
+    HASH_ITER(hh, algo->page_tables, p, tmp) {
+      HASH_DEL(algo->page_tables, p);
+      kfree(p);
+    }
+
 }
 
 struct task_struct *ts = NULL;
@@ -158,11 +169,8 @@ int init_module(void)
     printk(KERN_INFO "waiting");
     wait_for_completion(&lru_completion);
     printk(KERN_INFO "After LRU");
-    //call_algo(&lru);
-    destroy(&lru);
-
     
-
+    destroy(&lru);
     return 0;
 }
 
