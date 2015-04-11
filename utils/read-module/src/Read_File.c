@@ -10,6 +10,7 @@
 #include <linux/slab.h>
 
 #include "algo.h"
+#include "clock.h"
 #include "common.h"
 #include "fifo.h"
 #include "lfu.h"
@@ -87,6 +88,7 @@ int init_module(void)
     struct completion lru_completion;
     struct completion fifo_completion;
     struct completion lfu_completion;
+    struct completion clock_completion;
 
     int count = 0;
     int result = 0;
@@ -95,6 +97,7 @@ int init_module(void)
     algorithm lru;
     algorithm fifo;
     algorithm lfu;
+    algorithm clock;
 
     // Initialize semaphores
     sema_init(&set_sem, 1);
@@ -104,6 +107,7 @@ int init_module(void)
     init_completion(&lru_completion);
     init_completion(&fifo_completion);
     init_completion(&lfu_completion);
+    init_completion(&clock_completion);
 
     TAILQ_INIT(&que);
 
@@ -183,6 +187,11 @@ int init_module(void)
         return -1;
     }
 
+    result = init_algo("CLOCK", &clock, &que, set, &simulating, &clock_update_frame_in_memory, &clock_replace_frame, 
+                       &set_sem, &tailq_sem, &clock_completion);
+    if(result != 0) {
+        return -1;
+    }
     
     ts = kthread_run(call_algo, &lru , "LRU");
     if(ts == NULL){
@@ -194,7 +203,12 @@ int init_module(void)
         printk(KERN_INFO "Bad");
     }
 
-    ts = kthread_run(call_algo, &lfu , "FIFO");
+    ts = kthread_run(call_algo, &lfu , "LFU");
+    if(ts == NULL){
+        printk(KERN_INFO "Bad");
+    }
+
+    ts = kthread_run(call_algo, &clock , "CLOCK");
     if(ts == NULL){
         printk(KERN_INFO "Bad");
     }
@@ -202,9 +216,12 @@ int init_module(void)
     wait_for_completion(&lru_completion);
     wait_for_completion(&fifo_completion);
     wait_for_completion(&lfu_completion);
+    wait_for_completion(&clock_completion);
     
     destroy(&lru);
     destroy(&fifo);
+    destroy(&lfu);
+    destroy(&clock);
     return 0;
 }
 
