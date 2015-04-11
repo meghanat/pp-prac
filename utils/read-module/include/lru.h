@@ -4,7 +4,6 @@
 #include "algo.h"
 
 void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry);
-void lru_fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no);
 void lru_update_frame_in_memory(algorithm* algo, int frame_no);
 
 #endif
