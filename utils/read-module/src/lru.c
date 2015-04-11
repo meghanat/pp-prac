@@ -114,55 +114,73 @@ void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
     int i = 0;
     int frame_no = 0;
     memory_cell* replacee = NULL;
-    table_entry_t* found;
-    table_entry_t* search;
-    table_entry_t* temp;
+    table_entry_t* found = NULL;
+    table_entry_t* search = NULL;
+    table_entry_t* temp = NULL;
 
     cur_time = current_kernel_time();
     min = cur_time.tv_nsec;
 
     for(i = 0; i < NO_FRAMES; ++i) {
-        if(algo->memory[i].param.time_stamp < min) {
+        printk(KERN_INFO "%d\n", algo->memory[i].param.time_stamp);
+        printk(KERN_INFO "%d\n", min);
+        if(algo->memory[i].param.time_stamp <= min) {
             min = algo->memory[i].param.time_stamp;
             frame_no = i;
-            replacee = &algo->memory[i];
+            replacee = &(algo->memory[i]);
         }
     }
 
-    search = kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
-    memset(search, 0, sizeof(table_entry_t));
-    search->key.pid = replacee->pid;
-    search->key.virtual_page_no = replacee->virtual_page_no;
-    search->frame_no = frame_no;
-    search->present_bit = 0;
+    if(replacee != NULL)
+    {   
+        // Look for the page table entry for the frame being replaced
+        // Set it's present bit to 0
+        search = kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
+        memset(search, 0, sizeof(table_entry_t));
+        search->key.pid = replacee->pid;
+        search->key.virtual_page_no = replacee->virtual_page_no;
+        search->frame_no = frame_no;
+        search->present_bit = 0;
+        HASH_FIND(hh, algo->page_tables, &(search->key), sizeof(table_key_t), found);
 
-    HASH_FIND(hh, algo->page_tables, &(search->key), sizeof(table_key_t), found);
+        if(found) {
+            HASH_UPDATE(hh, algo->page_tables, key, sizeof(table_key_t), found, search, temp);
+        }
+        else{
+            printk(KERN_DEBUG "Replacing frame that doesn't exist");
+        }
 
-    if(found) {
-        HASH_UPDATE(hh, algo->page_tables, key, sizeof(table_key_t), found, search, temp);
+        // Look for the page table entry for the incoming virtual page no + pid
+        // Set it's present bit to 1
+        // Set the frame number to the number of the frame in memory being evicted
+        search->key.pid = entry->pid;
+        search->key.virtual_page_no = entry->virt_page_no;
+        search->frame_no = frame_no;
+        search->present_bit = 1;
+        HASH_FIND(hh, algo->page_tables, &(search->key), sizeof(table_key_t), found);
+
+        // If there is a PTE, update the frame number and present bit
+        // If not, add a new PTE
+        if(found) {
+            HASH_UPDATE(hh, algo->page_tables, key, sizeof(table_key_t), found, search, temp);
+            kfree(search);
+        }
+        else {
+            HASH_ADD(hh, algo->page_tables, key, sizeof(table_key_t), search);
+        }
+
+        /*replacee->virtual_page_no = entry->virt_page_no;
+        replacee->pid = entry->pid;
+        algo->update_frame(algo, frame_no);
+        algo->page_fault_count++;*/
     }
-    else{
-        printk(KERN_DEBUG "Replacing frame that doesn't exist");
+    else
+    {
+        printk(KERN_INFO "ERR");
+
     }
 
-    search->key.pid = entry->pid;
-    search->key.virtual_page_no = entry->virt_page_no;
-    search->frame_no = frame_no;
-    search->present_bit = 1;
 
-    HASH_FIND(hh, algo->page_tables, &(search->key), sizeof(table_key_t), found);
-    if(found) {
-        HASH_UPDATE(hh, algo->page_tables, key, sizeof(table_key_t), found, search, temp);
-        kfree(search);
-    }
-    else {
-        HASH_ADD(hh, algo->page_tables, key, sizeof(table_key_t), search);
-    }
-
-    replacee->virtual_page_no = entry->virt_page_no;
-    replacee->pid = entry->pid;
-    algo->update_frame(algo, frame_no);
-    return;
 }
 
 int call_algo(void * arg){
@@ -174,7 +192,8 @@ int call_algo(void * arg){
     int flag = 0;
 
     while(*(algo->simulating)) {
-        printk(KERN_INFO "simulating");
+        flag = 0;
+        //printk(KERN_INFO "simulating");
         if(!is_in_set(algo)) {
             entry = TAILQ_FIRST(algo->que);
             
@@ -183,18 +202,20 @@ int call_algo(void * arg){
                 pte = find_in_page_table(algo, entry);
                 // Page already in memory
                 if(pte != NULL && pte->present_bit) {
+                    printk("updating");
                     algo->update_frame(algo, pte->frame_no);
                 }
                 else {
                     // free frame availabe
                     for(i = 0; i < NO_FRAMES; ++i) {
                         if(algo->memory[i].pid == 0) {
+                            printk(KERN_INFO "Filling");
                             algo->fill_frame(algo, entry, i);
                             flag = 1;
                             break;
                         }
                     }
-
+                    printk(KERN_INFO "FLag: %d\n", flag);
                     // No free frame available
                     if(!flag) {
                         algo->replace_frame(algo, entry);

@@ -10,7 +10,7 @@
 #define uthash_free(ptr,sz) kfree(ptr)
 
 #define WINDOW 100
-#define NO_FRAMES 100
+#define NO_FRAMES 3
 #define NO_PR_THREADS 1
 
 typedef struct {
