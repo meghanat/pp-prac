@@ -56,6 +56,7 @@ struct algorithm_struct{
 	void (*replace_frame)(struct algorithm_struct* algo, struct  page_stream_entry* entry);
 	void (*fill_frame)(struct algorithm_struct* algo, struct page_stream_entry* stream_entry, long frame_no);
 	struct semaphore* set_sem;
+	struct semaphore* tailq_sem;
 
 };
 

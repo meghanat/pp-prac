@@ -83,7 +83,10 @@ int call_algo(void * arg){
         flag = 0;
         printk(KERN_INFO "Simulating\n");
         if(!is_in_set(algo)) {
+
+            down(algo->tailq_sem);
             entry = TAILQ_FIRST(algo->que);
+            up(algo->tailq_sem);
             
             if(entry){
                 printk(KERN_INFO "%ld %ld\n", entry->pid, entry->virt_page_no);
@@ -116,7 +119,8 @@ int call_algo(void * arg){
                 add_to_set(algo);
 
                 if(is_set_full(algo))
-                {    
+                {   
+                    down(algo->tailq_sem);
                     if(!TAILQ_EMPTY(algo->que)) {
                         TAILQ_REMOVE(algo->que, entry, tailq);
                     }
@@ -124,7 +128,7 @@ int call_algo(void * arg){
                     if(TAILQ_EMPTY(algo->que)) {
                     *(algo->simulating) = 0;
                     }
-                    
+                    up(algo->tailq_sem);
                 }
 
             }
