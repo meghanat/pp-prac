@@ -9,7 +9,7 @@
 #define uthash_malloc(sz) kmalloc(sz, GFP_ATOMIC)
 #define uthash_free(ptr,sz) kfree(ptr)
 
-#define WINDOW 100
+#define WINDOW 5
 #define NO_FRAMES 3
 #define NO_PR_THREADS 4
 

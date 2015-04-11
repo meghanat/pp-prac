@@ -1,7 +1,9 @@
 #include <linux/time.h>
 #include <linux/slab.h>
 #include <linux/kthread.h>
+
 #include "algo.h"
+#include "switcher.h"
 
 int is_in_set(algorithm* algo) {
     int i = 0;
@@ -119,6 +121,7 @@ int call_algo(void * arg){
             up(algo->tailq_sem);
             
             if(entry){
+                algo->pages_accessed += 1;
                 printk(KERN_INFO "%s read: %ld %ld\n", algo->name, entry->pid, entry->virt_page_no);
                 pte = find_in_page_table(algo, entry);
 
@@ -150,6 +153,10 @@ int call_algo(void * arg){
 
                 if(is_set_full(algo))
                 {   
+                    if(algo->pages_accessed == WINDOW) {
+                        do_switch(algo->algo_switcher);
+                    }
+
                     down(algo->tailq_sem);
                     if(!TAILQ_EMPTY(algo->que)) {
                         TAILQ_REMOVE(algo->que, entry, tailq);
