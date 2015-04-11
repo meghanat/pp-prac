@@ -13,6 +13,7 @@
 #define NO_FRAMES 3
 #define NO_PR_THREADS 1
 
+#include <linux/completion.h>
 #include <linux/semaphore.h>
 
 typedef struct {
@@ -57,7 +58,7 @@ struct algorithm_struct{
 	void (*fill_frame)(struct algorithm_struct* algo, struct page_stream_entry* stream_entry, long frame_no);
 	struct semaphore* set_sem;
 	struct semaphore* tailq_sem;
-
+	struct completion* completion;
 };
 
 typedef struct algorithm_struct algorithm;

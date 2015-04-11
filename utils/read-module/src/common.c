@@ -135,5 +135,5 @@ int call_algo(void * arg){
         }       
     }
     printk(KERN_INFO "%d\n", algo->page_fault_count);
-    return 0;
+    complete(algo->completion);
 }

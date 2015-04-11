@@ -113,5 +113,4 @@ void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
 
     }
 
-
 }

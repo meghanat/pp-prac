@@ -1,5 +1,6 @@
 #include <asm/uaccess.h>   // Needed by segment descriptors
 
+#include <linux/completion.h>
 #include <linux/fs.h>      // Needed by filp
 #include <linux/gfp.h>
 #include <linux/kernel.h>  // Needed for KERN_INFO
@@ -16,7 +17,7 @@
 int init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, volatile int* simulating,void (*update_func_ptr)(algorithm* algo, int frame_no),
     void (*replace_func_ptr)(algorithm* algo, struct  page_stream_entry* entry),
     void (*fill_func_ptr)(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no),
-    struct semaphore* set_sem, struct semaphore* tailq_sem) {
+    struct semaphore* set_sem, struct semaphore* tailq_sem, struct completion* completion) {
     static int identifier = 1;
     algo->memory = kmalloc(sizeof(memory_cell) * NO_FRAMES, GFP_ATOMIC);
     if(algo->memory == NULL) {
@@ -38,6 +39,7 @@ int init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, vola
     algo->page_tables = NULL;
     algo->set_sem = set_sem;
     algo->tailq_sem = tailq_sem;
+    algo->completion = completion;
 
     identifier++;
     return 0;
@@ -67,6 +69,8 @@ int init_module(void)
 
     struct semaphore set_sem;
     struct semaphore tailq_sem;
+
+    struct completion lru_completion;
 
     int count = 0;
     int result = 0;
@@ -136,7 +140,8 @@ int init_module(void)
     }
     filp_close(f, NULL);
 
-    result = init_algo(&lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame, &lru_fill_frame, &set_sem, &tailq_sem);
+    result = init_algo(&lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame, &lru_fill_frame, 
+                       &set_sem, &tailq_sem, &lru_completion);
 
     if(result != 0) {
         return -1;
@@ -145,12 +150,15 @@ int init_module(void)
     /*TAILQ_FOREACH(p, &que, tailq){
         printk(KERN_INFO "%d %d\n", p->pid, p->virt_page_no);
     }*/
-    
-    /*ts = kthread_run(call_algo, &lru , "LRU");
+    init_completion(&lru_completion);
+    ts = kthread_run(call_algo, &lru , "LRU");
     if(ts == NULL){
         printk(KERN_INFO "Bad");
-    }*/
-    call_algo(&lru);
+    }
+    printk(KERN_INFO "waiting");
+    wait_for_completion(&lru_completion);
+    printk(KERN_INFO "After LRU");
+    //call_algo(&lru);
     destroy(&lru);
 
     
