@@ -15,9 +15,11 @@
 #include "lru.h"
 #include "page_num_structure.h"
 
-int init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, volatile int* simulating,void (*update_func_ptr)(algorithm* algo, int frame_no),
+int init_algo(char* name, algorithm * algo, struct page_stream_entry_q * que, int* set, volatile int* simulating,
+    void (*update_func_ptr)(algorithm* algo, int frame_no),
     void (*replace_func_ptr)(algorithm* algo, struct  page_stream_entry* entry),
     struct semaphore* set_sem, struct semaphore* tailq_sem, struct completion* completion) {
+
     static int identifier = 1;
     algo->memory = kmalloc(sizeof(memory_cell) * NO_FRAMES, GFP_ATOMIC);
     if(algo->memory == NULL) {
@@ -25,6 +27,7 @@ int init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, vola
         return -1;
     }
     memset(algo->memory, 0, sizeof(memory_cell) * NO_FRAMES); // PID 0 => Empty Frame
+    algo->name = name;
     algo->que = que;
     algo->page_fault_count = 0;
     algo->thread_set = set;
@@ -158,13 +161,13 @@ int init_module(void)
     }
     filp_close(f, NULL);
 
-    result = init_algo(&lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame,  
+    result = init_algo("LRU", &lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame,  
                        &set_sem, &tailq_sem, &lru_completion);
     if(result != 0) {
         return -1;
     }
 
-    result = init_algo(&fifo, &que, set, &simulating, &fifo_update_frame_in_memory, &fifo_replace_frame, 
+    result = init_algo("FIFO", &fifo, &que, set, &simulating, &fifo_update_frame_in_memory, &fifo_replace_frame, 
                        &set_sem, &tailq_sem, &fifo_completion);
     if(result != 0) {
         return -1;

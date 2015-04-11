@@ -117,28 +117,28 @@ int call_algo(void * arg){
             up(algo->tailq_sem);
             
             if(entry){
-                printk(KERN_INFO "%ld %ld\n", entry->pid, entry->virt_page_no);
+                printk(KERN_INFO "%s read: %ld %ld\n", algo->name, entry->pid, entry->virt_page_no);
                 pte = find_in_page_table(algo, entry);
 
                 // Page already in memory
                 if(pte != NULL && pte->present_bit) {
-                    printk(KERN_INFO "Updating\n");
+                    printk(KERN_INFO "%s: Updating\n", algo->name);
                     algo->update_frame(algo, pte->frame_no);
                 }
                 else {
                     // free frame availabe
                     for(i = 0; i < NO_FRAMES; ++i) {
                         if(algo->memory[i].pid == 0) {
-                            printk(KERN_INFO "Filling\n");
+                            printk(KERN_INFO "%s: Filling\n", algo->name);
                             fill_frame(algo, entry, i);
                             flag = 1;
                             break;
                         }
                     }
-                    printk(KERN_INFO "FLag: %d\n", flag);
+                    //printk(KERN_INFO "FLag: %d\n", flag);
                     // No free frame available
                     if(!flag) {
-                        printk(KERN_INFO "Replacing\n");
+                        printk(KERN_INFO "%s: Replacing\n", algo->name);
                         algo->replace_frame(algo, entry);
                     }
                 }
@@ -162,6 +162,6 @@ int call_algo(void * arg){
             }
         }       
     }
-    printk(KERN_INFO "ALGOOO%d\n", algo->page_fault_count);
+    printk(KERN_INFO "%s Page fault count: %d\n", algo->name, algo->page_fault_count);
     complete(algo->completion);
 }

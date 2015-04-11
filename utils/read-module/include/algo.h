@@ -40,6 +40,7 @@ typedef struct {
 
 
 struct algorithm_struct{
+	char* name;
 	memory_cell * memory;
 	table_entry_t * page_tables;
 	struct page_stream_entry_q * que;
