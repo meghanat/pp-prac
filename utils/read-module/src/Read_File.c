@@ -20,7 +20,7 @@
 int init_algo(char* name, algorithm * algo, struct page_stream_entry_q * que, int* set, volatile int* simulating,
     void (*update_func_ptr)(algorithm* algo, int frame_no),
     void (*replace_func_ptr)(algorithm* algo, struct  page_stream_entry* entry),
-    struct semaphore* set_sem, struct semaphore* tailq_sem, struct completion* completion) {
+    struct semaphore* set_sem, struct semaphore* tailq_sem, struct completion* completion, switcher* algo_switcher) {
 
     static int identifier = 1;
     algo->memory = kmalloc(sizeof(memory_cell) * NO_FRAMES, GFP_ATOMIC);
@@ -45,6 +45,7 @@ int init_algo(char* name, algorithm * algo, struct page_stream_entry_q * que, in
     algo->tailq_sem = tailq_sem;
     algo->completion = completion;
     algo->next_frame_pointer = 0;
+    algo->algo_switcher = algo_switcher;
 
     identifier++;
     return 0;
@@ -99,6 +100,8 @@ int init_module(void)
     algorithm fifo;
     algorithm lfu;
     algorithm clock;
+
+    switcher algo_switcher;
 
     // Initialize semaphores
     sema_init(&set_sem, 1);
@@ -171,25 +174,25 @@ int init_module(void)
     filp_close(f, NULL);
 
     result = init_algo("LRU", &lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame,  
-                       &set_sem, &tailq_sem, &lru_completion);
+                       &set_sem, &tailq_sem, &lru_completion, &algo_switcher);
     if(result != 0) {
         return -1;
     }
 
     result = init_algo("FIFO", &fifo, &que, set, &simulating, &fifo_update_frame_in_memory, &fifo_replace_frame, 
-                       &set_sem, &tailq_sem, &fifo_completion);
+                       &set_sem, &tailq_sem, &fifo_completion, &algo_switcher);
     if(result != 0) {
         return -1;
     }
 
     result = init_algo("LFU", &lfu, &que, set, &simulating, &lfu_update_frame_in_memory, &lfu_replace_frame, 
-                       &set_sem, &tailq_sem, &lfu_completion);
+                       &set_sem, &tailq_sem, &lfu_completion, &algo_switcher);
     if(result != 0) {
         return -1;
     }
 
     result = init_algo("CLOCK", &clock, &que, set, &simulating, &clock_update_frame_in_memory, &clock_replace_frame, 
-                       &set_sem, &tailq_sem, &clock_completion);
+                       &set_sem, &tailq_sem, &clock_completion, &algo_switcher);
     if(result != 0) {
         return -1;
     }

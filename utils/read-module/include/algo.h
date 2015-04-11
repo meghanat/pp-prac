@@ -39,6 +39,13 @@ typedef struct {
 	int use_bit;  
 } memory_cell;
 
+struct algorithm_struct;
+
+typedef struct {
+	int total_count;
+	struct algorithm_struct* current_algo;
+	struct algorithm_struct* other_algos[NO_PR_THREADS];
+} switcher;
 
 struct algorithm_struct{
 	char* name;
@@ -62,6 +69,7 @@ struct algorithm_struct{
 	struct semaphore* tailq_sem;
 	struct completion* completion;
 	int next_frame_pointer; // This is only relevant to the clock algorithm
+	switcher* algo_switcher;
 };
 
 typedef struct algorithm_struct algorithm;
