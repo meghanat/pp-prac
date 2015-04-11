@@ -11,7 +11,7 @@
 
 #define WINDOW 100
 #define NO_FRAMES 3
-#define NO_PR_THREADS 1
+#define NO_PR_THREADS 2
 
 #include <linux/completion.h>
 #include <linux/semaphore.h>

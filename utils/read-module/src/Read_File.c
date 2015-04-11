@@ -11,6 +11,7 @@
 
 #include "algo.h"
 #include "common.h"
+#include "fifo.h"
 #include "lru.h"
 #include "page_num_structure.h"
 
@@ -82,15 +83,22 @@ int init_module(void)
     struct semaphore tailq_sem;
 
     struct completion lru_completion;
+    struct completion fifo_completion;
 
     int count = 0;
     int result = 0;
     int set[NO_PR_THREADS] = {0};
+
     algorithm lru;
+    algorithm fifo;
 
     // Initialize semaphores
     sema_init(&set_sem, 1);
     sema_init(&tailq_sem, 1);
+
+    // Initialize completion
+    init_completion(&lru_completion);
+    init_completion(&fifo_completion);
 
     TAILQ_INIT(&que);
 
@@ -100,7 +108,7 @@ int init_module(void)
     printk(KERN_INFO "Module is loaded\n");
     
     f = filp_open("/home/deborah/file", O_RDONLY, 0);
-    
+
     if(f == NULL)
         printk(KERN_ALERT "filp_open error.\n");
     else{
@@ -154,24 +162,32 @@ int init_module(void)
 
     result = init_algo(&lru, &que, set, &simulating, &lru_update_frame_in_memory, &lru_replace_frame, &lru_fill_frame, 
                        &set_sem, &tailq_sem, &lru_completion);
-
     if(result != 0) {
         return -1;
     }
 
-    /*TAILQ_FOREACH(p, &que, tailq){
-        printk(KERN_INFO "%d %d\n", p->pid, p->virt_page_no);
-    }*/
-    init_completion(&lru_completion);
+    result = init_algo(&fifo, &que, set, &simulating, &fifo_update_frame_in_memory, &fifo_replace_frame, &fifo_fill_frame, 
+                       &set_sem, &tailq_sem, &fifo_completion);
+    if(result != 0) {
+        return -1;
+    }
+
+    
     ts = kthread_run(call_algo, &lru , "LRU");
     if(ts == NULL){
         printk(KERN_INFO "Bad");
     }
-    printk(KERN_INFO "waiting");
+    
+    ts = kthread_run(call_algo, &fifo , "FIFO");
+    if(ts == NULL){
+        printk(KERN_INFO "Bad");
+    }
+
     wait_for_completion(&lru_completion);
-    printk(KERN_INFO "After LRU");
+    wait_for_completion(&fifo_completion);
     
     destroy(&lru);
+    destroy(&fifo);
     return 0;
 }
 

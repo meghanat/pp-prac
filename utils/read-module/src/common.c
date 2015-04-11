@@ -81,7 +81,6 @@ int call_algo(void * arg){
 
     while(*(algo->simulating)) {
         flag = 0;
-        printk(KERN_INFO "Simulating\n");
         if(!is_in_set(algo)) {
 
             down(algo->tailq_sem);
@@ -134,6 +133,6 @@ int call_algo(void * arg){
             }
         }       
     }
-    printk(KERN_INFO "%d\n", algo->page_fault_count);
+    printk(KERN_INFO "ALGOOO%d\n", algo->page_fault_count);
     complete(algo->completion);
 }
