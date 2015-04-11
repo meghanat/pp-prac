@@ -1,15 +1,16 @@
-#include <linux/module.h>  // Needed by all modules
-#include <linux/kernel.h>  // Needed for KERN_INFO
-#include <linux/fs.h>      // Needed by filp
 #include <asm/uaccess.h>   // Needed by segment descriptors
-#include <linux/kthread.h>
 
-#include <linux/slab.h>
+#include <linux/fs.h>      // Needed by filp
 #include <linux/gfp.h>
+#include <linux/kernel.h>  // Needed for KERN_INFO
+#include <linux/kthread.h>
+#include <linux/module.h>  // Needed by all modules
+#include <linux/semaphore.h> // For mutual exclusion
+#include <linux/slab.h>
 
 #include "algo.h"
-#include "page_num_structure.h"
 #include "lru.h"
+#include "page_num_structure.h"
 
 int init_algo(algorithm * algo, struct page_stream_entry_q * que, int* set, volatile int* simulating,void (*update_func_ptr)(algorithm* algo, int frame_no),
     void (*replace_func_ptr)(algorithm* algo, struct  page_stream_entry* entry),
