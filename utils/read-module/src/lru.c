@@ -3,6 +3,8 @@
 #include <linux/kthread.h>
 #include "algo.h"
 
+// TODO: time is a bit coarse and not accurate enough for LRU. Find moe accurate alternative
+
 void lru_update_frame_in_memory(algorithm* algo, int frame_no) {
     struct timespec cur_time;
     cur_time = current_kernel_time();

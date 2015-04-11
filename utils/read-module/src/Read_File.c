@@ -60,12 +60,12 @@ void destroy(algorithm * algo) {
 
 }
 
-struct task_struct *ts = NULL;
-
 int init_module(void)
 {
     // Create variables
+    struct task_struct *ts = NULL;
     struct file *f = NULL;
+
     char buf[128];
     int i = 0;
     long page_no = 0;
@@ -100,6 +100,7 @@ int init_module(void)
     printk(KERN_INFO "Module is loaded\n");
     
     f = filp_open("/home/deborah/file", O_RDONLY, 0);
+    
     if(f == NULL)
         printk(KERN_ALERT "filp_open error.\n");
     else{
