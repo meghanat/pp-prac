@@ -5,32 +5,17 @@
 
 
 void fifo_update_frame_in_memory(algorithm* algo, int frame_no) {
-    struct timespec cur_time;
-    cur_time = current_kernel_time();
-    algo->memory[frame_no].param.time_stamp = cur_time.tv_nsec; // nanoseconds
+    // FIFO update frame in memory doesn't need to DO anything
 }
 
 void fifo_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
-    struct timespec cur_time;
-    long min = 0;
-    int i = 0;
-    int frame_no = 0;
-    memory_cell* replacee = NULL;
+    static int frame_no = 0;
+    memory_cell* replacee = &(algo->memory[frame_no]);
     table_entry_t* found = NULL;
     table_entry_t* search = NULL;
     table_entry_t* temp = NULL;
 
-    cur_time = current_kernel_time();
-    min = cur_time.tv_nsec;
-
-    for(i = 0; i < NO_FRAMES; ++i) {
-        if(algo->memory[i].param.time_stamp <= min) {
-            min = algo->memory[i].param.time_stamp;
-            frame_no = i;
-            replacee = &(algo->memory[i]);
-        }
-    }
-
+    
     if(replacee != NULL)
     {   
         // Look for the page table entry for the frame being replaced
@@ -76,6 +61,8 @@ void fifo_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
         replacee->pid = entry->pid;
         algo->update_frame(algo, frame_no);
         algo->page_fault_count++;
+
+        frame_no = (frame_no + 1) % NO_FRAMES;
     }
     else
     {
