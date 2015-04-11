@@ -44,6 +44,7 @@ int init_algo(char* name, algorithm * algo, struct page_stream_entry_q * que, in
     algo->set_sem = set_sem;
     algo->tailq_sem = tailq_sem;
     algo->completion = completion;
+    algo->next_frame_pointer = 0;
 
     identifier++;
     return 0;

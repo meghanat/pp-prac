@@ -9,11 +9,36 @@ void clock_update_frame_in_memory(algorithm* algo, int frame_no) {
     struct timespec cur_time;
     cur_time = current_kernel_time();
     algo->memory[frame_no].param.time_stamp = cur_time.tv_nsec; // nanoseconds
+    algo->memory[frame_no].use_bit = 1;
+}
+
+int get_frame_to_replace(algorithm* algo) {
+    int start = algo->next_frame_pointer;
+    int frame = 0;
+
+    do{
+        // If a frame is found with use bit == 0, return it
+        if(algo->memory[algo->next_frame_pointer].use_bit == 0) {
+            frame = algo->next_frame_pointer;
+            algo->next_frame_pointer = (algo->next_frame_pointer + 1) % NO_FRAMES;
+            return frame;
+        }
+
+        // Otherwise clear the use bit and proceed
+        algo->memory[algo->next_frame_pointer].use_bit = 0;
+
+        algo->next_frame_pointer = (algo->next_frame_pointer + 1) % NO_FRAMES;
+    } while(algo->next_frame_pointer != start); 
+
+    // Reached the beginning without findind a frame with use bit 0
+    // Return the first frame itself
+    if(algo->next_frame_pointer == start) {
+        algo->next_frame_pointer = (algo->next_frame_pointer + 1) % NO_FRAMES;
+        return start;
+    }
 }
 
 void clock_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
-    struct timespec cur_time;
-    long min = 0;
     int i = 0;
     int frame_no = 0;
     memory_cell* replacee = NULL;
@@ -21,16 +46,8 @@ void clock_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
     table_entry_t* search = NULL;
     table_entry_t* temp = NULL;
 
-    cur_time = current_kernel_time();
-    min = cur_time.tv_nsec;
-
-    for(i = 0; i < NO_FRAMES; ++i) {
-        if(algo->memory[i].param.time_stamp <= min) {
-            min = algo->memory[i].param.time_stamp;
-            frame_no = i;
-            replacee = &(algo->memory[i]);
-        }
-    }
+    frame_no = get_frame_to_replace(algo);
+    replacee = &(algo->memory[frame_no]);
 
     if(replacee != NULL)
     {   

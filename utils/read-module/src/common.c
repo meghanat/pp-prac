@@ -97,7 +97,9 @@ void fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, long fr
     algo->update_frame(algo, frame_no);
     algo->memory[frame_no].pid = stream_entry->pid;
     algo->memory[frame_no].virtual_page_no = stream_entry->virt_page_no;
+    algo->memory[frame_no].use_bit = 1; // This is only relevant to the clock algorithm
     algo->page_fault_count++;
+
     return;
 }
 

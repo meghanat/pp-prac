@@ -35,7 +35,8 @@ typedef struct {
 		long freq;
 		long time_stamp;
 	 	long used;
-	} param;  
+	} param;
+	int use_bit;  
 } memory_cell;
 
 
@@ -60,6 +61,7 @@ struct algorithm_struct{
 	struct semaphore* set_sem;
 	struct semaphore* tailq_sem;
 	struct completion* completion;
+	int next_frame_pointer; // This is only relevant to the clock algorithm
 };
 
 typedef struct algorithm_struct algorithm;
