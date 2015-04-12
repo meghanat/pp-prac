@@ -39,7 +39,9 @@ void do_switch(switcher* algo_switcher) {
 		others[i]->page_fault_count = 0;
 		others[i]->pages_accessed = 0;
 
-
+		if(others[i] == algo_switcher->current_algo) {
+			continue;
+		}
 		set_page_tables(others[i], algo_switcher->current_algo);
 		set_memory(others[i], algo_switcher->current_algo);
 	}
