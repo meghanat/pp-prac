@@ -162,6 +162,10 @@ int call_algo(void * arg){
 
         if(!is_in_set(algo)) {
 
+            while(atomic_read(algo->read_event) == 0) {
+                // As long as nothing is in the queue, wait
+            }
+
             down(algo->tailq_sem);
             entry = TAILQ_FIRST(algo->que);
             up(algo->tailq_sem);

@@ -22,6 +22,12 @@ typedef struct {
 } table_key_t;
 
 typedef struct {
+	struct page_stream_entry_q* que;
+	struct completion* completion;
+	atomic_t* read_event;
+} read_args;
+
+typedef struct {
     table_key_t key;
     long frame_no;
     long present_bit;
@@ -70,7 +76,9 @@ struct algorithm_struct{
 	struct completion* completion;
 	int next_frame_pointer; // This is only relevant to the clock algorithm
 	switcher* algo_switcher;
+
 	atomic_t* is_switching;
+	atomic_t* read_event;
 	atomic_t frame_operation;
 };
 
