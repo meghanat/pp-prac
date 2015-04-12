@@ -158,6 +158,10 @@ int call_algo(void * arg){
 
                 if(is_set_full(algo))
                 {   
+                    while(atomic_read(algo->is_switching)){
+                        // Prevent calling of switcher again
+                    }
+
                     if(algo->pages_accessed == WINDOW) {
                         do_switch(algo->algo_switcher);
                     }
