@@ -29,8 +29,8 @@ void do_switch(switcher* algo_switcher) {
 		printk(KERN_INFO "%s: %d\n", others[i]->name, others[i]->page_fault_count);
 		others[i]->page_fault_count = 0;
 		others[i]->pages_accessed = 0;
+		set_page_tables(others[i], algo_switcher->current_algo);
 		set_memory(others[i], algo_switcher->current_algo);
-		// Reset page tables
 	}
 	
 	printk(KERN_INFO "Best: %s\n", best->name);

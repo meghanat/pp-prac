@@ -109,9 +109,39 @@ void set_memory(algorithm* target, algorithm* source) {
     int i = 0;
 
     for (i = 0; i < NO_FRAMES; ++i) {
-        target->memory[i] = source->memory[i];
+        target->memory[i].pid = source->memory[i].pid;
+        target->memory[i].virtual_page_no = source->memory[i].virtual_page_no;
+        target->memory[i].pid = source->memory[i].pid;
+        target->memory[i].param.time_stamp = 0;
+        target->memory[i].use_bit = 0;
     }
 
+}
+
+// TODO: make this more efficient?
+void set_page_tables(algorithm* target, algorithm* source) {
+    table_entry_t* p = NULL;
+    table_entry_t* tmp = NULL;
+    table_entry_t* new_entry = NULL;
+
+    // Free target algorithm's page tables
+    HASH_ITER(hh, target->page_tables, p, tmp) {
+      HASH_DEL(target->page_tables, p);
+      kfree(p);
+    }
+
+    // Create new entries in target
+    // For each of the source entries
+    HASH_ITER(hh, source->page_tables, p, tmp) {
+        new_entry = kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
+        memset(new_entry, 0, sizeof(table_entry_t));
+        new_entry->key.pid = p->key.pid;
+        new_entry->key.virtual_page_no = p->key.virtual_page_no;
+        new_entry->frame_no = p->frame_no;
+        new_entry->present_bit = p->present_bit;
+        HASH_ADD(hh, target->page_tables, key, sizeof(table_key_t), new_entry);
+
+    }
 }
 
 int call_algo(void * arg){
