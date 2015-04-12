@@ -70,6 +70,7 @@ struct algorithm_struct{
 	struct completion* completion;
 	int next_frame_pointer; // This is only relevant to the clock algorithm
 	switcher* algo_switcher;
+	atomic_t* is_switching;
 };
 
 typedef struct algorithm_struct algorithm;

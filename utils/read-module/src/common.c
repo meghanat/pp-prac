@@ -114,6 +114,11 @@ int call_algo(void * arg){
 
     while(*(algo->simulating)) {
         flag = 0;
+
+        while(atomic_read(algo->is_switching)) {
+            // Do not allow algos to execute when switching is in progress.
+        }
+
         if(!is_in_set(algo)) {
 
             down(algo->tailq_sem);
