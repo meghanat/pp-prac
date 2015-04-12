@@ -210,10 +210,11 @@ int call_algo(void * arg){
                     down(algo->tailq_sem);
                     if(!TAILQ_EMPTY(algo->que)) {
                         TAILQ_REMOVE(algo->que, entry, tailq);
+                        printk(KERN_INFO "\n-----------------------------\n");
                     }
                     clear_set(algo);
                     if(TAILQ_EMPTY(algo->que)) {
-                    *(algo->simulating) = 0;
+                        *(algo->simulating) = 0;
                     }
                     up(algo->tailq_sem);
                 }

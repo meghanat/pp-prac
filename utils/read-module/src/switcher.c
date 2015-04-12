@@ -18,7 +18,7 @@ void do_switch(switcher* algo_switcher) {
 		}
 	}
 
-	printk(KERN_INFO "Switch begin\n");
+	printk(KERN_INFO "-----------------------------\nSwitch begin\n");
 
 	// Find the algorithm with the lowest page fault count
 	min = others[0]->page_fault_count;
@@ -47,8 +47,8 @@ void do_switch(switcher* algo_switcher) {
 	}
 	
 	printk(KERN_INFO "Best: %s\n", best->name);
-	printk(KERN_INFO "Switch End\n");
 	printk(KERN_INFO "Switched Algo Total: %d\n", algo_switcher->total_count);
+	printk(KERN_INFO "Switch End\n");
 
 	// Switch to the algorithm with the lowest page fault count
 	algo_switcher->current_algo = best;
