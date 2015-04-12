@@ -105,6 +105,15 @@ void fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, long fr
     return;
 }
 
+void set_memory(algorithm* target, algorithm* source) {
+    int i = 0;
+
+    for (i = 0; i < NO_FRAMES; ++i) {
+        target->memory[i] = source->memory[i];
+    }
+
+}
+
 int call_algo(void * arg){
     algorithm * algo = (algorithm *) arg;
     struct page_stream_entry* entry = NULL;

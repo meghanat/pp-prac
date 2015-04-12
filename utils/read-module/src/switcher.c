@@ -1,4 +1,5 @@
 #include "algo.h"
+#include "common.h"
 
 void do_switch(switcher* algo_switcher) {
 	atomic_set(algo_switcher->current_algo->is_switching, 1);
@@ -25,10 +26,10 @@ void do_switch(switcher* algo_switcher) {
 	// Reset page fault counts, pages accessed
 	// Set other algorithms' page tables and memory to that of current
 	for (i = 0; i < NO_PR_THREADS; ++i) {
-		printk(KERN_INFO "%s: %d\n", algo_switcher->other_algos[i]->name, algo_switcher->other_algos[i]->page_fault_count);
-		algo_switcher->other_algos[i]->page_fault_count = 0;
-		algo_switcher->other_algos[i]->pages_accessed = 0;
-		// Reset memory
+		printk(KERN_INFO "%s: %d\n", others[i]->name, others[i]->page_fault_count);
+		others[i]->page_fault_count = 0;
+		others[i]->pages_accessed = 0;
+		set_memory(others[i], algo_switcher->current_algo);
 		// Reset page tables
 	}
 	
