@@ -48,6 +48,7 @@ int init_algo(char* name, algorithm * algo, struct page_stream_entry_q * que, in
     algo->next_frame_pointer = 0;
     algo->algo_switcher = algo_switcher;
     algo->is_switching = is_switching;
+    atomic_set(&(algo->frame_operation), 0);
 
     identifier++;
     return 0;

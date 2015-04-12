@@ -6,13 +6,16 @@
 // TODO: time is a bit coarse and not accurate enough for LRU. Find moe accurate alternative
 
 void clock_update_frame_in_memory(algorithm* algo, int frame_no) {
+    atomic_set(&(algo->frame_operation), 1);
     struct timespec cur_time;
     cur_time = current_kernel_time();
     algo->memory[frame_no].param.time_stamp = cur_time.tv_nsec; // nanoseconds
     algo->memory[frame_no].use_bit = 1;
+    atomic_set(&(algo->frame_operation), 0);
 }
 
 int get_frame_to_replace(algorithm* algo) {
+    atomic_set(&(algo->frame_operation), 1);
     int start = algo->next_frame_pointer;
     int frame = 0;
 
@@ -65,7 +68,7 @@ void clock_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
             HASH_UPDATE(hh, algo->page_tables, key, sizeof(table_key_t), found, search, temp);
         }
         else{
-            printk(KERN_DEBUG "Replacing frame that doesn't exist");
+            printk(KERN_DEBUG "%s: Replacing frame that doesn't exist\n", algo->name);
         }
 
         // Look for the page table entry for the incoming virtual page no + pid
@@ -100,5 +103,5 @@ void clock_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
         printk(KERN_INFO "ERR");
 
     }
-
+    atomic_set(&(algo->frame_operation), 0);
 }

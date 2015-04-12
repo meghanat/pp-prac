@@ -75,6 +75,7 @@ table_entry_t* find_in_page_table(algorithm* algo, struct page_stream_entry* ent
 }
 
 void fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, long frame_no) {
+    atomic_set(&(algo->frame_operation), 1);
     table_entry_t* entry = kmalloc(sizeof(table_entry_t), GFP_ATOMIC);
     table_entry_t* found = NULL;
     table_entry_t* temp = NULL;
@@ -102,6 +103,7 @@ void fill_frame(algorithm* algo, struct page_stream_entry* stream_entry, long fr
     algo->memory[frame_no].use_bit = 1; // This is only relevant to the clock algorithm
     algo->page_fault_count++;
 
+    atomic_set(&(algo->frame_operation), 0);
     return;
 }
 

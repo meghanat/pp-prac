@@ -9,6 +9,7 @@ void fifo_update_frame_in_memory(algorithm* algo, int frame_no) {
 }
 
 void fifo_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
+    atomic_set(&(algo->frame_operation), 1);
     static int frame_no = 0;
     memory_cell* replacee = &(algo->memory[frame_no]);
     table_entry_t* found = NULL;
@@ -32,7 +33,7 @@ void fifo_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
             HASH_UPDATE(hh, algo->page_tables, key, sizeof(table_key_t), found, search, temp);
         }
         else{
-            printk(KERN_DEBUG "Replacing frame that doesn't exist");
+            printk(KERN_DEBUG "%s: Replacing frame that doesn't exist\n", algo->name);
         }
 
         // Look for the page table entry for the incoming virtual page no + pid
@@ -69,5 +70,5 @@ void fifo_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
         printk(KERN_INFO "ERR");
 
     }
-
+    atomic_set(&(algo->frame_operation), 0);
 }

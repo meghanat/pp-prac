@@ -71,6 +71,7 @@ struct algorithm_struct{
 	int next_frame_pointer; // This is only relevant to the clock algorithm
 	switcher* algo_switcher;
 	atomic_t* is_switching;
+	atomic_t frame_operation;
 };
 
 typedef struct algorithm_struct algorithm;
