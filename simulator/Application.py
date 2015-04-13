@@ -14,6 +14,7 @@ import time
 class Simulator(tk.Tk):
 
     def __init__(self, parent):
+        
         tk.Tk.__init__(self, parent)
         self.parent = parent
         self.controller = None
@@ -21,6 +22,7 @@ class Simulator(tk.Tk):
         self.page_accesses = None
 
     def initialize(self):
+        
         self.padx = 10
         self.pady = 5
         self.label_options = {
@@ -37,10 +39,16 @@ class Simulator(tk.Tk):
             }
         self.spinbox_options = {'width': 10}
         self.spinBoxes = {}
-        self.spinbox_names = ['vas', 'number_frames', 'number_processes'
+        self.spinbox_names = [
+                            'vas',
+                            'number_frames',
+                            'number_processes'
                               ]
-        self.label_texts = ['VAS(GB)', 'Number of frames',
-                            'Number of procesess']
+        self.label_texts = [
+                            'VAS(GB)',
+                            'Number of frames',
+                            'Number of procesess'
+                            ]
         self.algo_texts = [
             'LRU',
             'LFU',
@@ -67,12 +75,15 @@ class Simulator(tk.Tk):
                                   relief=tk.GROOVE, bd=5)
         self.leftFrame.grid(column=0, row=0, sticky='EWNS', padx=10,
                             pady=10)
+
         self.rightFrame = tk.Frame(self)
         self.rightFrame.grid(column=1, sticky='', row=0, padx=10,
                              pady=10)
+
         self.rightTopFrame = tk.Frame(self.rightFrame,
                 self.frame_options)
         self.rightTopFrame.grid(row=0, column=0)
+
         self.rightBottomFrame = tk.Frame(self.rightFrame,
                 self.frame_options)
         self.rightBottomFrame.grid(row=1, column=0)
@@ -81,6 +92,7 @@ class Simulator(tk.Tk):
                                     font=('Helvetica', 16),
                                     text='Parameter')
         self.label_param.grid(column=0, row=0, pady=20)
+
         self.label_value = tk.Label(self.leftFrame, self.label_options,
                                     font=('Helvetica', 16), text='Value'
                                     )
@@ -88,6 +100,7 @@ class Simulator(tk.Tk):
 
         self.leftFrame.columnconfigure(1, pad=10)
         self.leftFrame.columnconfigure(0, pad=10)
+
         self.simulate_button = tk.Button(self.leftFrame, text='Simulate'
                 , command=self.verifyParams)
         self.simulate_button.grid(column=0, row=5, columnspan=2,
@@ -103,6 +116,7 @@ class Simulator(tk.Tk):
 
         f = tkFont.Font(self.label_param, self.label_param.cget('font'))
         f.configure(underline=True)
+
         self.label_param.configure(font=f)
         self.label_value.configure(font=f)
 
@@ -113,10 +127,12 @@ class Simulator(tk.Tk):
         self.enable_uniform_resize()
 
     def create_input_labels(self):
+        
         for (i, text) in enumerate(self.label_texts):
             label = tk.Label(self.leftFrame, self.label_options,
                              text=text)
             label.grid(column=0, row=i + 1)
+
             self.spinBoxes[self.spinbox_names[i]] = \
                 tk.Spinbox(self.leftFrame, self.spinbox_options,
                            from_=self.ranges[i][0],
@@ -136,7 +152,9 @@ class Simulator(tk.Tk):
                                   + 1)
 
     def create_log_frames(self):
+        
         self.tabs = ttk.Notebook(self.rightBottomFrame)
+
         for algo in self.algo_texts:
             frame = ttk.Frame(self.tabs)
             scrollbar = tk.Scrollbar(frame)
@@ -150,6 +168,7 @@ class Simulator(tk.Tk):
             self.tabs.grid(row=1, column=0)
 
     def create_menu_bar(self):
+        
         menubar = tk.Menu(self)
         filemenu = tk.Menu(self, tearoff=0)
         filemenu.add_command(label='Load Access Stream From',
@@ -168,6 +187,7 @@ class Simulator(tk.Tk):
         self.config(menu=menubar)
 
     def create_page_count_labels(self):
+        
         self.total_count = tk.StringVar()
         self.total_count_label = tk.Label(self.rightTopFrame,
                 self.label_options, text='TOTAL')
@@ -177,6 +197,7 @@ class Simulator(tk.Tk):
                 self.label_options, bg='white',
                 textvariable=self.total_count)
         self.total_count_box.grid(column=1, row=0)
+
         for (i, text) in enumerate(self.algo_texts):
             label = tk.Label(self.rightTopFrame, self.label_options,
                              text=text)
@@ -189,6 +210,7 @@ class Simulator(tk.Tk):
             self.algo_values[text]['label'].grid(column=1, row=i + 1)
 
     def enable_uniform_resize(self):
+        
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
@@ -205,6 +227,7 @@ class Simulator(tk.Tk):
         self.rightFrame.columnconfigure(0, weight=1)
 
     def save_logs(self):
+        
         file_name = tkFileDialog.asksaveasfilename()
         file_handle = open(file_name, 'w')
         for algo in self.algo_texts:
@@ -218,6 +241,7 @@ class Simulator(tk.Tk):
         file_handle.close()
 
     def load_accesses(self):
+        
         try:
             print 'in load_accesses'
             file_handle = tkFileDialog.askopenfile()
@@ -234,79 +258,70 @@ class Simulator(tk.Tk):
                 self.page_accesses.append([i[1], int(i[0], 16) >> 12])
 
             self.spinBoxes['number_processes'].config(state=tk.DISABLED)
-        except:
 
+        except:
             print 'Fail'
             self.read_from_file = False
             self.spinBoxes['number_processes'].config(state=tk.NORMAL)
 
     def save_accesses(self):
+
         pass
 
     def verifyParams(self):
 
         # check VAS
-
         try:
             vas = float(self.spinBoxes['vas'].get())
-
             if vas < 1:
                 tkMessageBox.showerror('Error',
                         'Virtual Address Space must be greater than 1 GB!'
                         )
                 return
         except ValueError:
-
             tkMessageBox.showerror('Error',
                                    'Virtual Address Space must be a number!'
                                    )
             return
 
         # check Number of frames
-
         try:
             number_frames = int(self.spinBoxes['number_frames'].get())
-
             if number_frames < 1:
                 tkMessageBox.showerror('Error',
                         'Number of frames must be greater than 0')
                 return
         except ValueError:
-
             tkMessageBox.showerror('Error',
                                    "Input 'Number of frames' must be a positive integer!"
                                    )
             return
 
         # check NUmber of processes
-
         try:
             number_processes = int(self.spinBoxes['number_processes'
                                    ].get())
-
             if number_processes < 1:
                 tkMessageBox.showerror('Error',
                         'Number of processes must be greater than 0')
                 return
         except ValueError:
-
             tkMessageBox.showerror('Error',
                                    "Input 'Number of processes' must be a positive integer!"
                                    )
             return
-
         self.start_simulation()
 
     def start_simulation(self):
 
         # clear logs
-
         for algo in self.algo_texts:
             self.algo_values[algo]['log'].configure(state=tk.NORMAL)
             self.algo_values[algo]['log'].delete(1.0, tk.END)
             self.algo_values[algo]['log'].configure(state=tk.DISABLED)
 
         self.simulation_values = {}
+
         self.stop_button.configure(state=tk.NORMAL)
         for parameter in self.spinbox_names:
             try:
@@ -322,8 +337,11 @@ class Simulator(tk.Tk):
         self.simulation_values['page_accesses'] = self.page_accesses
         self.simulation_values['simulating'] = True
         self.simulation_values['progress_bar'] = self.progress_bar
+        
         self.controller = controller.Controller(self.simulation_values)
+        
         self.update_algo_values()
+        
         self.controller_thread = \
             threading.Thread(target=self.controller.start_simulation)
         self.controller_thread.start()
@@ -334,9 +352,11 @@ class Simulator(tk.Tk):
         self.update_log_thread.start()
 
     def stop_simulation(self):
+
         self.simulation_values['simulating'] = False
 
     def update_algo_values(self):
+
         self.algo_values['LRU']['algo'] = self.controller.lru
         self.algo_values['LFU']['algo'] = self.controller.lfu
         self.algo_values['OPTIMAL']['algo'] = self.controller.optimal
@@ -345,6 +365,7 @@ class Simulator(tk.Tk):
         self.algo_values['CLOCK']['algo'] = self.controller.clock
 
     def update_labels(self):
+
         while self.simulation_values['simulating']:
             self.total_count.set(self.controller.switcher.get_total_count())
 
@@ -364,6 +385,7 @@ class Simulator(tk.Tk):
             self.update_idletasks()
 
     def update_logs(self):
+
         while self.simulation_values['simulating']:
             for algo in self.algo_texts:
                 self.algo_values[algo]['log'].configure(state=tk.NORMAL)
@@ -377,6 +399,7 @@ class Simulator(tk.Tk):
 
 
 if __name__ == '__main__':
+
     sim = Simulator(None)
     sim.title('Simulation of Page Replacement')
     sim.initialize()
