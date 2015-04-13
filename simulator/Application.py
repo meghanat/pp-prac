@@ -190,9 +190,46 @@ class Simulator(tk.Tk):
     def verifyParams(self):
 
         #check VAS
-        vas=int(self.spinBoxes["vas"].get())
-        if(vas<1):
-            tkMessageBox.showerror("Error","Virtual Address Space must be greater than 1 GB !")
+        try:
+            vas=float(self.spinBoxes["vas"].get())
+
+            if(vas<1):
+                tkMessageBox.showerror("Error","Virtual Address Space must be greater than 1 GB!")
+                return
+
+        except ValueError:
+                tkMessageBox.showerror("Error","Virtual Address Space must be a number!")
+                return
+
+        #check Number of frames
+        try:
+            number_frames=int(self.spinBoxes["number_frames"].get())
+
+            if(number_frames<1):
+                tkMessageBox.showerror("Error","Number of frames must be greater than 0")
+                return
+            
+        except ValueError:
+            tkMessageBox.showerror("Error","Input 'Number of frames' must be a positive integer!")
+            return
+
+        #check NUmber of processes
+        try:
+            number_processes=int(self.spinBoxes["number_processes"].get())
+
+            if(number_processes<1):
+                tkMessageBox.showerror("Error","Number of processes must be greater than 0")
+                return
+            
+        except ValueError:
+            tkMessageBox.showerror("Error","Input 'Number of processes' must be a positive integer!")
+            return
+
+        self.start_simulation()
+
+
+            
+        
 
     def start_simulation(self):
 
