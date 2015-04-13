@@ -53,7 +53,7 @@ class Simulator(tk.Tk):
 
         self.leftFrame.columnconfigure(1, pad=10)
         self.leftFrame.columnconfigure(0, pad=10)
-        self.simulate_button = tk.Button(self.leftFrame, text="Simulate", command=self.start_simulation)
+        self.simulate_button = tk.Button(self.leftFrame, text="Simulate", command=self.verifyParams)
         self.simulate_button.grid(column=0, row=5, columnspan=2, padx=10, pady=10)
         
         self.stop_button = tk.Button(self.leftFrame, text=" Stop", command=self.stop_simulation,state=tk.DISABLED)
@@ -186,6 +186,13 @@ class Simulator(tk.Tk):
             
     def save_accesses(self):
             pass
+
+    def verifyParams(self):
+
+        #check VAS
+        vas=int(self.spinBoxes["vas"].get())
+        if(vas<1):
+            tkMessageBox.showerror("Error","Virtual Address Space must be greater than 1 GB !")
 
     def start_simulation(self):
 
