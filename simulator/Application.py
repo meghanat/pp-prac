@@ -23,12 +23,12 @@ class Simulator(tk.Tk):
 
     def initialize(self):
         
-        self.padx = 10
-        self.pady = 0
+        self.padx = 5
+        self.pady = 6
         self.label_options = {
-            'padx': self.padx,
+            'padx': 0,
             'pady': self.pady,
-            'width': 30,
+            'width': 20,
             'bg': 'gainsboro',
 
             }
@@ -38,7 +38,7 @@ class Simulator(tk.Tk):
             'padx': 10,
             'pady': 10,
             }
-        self.spinbox_options = {'width': 10}
+        self.spinbox_options = {'width': 7}
         self.spinBoxes = {}
         self.spinbox_names = [
                             'vas',
@@ -46,7 +46,7 @@ class Simulator(tk.Tk):
                             'number_processes'
                               ]
         self.label_texts = [
-                            'Virtual Address Space( in GB)',
+                            'Virtual Address Space\n(in GB)',
                             'Number of frames',
                             'Number of procesess'
                             ]
@@ -74,7 +74,7 @@ class Simulator(tk.Tk):
 
         self.leftFrame = tk.Frame(self, bg='gainsboro',
                                   relief=tk.GROOVE, bd=5)
-        self.leftFrame.grid(column=0, row=0, sticky='EWNS', padx=10,
+        self.leftFrame.grid(column=0, row=0, sticky='NS', padx=5,
                             pady=10)
 
         self.rightFrame = tk.Frame(self)
@@ -90,17 +90,17 @@ class Simulator(tk.Tk):
         self.rightBottomFrame.grid(row=1, column=0)
 
         self.label_param = tk.Label(self.leftFrame, self.label_options,
-                                    font=('Helvetica', 16),
+                                    font=('Helvetica', 20),
                                     text='Parameter')
-        self.label_param.grid(column=0, row=0, pady=20)
+        self.label_param.grid(column=0, row=0, pady=15)
 
         self.label_value = tk.Label(self.leftFrame, self.label_options,
-                                    font=('Helvetica', 16), text='Value'
+                                    font=('Helvetica', 20), text='Value'
                                     )
         self.label_value.grid(column=1, row=0, pady=20)
 
-        self.leftFrame.columnconfigure(1, pad=10)
-        self.leftFrame.columnconfigure(0, pad=10)
+        self.leftFrame.columnconfigure(1, pad=0)
+        self.leftFrame.columnconfigure(0, pad=0)
 
         self.simulate_button = tk.Button(self.leftFrame, text='Simulate'
                 , command=self.verifyParams)
