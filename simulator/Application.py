@@ -24,12 +24,13 @@ class Simulator(tk.Tk):
     def initialize(self):
         
         self.padx = 10
-        self.pady = 5
+        self.pady = 0
         self.label_options = {
             'padx': self.padx,
             'pady': self.pady,
-            'width': 15,
+            'width': 30,
             'bg': 'gainsboro',
+
             }
         self.frame_options = {
             'width': 500,
@@ -45,7 +46,7 @@ class Simulator(tk.Tk):
                             'number_processes'
                               ]
         self.label_texts = [
-                            'VAS(GB)',
+                            'Virtual Address Space( in GB)',
                             'Number of frames',
                             'Number of procesess'
                             ]
@@ -129,7 +130,7 @@ class Simulator(tk.Tk):
     def create_input_labels(self):
         
         for (i, text) in enumerate(self.label_texts):
-            label = tk.Label(self.leftFrame, self.label_options,
+            label = tk.Label(self.leftFrame, self.label_options,font=('Helvetica', 16),
                              text=text)
             label.grid(column=0, row=i + 1)
 
@@ -141,7 +142,7 @@ class Simulator(tk.Tk):
                     + 1)
 
         self.switcher_label = tk.Label(self.leftFrame,
-                self.label_options, text='Switching Window')
+                self.label_options,font=('Helvetica', 16), text='Switching Window')
         self.switcher_label.grid(column=0, row=len(self.label_texts)
                                  + 1)
 
