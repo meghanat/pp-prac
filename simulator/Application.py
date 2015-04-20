@@ -359,20 +359,20 @@ class Simulator(tk.Tk):
 
         self.stop_time=time.time()
         self.report = tk.Toplevel()
-        self.report.geometry("%dx%d%+d%+d" % (600, 250, 350, 125))
+        self.report.geometry("%dx%d%+d%+d" % (555, 400, 350, 70))
         self.report.title("Summary Report")
 
         self.reportFrame = tk.Frame(self.report, bg='gainsboro',
                                   relief=tk.GROOVE, bd=5)
-        self.reportFrame.grid(column=0, row=0, sticky='NS', padx=15,
-                            pady=30)
+        self.reportFrame.grid(column=0, row=0, sticky='NS', padx=25,
+                            pady=70)
 
         self.reportFrame.columnconfigure(1, pad=5)
         self.reportFrame.columnconfigure(0, pad=5)
 
         self.report_label_options = {
             'padx': 0,
-            'pady': self.pady,
+            'pady': 10,
             'width': 30,
             'bg': 'gainsboro',
 
@@ -406,19 +406,26 @@ class Simulator(tk.Tk):
         self.report_num_windows_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Number of Switching Windows:')
         self.report_num_windows_label.grid(row=3, column=0)
-        self.report_num_windows_value = tk.Label(self.reportFrame,self.report_label_options,
-                                    text=sel)
-        self.report_size_windows_value.grid(row=2, column=1)
+        self.report_size_windows_value = tk.Label(self.reportFrame,self.report_label_options,
+                                    text=self.controller.switcher.get_total_windows())
+        self.report_size_windows_value.grid(row=3, column=1)
 
         #Number of page accesses performed
         self.report_accesses_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Number of Page Accesses:')
         self.report_accesses_label.grid(row=4,column=0)
+        self.report_accesses_values = tk.Label(self.reportFrame,self.report_label_options,
+                                    text=self.controller.optimal.pages_accessed )
+        self.report_accesses_values.grid(row=4,column=1)
+
 
         #Best Performing algorithm
         self.report_best_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Best Performing Algorithm:')
         self.report_best_label.grid(row=5,column=0)
+        self.report_best_label = tk.Label(self.reportFrame,self.report_label_options,
+                                    text=self.controller.switcher.get_best_performing_algorithm())
+        self.report_best_label.grid(row=5,column=1)
 
         
 

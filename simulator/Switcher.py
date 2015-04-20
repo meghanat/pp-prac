@@ -1,4 +1,5 @@
 import time
+import operator
 class Switcher(object):
 	def __init__(self,current_algorithm,other_algorithms,optimal):
 		self.current_algorithm=current_algorithm
@@ -6,6 +7,9 @@ class Switcher(object):
 		self.optimal=optimal
 		self.total_count = 0
 		self.number_windows=0
+		self.performance={}
+		for i in self.other_algorithms:
+			self.performance[i.name]=0
 
 	def switch(self, switching_event):
 		
@@ -13,6 +17,7 @@ class Switcher(object):
 
 		switching_event.clear()
 		best = min(self.other_algorithms, key=lambda x: x.get_page_fault_count())
+		self.performance[best.name]+=1
 		#print best.name
 		# for i in self.other_algorithms:
 		# 	print i.name, i.get_page_fault_count()
@@ -44,4 +49,7 @@ class Switcher(object):
 
 	def get_total_windows(self):
 		return self.number_windows
+
+	def get_best_performing_algorithm(self):
+		return max(self.performance.iteritems(), key=operator.itemgetter(1))[0]
 
