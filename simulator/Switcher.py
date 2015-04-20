@@ -5,9 +5,13 @@ class Switcher(object):
 		self.other_algorithms=other_algorithms
 		self.optimal=optimal
 		self.total_count = 0
+		self.number_windows=0
 
-	def switch(self, swithing_event):
-		swithing_event.clear()
+	def switch(self, switching_event):
+		
+		self.number_windows+=1
+
+		switching_event.clear()
 		best = min(self.other_algorithms, key=lambda x: x.get_page_fault_count())
 		#print best.name
 		# for i in self.other_algorithms:
@@ -33,8 +37,11 @@ class Switcher(object):
 		self.optimal.pages_accessed=0 # since the pages being accessed must be the same across all algorithms	
 
 		self.current_algorithm = best
-		swithing_event.set()
+		switching_event.set()
 
 	def get_total_count(self):
 		return self.total_count
+
+	def get_total_windows(self):
+		return self.number_windows
 

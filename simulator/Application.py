@@ -398,11 +398,17 @@ class Simulator(tk.Tk):
         self.report_size_windows_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Size of Switching Window:')
         self.report_size_windows_label.grid(row=2, column=0)
+        self.report_size_windows_value = tk.Label(self.reportFrame,self.report_label_options,
+                                    text=self.simulation_values["window"])
+        self.report_size_windows_value.grid(row=2, column=1)
 
         #Number of Switching windows
         self.report_num_windows_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Number of Switching Windows:')
         self.report_num_windows_label.grid(row=3, column=0)
+        self.report_num_windows_value = tk.Label(self.reportFrame,self.report_label_options,
+                                    text=sel)
+        self.report_size_windows_value.grid(row=2, column=1)
 
         #Number of page accesses performed
         self.report_accesses_label = tk.Label(self.reportFrame,self.report_label_options,
