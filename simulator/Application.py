@@ -382,6 +382,9 @@ class Simulator(tk.Tk):
         self.report_faults_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Total Number of Page Faults:')
         self.report_faults_label.grid(row=0, column=0)
+        self.report_faults_value=tk.Label(self.reportFrame,self.report_label_options,
+                                    text=self.controller.switcher.get_total_count())
+        self.report_faults_value.grid(row=0, column=1)
 
         #Simulation duration
         self.report_time_label = tk.Label(self.reportFrame,self.report_label_options,
