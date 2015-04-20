@@ -356,6 +356,48 @@ class Simulator(tk.Tk):
 
         self.simulation_values['simulating'] = False
 
+        self.report = tk.Toplevel()
+        self.report.geometry("%dx%d%+d%+d" % (600, 250, 350, 125))
+        self.report.title("Summary Report")
+
+        self.reportFrame = tk.Frame(self.report, bg='gainsboro',
+                                  relief=tk.GROOVE, bd=5)
+        self.reportFrame.grid(column=0, row=0, sticky='NS', padx=15,
+                            pady=30)
+
+        self.reportFrame.columnconfigure(1, pad=5)
+        self.reportFrame.columnconfigure(0, pad=5)
+
+        self.report_label_options = {
+            'padx': 0,
+            'pady': self.pady,
+            'width': 30,
+            'bg': 'gainsboro',
+
+            }
+
+        self.report_faults_label = tk.Label(self.reportFrame,self.report_label_options,
+                                    text='Total Number of Page Faults:')
+        self.report_time_label = tk.Label(self.reportFrame,self.report_label_options,
+                                    text='Simulation Duration:')
+        self.report_size_windows_label = tk.Label(self.reportFrame,self.report_label_options,
+                                    text='Size of Switching Window:')
+        self.report_num_windows_label = tk.Label(self.reportFrame,self.report_label_options,
+                                    text='Number of Switching Windows:')
+        self.report_accesses_label = tk.Label(self.reportFrame,self.report_label_options,
+                                    text='Number of Page Accesses:')
+        self.report_best_label = tk.Label(self.reportFrame,self.report_label_options,
+                                    text='Best Performing Algorithm:')
+
+        self.report_faults_label.grid(row=0, column=0)
+        self.report_time_label.grid(row=1, column=0)
+        self.report_size_windows_label.grid(row=2, column=0)
+        self.report_num_windows_label.grid(row=3, column=0)
+        self.report_accesses_label.grid(row=4,column=0)
+        self.report_best_label.grid(row=5,column=0)
+
+        
+
     def update_algo_values(self):
 
         self.algo_values['LRU']['algo'] = self.controller.lru
