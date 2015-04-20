@@ -343,6 +343,7 @@ class Simulator(tk.Tk):
         
         self.update_algo_values()
         
+        self.start_time=time.time()
         self.controller_thread = \
             threading.Thread(target=self.controller.start_simulation)
         self.controller_thread.start()
@@ -356,6 +357,7 @@ class Simulator(tk.Tk):
 
         self.simulation_values['simulating'] = False
 
+        self.stop_time=time.time()
         self.report = tk.Toplevel()
         self.report.geometry("%dx%d%+d%+d" % (600, 250, 350, 125))
         self.report.title("Summary Report")
@@ -376,24 +378,37 @@ class Simulator(tk.Tk):
 
             }
 
+        #Total number of page faults
         self.report_faults_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Total Number of Page Faults:')
+        self.report_faults_label.grid(row=0, column=0)
+
+        #Simulation duration
         self.report_time_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Simulation Duration:')
+        self.report_time_label.grid(row=1, column=0)
+        self.report_time_value=tk.Label(self.reportFrame,self.report_label_options,
+                                    text=self.stop_time - self.start_time)
+        self.report_time_value.grid(row=1, column=1)
+
+        #Switching window size
         self.report_size_windows_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Size of Switching Window:')
+        self.report_size_windows_label.grid(row=2, column=0)
+
+        #Number of Switching windows
         self.report_num_windows_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Number of Switching Windows:')
+        self.report_num_windows_label.grid(row=3, column=0)
+
+        #Number of page accesses performed
         self.report_accesses_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Number of Page Accesses:')
+        self.report_accesses_label.grid(row=4,column=0)
+
+        #Best Performing algorithm
         self.report_best_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Best Performing Algorithm:')
-
-        self.report_faults_label.grid(row=0, column=0)
-        self.report_time_label.grid(row=1, column=0)
-        self.report_size_windows_label.grid(row=2, column=0)
-        self.report_num_windows_label.grid(row=3, column=0)
-        self.report_accesses_label.grid(row=4,column=0)
         self.report_best_label.grid(row=5,column=0)
 
         
