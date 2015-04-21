@@ -44,9 +44,7 @@ class Controller(object):
         self.other_algorithms = [self.lfu, self.lru, self.fifo, self.random, self.clock]
 
         self.switcher = Switcher(self.current_algorithm, self.other_algorithms, self.optimal)
-
-
-
+        
     def start_simulation(self):
         try:
 

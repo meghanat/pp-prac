@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 import controller
 import tkFileDialog
 import tkFont
@@ -9,6 +8,7 @@ import Tkinter as tk
 import ttk
 import threading
 import time
+
 
 
 class Simulator(tk.Tk):
@@ -23,22 +23,36 @@ class Simulator(tk.Tk):
 
     def initialize(self):
         
-        self.padx = 5
-        self.pady = 6
-        self.label_options = {
-            'padx': 0,
-            'pady': self.pady,
-            'width': 20,
+        self.padx=10
+        self.pady=10
+        self.param_options = {
             'bg': 'gainsboro',
+            "padx": 5
 
             }
-        self.frame_options = {
-            'width': 500,
-            'height': 500,
-            'padx': 10,
-            'pady': 10,
+        self.value_options = {
+            'width' : 7,
+
             }
-        self.spinbox_options = {'width': 7}
+        self.heading_options={
+            'bg': 'gainsboro'
+        }
+        self.leftFrame_options={
+
+            "padx" :10,
+            "pady":10
+        }
+        self.label_options={
+            "bg" :"gainsboro",
+            "width" :20,
+            "padx" :5,
+            "pady" : 7
+        }
+        self.count_options={
+            "width" : 30,
+            "bg":"gainsboro",
+            "pady" : 7
+        }
         self.spinBoxes = {}
         self.spinbox_names = [
                             'vas',
@@ -72,48 +86,57 @@ class Simulator(tk.Tk):
 
         self.ranges = [(2, 4), (1, 4), (4, 8), (1, 1000), (1, 1000)]
 
-        self.leftFrame = tk.Frame(self, bg='gainsboro',
-                                  relief=tk.GROOVE, bd=5)
-        self.leftFrame.grid(column=0, row=0, sticky='NS', padx=5,
-                            pady=10)
+        self.leftFrame = tk.Frame(self,self.leftFrame_options, bg='gainsboro',
+                                  relief=tk.GROOVE, bd=5,padx=15)
+        self.leftFrame.grid(column=0, row=0, sticky='NSWE')
 
         self.rightFrame = tk.Frame(self)
-        self.rightFrame.grid(column=1, sticky='', row=0, padx=10,
-                             pady=10)
+        self.rightFrame.grid(column=1, sticky='NSWE', row=0)
+        self.rightFrame.columnconfigure(1,pad=10)
+        self.rightFrame.columnconfigure(0,pad=10)
 
-        self.rightTopFrame = tk.Frame(self.rightFrame,
-                self.frame_options)
-        self.rightTopFrame.grid(row=0, column=0)
+        
+        self.rightTopFrame=tk.Frame(self.rightFrame,relief=tk.FLAT,bd=5)
+        self.rightTopFrame.grid(row=0, column=0,sticky='EW')
+        self.rightTopLeftFrame = tk.Frame(self.rightTopFrame,relief=tk.RIDGE,bd=5)
+        self.rightTopLeftFrame.grid(row=0, column=0,sticky='NSEW')
+        self.rightTopFrame.grid_columnconfigure(1, weight=1,pad=20)
+        self.rightTopRightFrame = tk.Frame(self.rightTopFrame,relief=tk.RIDGE,bd=5)
+        self.rightTopRightFrame.grid(row=0, column=1,sticky='NSEW')
 
-        self.rightBottomFrame = tk.Frame(self.rightFrame,
-                self.frame_options)
+        self.canvas = tk.Canvas(self.rightTopRightFrame, width=370,height=220)
+        self.canvas.grid(row=0,column=0,sticky="NSEW",padx=75)
+        self.graph_flag=0
+        self.rects=[]
+
+
+        self.rightBottomFrame = tk.Frame(self.rightFrame)
         self.rightBottomFrame.grid(row=1, column=0)
 
-        self.label_param = tk.Label(self.leftFrame, self.label_options,
+        self.label_param = tk.Label(self.leftFrame, self.heading_options,
                                     font=('Helvetica', 20),
                                     text='Parameter')
-        self.label_param.grid(column=0, row=0, pady=15)
+        self.label_param.grid(column=0, row=0)
 
-        self.label_value = tk.Label(self.leftFrame, self.label_options,
+        self.label_value = tk.Label(self.leftFrame, self.heading_options,
                                     font=('Helvetica', 20), text='Value'
                                     )
-        self.label_value.grid(column=1, row=0, pady=20)
+        self.label_value.grid(column=1, row=0)
 
-        self.leftFrame.columnconfigure(1, pad=0)
-        self.leftFrame.columnconfigure(0, pad=0)
+        self.leftFrame.columnconfigure(1)
+        self.leftFrame.columnconfigure(0)
 
         self.simulate_button = tk.Button(self.leftFrame, text='Simulate'
                 , command=self.verifyParams)
-        self.simulate_button.grid(column=0, row=5, columnspan=2,
-                                  padx=10, pady=10)
+        self.simulate_button.grid(column=0, row=5, columnspan=2)
 
         self.stop_button = tk.Button(self.leftFrame, text=' Stop',
                 command=self.stop_simulation, state=tk.DISABLED)
-        self.stop_button.grid(column=0, row=6, columnspan=2, padx=10,
-                              pady=10)
+        self.stop_button.grid(column=0, row=7, columnspan=2)
 
         self.progress_bar = ttk.Progressbar(self.leftFrame,
-                orient='horizontal', length=100, mode='determinate')
+                orient='horizontal', length=70, mode='determinate')
+
 
         f = tkFont.Font(self.label_param, self.label_param.cget('font'))
         f.configure(underline=True)
@@ -125,24 +148,27 @@ class Simulator(tk.Tk):
         self.create_page_count_labels()
         self.create_log_frames()
         self.create_menu_bar()
+
+        self.graph_data={}
+
         self.enable_uniform_resize()
 
     def create_input_labels(self):
         
         for (i, text) in enumerate(self.label_texts):
-            label = tk.Label(self.leftFrame, self.label_options,font=('Helvetica', 16),
+            label = tk.Label(self.leftFrame, self.param_options,font=('Helvetica', 16),
                              text=text)
             label.grid(column=0, row=i + 1)
 
             self.spinBoxes[self.spinbox_names[i]] = \
-                tk.Spinbox(self.leftFrame, self.spinbox_options,
+                tk.Spinbox(self.leftFrame,self.value_options,
                            from_=self.ranges[i][0],
                            to=self.ranges[i][1])
             self.spinBoxes[self.spinbox_names[i]].grid(column=1, row=i
                     + 1)
 
         self.switcher_label = tk.Label(self.leftFrame,
-                self.label_options,font=('Helvetica', 16), text='Switching Window')
+                self.param_options,font=('Helvetica', 16), text='Switching Window')
         self.switcher_label.grid(column=0, row=len(self.label_texts)
                                  + 1)
 
@@ -150,7 +176,7 @@ class Simulator(tk.Tk):
                 to=10000, orient=tk.HORIZONTAL)
         self.switcher_slider.set(1000)
         self.switcher_slider.grid(column=1, row=len(self.label_texts)
-                                  + 1)
+                                  + 1,)
 
     def create_log_frames(self):
         
@@ -190,21 +216,21 @@ class Simulator(tk.Tk):
     def create_page_count_labels(self):
         
         self.total_count = tk.StringVar()
-        self.total_count_label = tk.Label(self.rightTopFrame,
+        self.total_count_label = tk.Label(self.rightTopLeftFrame,
                 self.label_options, text='TOTAL')
         self.total_count_label.grid(column=0, row=0)
 
-        self.total_count_box = tk.Label(self.rightTopFrame,
-                self.label_options, bg='white',
+        self.total_count_box = tk.Label(self.rightTopLeftFrame,
+                self.count_options, bg='white',
                 textvariable=self.total_count)
         self.total_count_box.grid(column=1, row=0)
 
         for (i, text) in enumerate(self.algo_texts):
-            label = tk.Label(self.rightTopFrame, self.label_options,
+            label = tk.Label(self.rightTopLeftFrame, self.label_options,
                              text=text)
             label.grid(column=0, row=i + 1)
             self.algo_values[text]['label'] = \
-                tk.Label(self.rightTopFrame, self.label_options,
+                tk.Label(self.rightTopLeftFrame, self.count_options,
                          bg='white',
                          textvariable=self.algo_values[text]['string_var'
                          ])
@@ -226,6 +252,29 @@ class Simulator(tk.Tk):
         self.rightFrame.rowconfigure(0, weight=1)
         self.rightFrame.rowconfigure(1, weight=1)
         self.rightFrame.columnconfigure(0, weight=1)
+        self.rightFrame.columnconfigure(1, weight=1)
+
+    def graph_points(self,width=500,height=200):
+
+        data=list(self.graph_data.values())
+        keys=list(self.graph_data.keys())
+        max_val=max(data)
+        for i in range(len(data)):
+            data[i]=data[i]*1.0/(max_val*1.0 +1.0)  * 180.0        
+        
+        self.canvas.delete("all")
+        x_stretch = 10
+        x_width = 20
+        x_gap = 25
+        for x, y in enumerate(data):
+            x0 = x * x_stretch +  x*x_width +x*x_gap + 70
+            y0 = height - (y)
+            x1 = x0 + x_width
+            y1 = height
+            print ("xo :",x0,"y0 :",y0,"y :",y)   
+            self.canvas.create_rectangle(x0, y0, x1, y1, fill="gainsboro")
+            self.rects.append(self.canvas.create_text(x0+2, y0, anchor=tk.S, text=str(keys[x])))
+            
 
     def save_logs(self):
         
@@ -440,21 +489,24 @@ class Simulator(tk.Tk):
 
     def update_labels(self):
 
+        self.graph_data={}
+
         while self.simulation_values['simulating']:
             self.total_count.set(self.controller.switcher.get_total_count())
 
             for algo in self.algo_values:
-
+                count=self.algo_values[algo]['algo'].get_page_fault_count()
+                self.graph_data[self.algo_values[algo]['algo'].name]=count
                 self.algo_values[algo]['string_var'
-                        ].set(str(self.algo_values[algo]['algo'
-                              ].get_page_fault_count()))
-
+                        ].set(str(count))
+            print(self.graph_data)
             for algo in self.algo_values:
                 self.algo_values[algo]['label'].config(bg='white')
 
             self.algo_values[self.controller.switcher.current_algorithm.name]['label'
                     ].config(bg='green')
 
+            self.graph_points()
             time.sleep(1)
             self.update_idletasks()
 
@@ -476,5 +528,6 @@ if __name__ == '__main__':
 
     sim = Simulator(None)
     sim.title('Simulation of Page Replacement')
+    sim.attributes('-fullscreen', True)
     sim.initialize()
     sim.mainloop()
