@@ -46,7 +46,8 @@ class Simulator(tk.Tk):
             "bg" :"gainsboro",
             "width" :20,
             "padx" :5,
-            "pady" : 7
+            "pady" : 7,
+
         }
         self.count_options={
             "width" : 30,
@@ -104,11 +105,9 @@ class Simulator(tk.Tk):
         self.rightTopRightFrame = tk.Frame(self.rightTopFrame,relief=tk.RIDGE,bd=5)
         self.rightTopRightFrame.grid(row=0, column=1,sticky='NSEW')
 
-        self.canvas = tk.Canvas(self.rightTopRightFrame, width=370,height=220)
+        self.canvas = tk.Canvas(self.rightTopRightFrame, width=400,height=220)
         self.canvas.grid(row=0,column=0,sticky="NSEW",padx=75)
-        self.graph_flag=0
-        self.rects=[]
-
+        
 
         self.rightBottomFrame = tk.Frame(self.rightFrame)
         self.rightBottomFrame.grid(row=1, column=0)
@@ -135,7 +134,7 @@ class Simulator(tk.Tk):
         self.stop_button.grid(column=0, row=7, columnspan=2)
 
         self.progress_bar = ttk.Progressbar(self.leftFrame,
-                orient='horizontal', length=70, mode='determinate')
+                orient='horizontal', length=60, mode='determinate')
 
 
         f = tkFont.Font(self.label_param, self.label_param.cget('font'))
@@ -264,16 +263,20 @@ class Simulator(tk.Tk):
         
         self.canvas.delete("all")
         x_stretch = 10
-        x_width = 20
-        x_gap = 25
+        x_width = 25
+        x_gap = 20
         for x, y in enumerate(data):
-            x0 = x * x_stretch +  x*x_width +x*x_gap + 70
+            x0 = x * x_stretch +  x*x_width +x*x_gap + 30
             y0 = height - (y)
             x1 = x0 + x_width
             y1 = height
             print ("xo :",x0,"y0 :",y0,"y :",y)   
-            self.canvas.create_rectangle(x0, y0, x1, y1, fill="gainsboro")
-            self.rects.append(self.canvas.create_text(x0+2, y0, anchor=tk.S, text=str(keys[x])))
+            self.canvas.create_rectangle(x0, y0, x1, y1, fill="indian red")
+            self.canvas.create_text(x0+12, y0, anchor=tk.S, text=str(keys[x]))
+
+        self.canvas.create_line(5,height,width,height+2,width=4);
+        self.canvas.create_line(5,height-180,5,height+2,width=4)
+
             
 
     def save_logs(self):
@@ -409,7 +412,7 @@ class Simulator(tk.Tk):
         self.stop_time=time.time()
         self.report = tk.Toplevel()
         self.report.geometry("%dx%d%+d%+d" % (555, 400, 350, 70))
-        self.report.title("Summary Report")
+        self.report.title("Simulation Summary")
 
         self.reportFrame = tk.Frame(self.report, bg='gainsboro',
                                   relief=tk.GROOVE, bd=5)
@@ -427,54 +430,56 @@ class Simulator(tk.Tk):
 
             }
 
+        self.heading=tk.Label(self.reportFrame,self.heading_options,font=('Helvetica', 20),text="Summary")
+        self.heading.grid(row=0,column=0,columnspan=2)
         #Total number of page faults
         self.report_faults_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Total Number of Page Faults:')
-        self.report_faults_label.grid(row=0, column=0)
+        self.report_faults_label.grid(row=1, column=0)
         self.report_faults_value=tk.Label(self.reportFrame,self.report_label_options,
                                     text=self.controller.switcher.get_total_count())
-        self.report_faults_value.grid(row=0, column=1)
+        self.report_faults_value.grid(row=1, column=1)
 
         #Simulation duration
         self.report_time_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Simulation Duration:')
-        self.report_time_label.grid(row=1, column=0)
+        self.report_time_label.grid(row=2, column=0)
         self.report_time_value=tk.Label(self.reportFrame,self.report_label_options,
                                     text=self.stop_time - self.start_time)
-        self.report_time_value.grid(row=1, column=1)
+        self.report_time_value.grid(row=2, column=1)
 
         #Switching window size
         self.report_size_windows_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Size of Switching Window:')
-        self.report_size_windows_label.grid(row=2, column=0)
+        self.report_size_windows_label.grid(row=3, column=0)
         self.report_size_windows_value = tk.Label(self.reportFrame,self.report_label_options,
                                     text=self.simulation_values["window"])
-        self.report_size_windows_value.grid(row=2, column=1)
+        self.report_size_windows_value.grid(row=3, column=1)
 
         #Number of Switching windows
         self.report_num_windows_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Number of Switching Windows:')
-        self.report_num_windows_label.grid(row=3, column=0)
+        self.report_num_windows_label.grid(row=4, column=0)
         self.report_size_windows_value = tk.Label(self.reportFrame,self.report_label_options,
                                     text=self.controller.switcher.get_total_windows())
-        self.report_size_windows_value.grid(row=3, column=1)
+        self.report_size_windows_value.grid(row=4, column=1)
 
         #Number of page accesses performed
         self.report_accesses_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Number of Page Accesses:')
-        self.report_accesses_label.grid(row=4,column=0)
+        self.report_accesses_label.grid(row=5,column=0)
         self.report_accesses_values = tk.Label(self.reportFrame,self.report_label_options,
                                     text=self.controller.optimal.pages_accessed )
-        self.report_accesses_values.grid(row=4,column=1)
+        self.report_accesses_values.grid(row=5,column=1)
 
 
         #Best Performing algorithm
         self.report_best_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text='Best Performing Algorithm:')
-        self.report_best_label.grid(row=5,column=0)
+        self.report_best_label.grid(row=6,column=0)
         self.report_best_label = tk.Label(self.reportFrame,self.report_label_options,
                                     text=self.controller.switcher.get_best_performing_algorithm())
-        self.report_best_label.grid(row=5,column=1)
+        self.report_best_label.grid(row=6,column=1)
 
         
 
