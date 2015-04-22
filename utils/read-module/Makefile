@@ -1,5 +1,5 @@
 obj-m := Read_File.o
-EXTRA_CFLAGS:= -I/home/deborah/Github/pp-prac/utils/read-module/include # use EXTRA_CFLAGS instead of ccflags-y
+EXTRA_CFLAGS:= -I/home/deborah/pp-prac-clone/utils/read-module/include # use EXTRA_CFLAGS instead of ccflags-y
 Read_File-y := src/Read_File.o #relative
 Read_File-y += src/lru.o
 Read_File-y += src/common.o
