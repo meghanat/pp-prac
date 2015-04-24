@@ -1,6 +1,7 @@
 #include <linux/time.h>
 #include <linux/slab.h>
 #include <linux/kthread.h>
+#include <linux/jiffies.h>
 #include "algo.h"
 
 // TODO: time is a bit coarse and not accurate enough for LRU. Find moe accurate alternative
@@ -9,7 +10,7 @@ void lru_update_frame_in_memory(algorithm* algo, int frame_no) {
     atomic_set(&(algo->frame_operation), 1);
     struct timespec cur_time;
     cur_time = current_kernel_time();
-    algo->memory[frame_no].param.time_stamp = cur_time.tv_nsec; // nanoseconds
+    algo->memory[frame_no].param.time_stamp = jiffies;//cur_time.tv_nsec; // nanoseconds
     atomic_set(&(algo->frame_operation), 0);
 }
 
@@ -25,7 +26,7 @@ void lru_replace_frame(algorithm* algo, struct  page_stream_entry* entry) {
     table_entry_t* temp = NULL;
 
     cur_time = current_kernel_time();
-    min = cur_time.tv_nsec;
+    min = jiffies;//cur_time.tv_nsec;
 
     for(i = 0; i < NO_FRAMES; ++i) {
         if(algo->memory[i].param.time_stamp <= min) {

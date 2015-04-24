@@ -31,7 +31,7 @@ int read_entries_from_file(void * args) {
     for(i = 0;i < 128; i++)
         buf[i] = 0;
 
-    f = filp_open("/home/deborah/file", O_RDONLY, 0);
+    f = filp_open("/home/deborah/file1", O_RDONLY, 0);
 
     if(f == NULL)
         printk(KERN_ALERT "filp_open error.\n");
