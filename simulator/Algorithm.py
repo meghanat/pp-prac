@@ -112,7 +112,7 @@ class Algorithm:
                 if(len(self.page_num_stream) < self.switcher_size):  # Wait for an access to be made
                     if(self.simulation_values["read_from_file"]):
                         self.simulation_values["simulating"]=False
-                        print "Sim stopped"
+                        #print "Sim stopped"
                         tkMessageBox.showerror("Alert","Simulation stopped")
 
                     self.event.clear() 

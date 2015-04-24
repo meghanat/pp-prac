@@ -5,7 +5,7 @@ import Generator
 
 class CPU:
     def __init__(self,simulation_values):
-        print "In CPU,", simulation_values
+        #print "In CPU,", simulation_values
         self.simulation_values=simulation_values
         self.num_processes = simulation_values["number_processes"]
         self.addr_access_stream = []
@@ -23,17 +23,18 @@ class CPU:
     def page_access_stream(self):
         while(self.simulation_values["simulating"]):
             if(len(self.addr_access_stream) == 0):
-                print "empty"
+                #print "empty"
                 self.event_access_stream.clear()
             self.event_access_stream.wait()
 
             pid, virt_addr = self.addr_access_stream.pop(0)
             virt_page = virt_addr >> self.PAGE_SHIFT
+            print virt_page
             self.page_num_stream.append([pid, virt_page])
             self.event_page_stream.set()
 
 def start_CPU(simulation_values):
-    print "here"
+    #print "here"
     mCPU = CPU(simulation_values)
     try:
         mCPU.page_access_stream()

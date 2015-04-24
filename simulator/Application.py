@@ -270,7 +270,7 @@ class Simulator(tk.Tk):
             y0 = height - (y)
             x1 = x0 + x_width
             y1 = height
-            print ("xo :",x0,"y0 :",y0,"y :",y)   
+            #print ("xo :",x0,"y0 :",y0,"y :",y)   
             self.canvas.create_rectangle(x0, y0, x1, y1, fill="indian red")
             self.canvas.create_text(x0+12, y0, anchor=tk.S, text=str(keys[x]))
 
@@ -296,7 +296,7 @@ class Simulator(tk.Tk):
     def load_accesses(self):
         
         try:
-            print 'in load_accesses'
+            #print 'in load_accesses'
             file_handle = tkFileDialog.askopenfile()
             self.read_from_file = True
 
@@ -313,7 +313,7 @@ class Simulator(tk.Tk):
             self.spinBoxes['number_processes'].config(state=tk.DISABLED)
 
         except:
-            print 'Fail'
+            #print 'Fail'
             self.read_from_file = False
             self.spinBoxes['number_processes'].config(state=tk.NORMAL)
 
@@ -504,7 +504,7 @@ class Simulator(tk.Tk):
                 self.graph_data[self.algo_values[algo]['algo'].name]=count
                 self.algo_values[algo]['string_var'
                         ].set(str(count))
-            print(self.graph_data)
+            #print(self.graph_data)
             for algo in self.algo_values:
                 self.algo_values[algo]['label'].config(bg='white')
 

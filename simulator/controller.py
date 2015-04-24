@@ -60,8 +60,8 @@ class Controller(object):
                 pass
             self.simulation_values["progress_bar"].grid_forget()
 
-            print "switch_win filled"
-            print len(self.simulation_values["page_num_stream"])
+            #print "switch_win filled"
+            #print len(self.simulation_values["page_num_stream"])
                   
             thread_optimal = threading.Thread(target=self.optimal, args=(self.switcher,))
             self.threads.append(thread_optimal)
