@@ -72,6 +72,7 @@ class Simulator(tk.Tk):
             'FIFO',
             'RANDOM',
             'CLOCK',
+            'LRU_STANDALONE'
             ]
         self.algo_values = {
             'LRU': {},
@@ -80,6 +81,7 @@ class Simulator(tk.Tk):
             'FIFO': {},
             'RANDOM': {},
             'CLOCK': {},
+            'LRU_STANDALONE': {}
             }
         for text in self.algo_texts:
             self.algo_values[text]['label'] = None
@@ -308,6 +310,7 @@ class Simulator(tk.Tk):
 
             for i in logs:
                 i = i.strip().split(',')
+		print str(int(i[0], 16) >> 12)
                 self.page_accesses.append([i[1], int(i[0], 16) >> 12])
 
             self.spinBoxes['number_processes'].config(state=tk.DISABLED)
@@ -491,6 +494,7 @@ class Simulator(tk.Tk):
         self.algo_values['FIFO']['algo'] = self.controller.fifo
         self.algo_values['RANDOM']['algo'] = self.controller.random
         self.algo_values['CLOCK']['algo'] = self.controller.clock
+        self.algo_values['LRU_STANDALONE']['algo'] = self.controller.lru_standalone
 
     def update_labels(self):
 

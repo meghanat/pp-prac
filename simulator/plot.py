@@ -12,7 +12,7 @@ for val in y:
 	time += 0.01
 
 plt.plot(x, y)
-plt.show()
+plt.savefig('run2.png')
 y_file.close()
 
 	

@@ -6,7 +6,7 @@ import threading
 
 class VirtualAddressGenerator:
     pid = 0
-    def __init__(self,simulation_values, address_stream, event, prob_dist=[0.6, 0.3, 0.1], process_size=1 << 32,switcher_size=10):
+    def __init__(self,simulation_values, address_stream, event, prob_dist=[0.3, 0.3, 0.4], process_size=1 << 32,switcher_size=10):
         self.process_size = process_size
         self.kernel_space = 1 << 30  # Remove this hard coded value
         self.prob_dist = prob_dist

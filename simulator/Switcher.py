@@ -1,13 +1,14 @@
 import time
 import operator
 class Switcher(object):
-	def __init__(self,current_algorithm,other_algorithms,optimal):
+	def __init__(self,current_algorithm,other_algorithms,optimal, lru_standalone):
 		self.current_algorithm=current_algorithm
 		self.other_algorithms=other_algorithms
 		self.optimal=optimal
 		self.total_count = 0
 		self.number_windows=0
 		self.performance={}
+		self.lru_standalone = lru_standalone
 		for i in self.other_algorithms:
 			self.performance[i.name]=0
 
@@ -39,7 +40,8 @@ class Switcher(object):
 	
 		for i in self.other_algorithms:
 			i.pages_accessed=0
-		self.optimal.pages_accessed=0 # since the pages being accessed must be the same across all algorithms	
+		self.optimal.pages_accessed=0 # since the pages being accessed must be the same across all algorithms
+		self.lru_standalone.pages_accessed = 0	
 
 		self.current_algorithm = best
 		switching_event.set()
